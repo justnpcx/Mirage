@@ -581,4 +581,24 @@
     <string name="app_list_permission_denied">Unable to read installed apps.\nThis is usually because the system has restricted app read permissions.\nPlease grant permissions in the system settings.</string>
     <string name="open_app_settings">Open System Settings</string>
     <string name="dns_failure_hint">Hint: the domain of the proxy server could not be resolved. If your ISP blocks the configured DNS, add a reachable one under Settings - DNS; the app probes them and uses the first reachable server.</string>
+    <string name="dashboard_state_connected">Connected</string>
+    <string name="dashboard_state_connecting">Connecting…</string>
+    <string name="dashboard_state_stopping">Stopping…</string>
+    <string name="dashboard_state_disconnected">Not connected</string>
+    <string name="dashboard_detail_routed">Traffic is routed through Mirage</string>
+    <string name="dashboard_detail_running">Service is running</string>
+    <string name="dashboard_detail_idle">Tap below to start</string>
+    <string name="dashboard_no_node">No node selected</string>
+    <string name="dashboard_connect">Connect</string>
+    <string name="dashboard_disconnect">Disconnect</string>
+    <string name="dashboard_upload">Upload</string>
+    <string name="dashboard_download">Download</string>
+    <string name="dashboard_current_node">Current node</string>
+    <string name="dashboard_switch">Switch</string>
+    <string name="about_check_update">Check for updates</string>
+    <string name="about_check_update_preview">Check for preview updates</string>
+    <string name="about_ignore_battery">Ignore battery optimizations</string>
+    <string name="about_ignore_battery_sum">Keeps the proxy service alive in the background</string>
+    <string name="about_license">License</string>
+    <string name="about_singbox">sing-box</string>
 </resources>

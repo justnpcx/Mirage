@@ -46,20 +46,16 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
         val profileId = DataStore.currentProfile
         val profile = if (profileId > 0) ProfileManager.getProfile(profileId) else null
         _state.value = DashboardState(
-            stateLabel = when (serviceState) {
-                BaseService.State.Connected -> "Connected"
-                BaseService.State.Connecting -> "Connecting…"
-                BaseService.State.Stopping -> "Stopping…"
-                else -> "Not connected"
+            connectionState = when (serviceState) {
+                BaseService.State.Connected -> ConnectionState.CONNECTED
+                BaseService.State.Connecting -> ConnectionState.CONNECTING
+                BaseService.State.Stopping -> ConnectionState.STOPPING
+                else -> ConnectionState.DISCONNECTED
             },
-            stateDetail = when {
-                serviceState.connected -> "Traffic is routed through Mirage"
-                serviceState.started -> "Service is running"
-                else -> "Tap below to start"
-            },
+            started = serviceState.started,
             connected = serviceState.connected,
             canStop = serviceState.canStop,
-            profileName = profile?.displayName() ?: "No node selected",
+            profileName = profile?.displayName() ?: "",
             serverAddress = profile?.displayAddress() ?: "",
             // keep the last rates while connected, blank them out otherwise
             upload = if (serviceState.connected) _state.value.upload else "—",

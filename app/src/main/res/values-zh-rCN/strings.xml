@@ -500,4 +500,24 @@
     <string name="app_list_permission_denied">无法读取已安装的应用。\n这通常是由于系统限制了应用的读取权限（例如某些中国厂商系统）。\n请在系统设置中授予权限。</string>
     <string name="open_app_settings">打开系统设置</string>
     <string name="dns_failure_hint">提示：无法解析代理服务器的域名。若运营商封了当前 DNS，请在「设置 - DNS」中补充一个可用地址；应用会先探测并自动选用可达的那个。</string>
+    <string name="dashboard_state_connected">已连接</string>
+    <string name="dashboard_state_connecting">正在连接…</string>
+    <string name="dashboard_state_stopping">正在断开…</string>
+    <string name="dashboard_state_disconnected">未连接</string>
+    <string name="dashboard_detail_routed">流量已通过 Mirage 转发</string>
+    <string name="dashboard_detail_running">服务运行中</string>
+    <string name="dashboard_detail_idle">点击下方按钮启动</string>
+    <string name="dashboard_no_node">未选择节点</string>
+    <string name="dashboard_connect">连接</string>
+    <string name="dashboard_disconnect">断开</string>
+    <string name="dashboard_upload">上传</string>
+    <string name="dashboard_download">下载</string>
+    <string name="dashboard_current_node">当前节点</string>
+    <string name="dashboard_switch">切换</string>
+    <string name="about_check_update">检查更新</string>
+    <string name="about_check_update_preview">检查预览版更新</string>
+    <string name="about_ignore_battery">忽略电池优化</string>
+    <string name="about_ignore_battery_sum">保持代理服务在后台运行</string>
+    <string name="about_license">开源许可</string>
+    <string name="about_singbox">sing-box</string>
 </resources>

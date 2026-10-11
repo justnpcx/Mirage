@@ -27,6 +27,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.justnpcx.mirage.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -34,9 +36,11 @@ import androidx.compose.ui.unit.dp
 /**
  * Immutable UI state for the Home / Dashboard screen.
  */
+enum class ConnectionState { CONNECTED, CONNECTING, STOPPING, DISCONNECTED }
+
 data class DashboardState(
-    val stateLabel: String,
-    val stateDetail: String,
+    val connectionState: ConnectionState = ConnectionState.DISCONNECTED,
+    val started: Boolean = false,
     val connected: Boolean,
     val canStop: Boolean,
     val profileName: String,
@@ -46,11 +50,11 @@ data class DashboardState(
 ) {
     companion object {
         fun empty() = DashboardState(
-            stateLabel = "Not connected",
-            stateDetail = "",
+            connectionState = ConnectionState.DISCONNECTED,
+            started = false,
             connected = false,
             canStop = false,
-            profileName = "No node selected",
+            profileName = "",
             serverAddress = "",
         )
     }
@@ -95,7 +99,7 @@ fun DashboardScreen(
                 Icon(Icons.Filled.PowerSettingsNew, contentDescription = null)
                 Spacer(Modifier.size(8.dp))
                 Text(
-                    text = if (state.canStop) "Disconnect" else "Connect",
+                    text = stringResource(if (state.canStop) R.string.dashboard_disconnect else R.string.dashboard_connect),
                     style = MaterialTheme.typography.titleMedium,
                 )
             }
@@ -105,6 +109,21 @@ fun DashboardScreen(
 
 @Composable
 private fun StatusCard(state: DashboardState) {
+    val stateLabel = stringResource(
+        when (state.connectionState) {
+            ConnectionState.CONNECTED -> R.string.dashboard_state_connected
+            ConnectionState.CONNECTING -> R.string.dashboard_state_connecting
+            ConnectionState.STOPPING -> R.string.dashboard_state_stopping
+            ConnectionState.DISCONNECTED -> R.string.dashboard_state_disconnected
+        }
+    )
+    val stateDetail = stringResource(
+        when {
+            state.connected -> R.string.dashboard_detail_routed
+            state.started -> R.string.dashboard_detail_running
+            else -> R.string.dashboard_detail_idle
+        }
+    )
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -117,13 +136,13 @@ private fun StatusCard(state: DashboardState) {
     ) {
         Column(Modifier.padding(20.dp)) {
             Text(
-                text = state.stateLabel,
+                text = stateLabel,
                 style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.SemiBold,
             )
             Spacer(Modifier.height(4.dp))
             Text(
-                text = state.stateDetail,
+                text = stateDetail,
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -140,8 +159,8 @@ private fun TrafficCard(state: DashboardState) {
                 .padding(20.dp),
             horizontalArrangement = Arrangement.SpaceEvenly,
         ) {
-            TrafficMetric("Upload", state.upload)
-            TrafficMetric("Download", state.download)
+            TrafficMetric(stringResource(R.string.dashboard_upload), state.upload)
+            TrafficMetric(stringResource(R.string.dashboard_download), state.download)
         }
     }
 }
@@ -173,13 +192,13 @@ private fun ProfileCard(state: DashboardState, onOpenProfiles: () -> Unit) {
         ) {
             Column(Modifier.weight(1f)) {
                 Text(
-                    text = "Current node",
+                    text = stringResource(R.string.dashboard_current_node),
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(
-                    text = state.profileName,
+                    text = state.profileName.ifBlank { stringResource(R.string.dashboard_no_node) },
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Medium,
                     maxLines = 1,
@@ -199,7 +218,7 @@ private fun ProfileCard(state: DashboardState, onOpenProfiles: () -> Unit) {
             OutlinedButton(onClick = onOpenProfiles) {
                 Icon(Icons.Filled.SwapHoriz, contentDescription = null)
                 Spacer(Modifier.size(6.dp))
-                Text("Switch")
+                Text(stringResource(R.string.dashboard_switch))
             }
         }
     }

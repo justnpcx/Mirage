@@ -20,6 +20,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.justnpcx.mirage.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -66,11 +68,11 @@ fun AboutScreen(
                         onClick = { onOpenUrl("https://github.com/justnpcx/Mirage/releases") },
                     )
                     Divider()
-                    InfoRow(title = "Check for updates", onClick = { onCheckUpdate(false) })
+                    InfoRow(title = stringResource(R.string.about_check_update), onClick = { onCheckUpdate(false) })
                     Divider()
-                    InfoRow(title = "Check for preview updates", onClick = { onCheckUpdate(true) })
+                    InfoRow(title = stringResource(R.string.about_check_update_preview), onClick = { onCheckUpdate(true) })
                     Divider()
-                    InfoRow(title = "sing-box", subtitle = state.singBoxVersion, onClick = null)
+                    InfoRow(title = stringResource(R.string.about_singbox), subtitle = state.singBoxVersion, onClick = null)
                 }
             }
 
@@ -93,8 +95,8 @@ fun AboutScreen(
                 item {
                     AboutCard {
                         InfoRow(
-                            title = "Ignore battery optimizations",
-                            subtitle = "Keeps the proxy service alive in the background",
+                            title = stringResource(R.string.about_ignore_battery),
+                            subtitle = stringResource(R.string.about_ignore_battery_sum),
                             onClick = onRequestIgnoreBatteryOptimizations,
                         )
                     }
@@ -109,7 +111,7 @@ fun AboutScreen(
 
             item {
                 Text(
-                    text = "License",
+                    text = stringResource(R.string.about_license),
                     style = MaterialTheme.typography.titleSmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
