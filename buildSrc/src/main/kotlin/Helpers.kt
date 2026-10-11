@@ -152,7 +152,9 @@ fun Project.setupAppCommon() {
 fun Project.setupApp() {
     val pkgName = requireMetadata().getProperty("PACKAGE_NAME")
     val verName = requireMetadata().getProperty("VERSION_NAME")
-    val verCode = (requireMetadata().getProperty("VERSION_CODE").toInt()) * 5
+    // used verbatim: VERSION_CODE is a monotonic build number, deliberately decoupled from
+    // VERSION_NAME so the name can be reset without breaking in-place upgrades
+    val verCode = requireMetadata().getProperty("VERSION_CODE").toInt()
     android.apply {
         defaultConfig {
             applicationId = pkgName
