@@ -2,11 +2,13 @@ package com.justnpcx.mirage.ui.compose
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.justnpcx.mirage.database.DataStore
 import com.justnpcx.mirage.database.SagerDatabase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 data class NodeItem(
     val id: Long,
@@ -51,5 +53,30 @@ class NodeListViewModel(application: Application) : AndroidViewModel(application
         DataStore.selectedProxy = id
         DataStore.currentProfile = id
         refresh()
+    }
+
+    /** Live reorder while dragging; call [persistOrder] once the drag ends. */
+    fun move(from: Int, to: Int) {
+        val nodes = _state.value.nodes
+        if (from !in nodes.indices || to !in nodes.indices || from == to) return
+        val reordered = nodes.toMutableList()
+        reordered.add(to, reordered.removeAt(from))
+        _state.value = _state.value.copy(nodes = reordered)
+    }
+
+    /** Writes the current order back to the database (userOrder = position + 1). */
+    fun persistOrder() {
+        val order = _state.value.nodes.map { it.id }
+        if (order.isEmpty()) return
+        viewModelScope.launch {
+            runCatching {
+                val entities = SagerDatabase.proxyDao.getEntities(order)
+                val byId = entities.associateBy { it.id }
+                val updated = order.mapIndexedNotNull { index, id ->
+                    byId[id]?.also { it.userOrder = (index + 1).toLong() }
+                }
+                if (updated.isNotEmpty()) SagerDatabase.proxyDao.updateProxy(updated)
+            }
+        }
     }
 }

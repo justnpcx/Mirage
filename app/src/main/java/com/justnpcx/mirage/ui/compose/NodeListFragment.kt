@@ -25,7 +25,12 @@ class NodeListFragment : ToolbarFragment(R.layout.layout_compose) {
         view.findViewById<ComposeView>(R.id.compose_view).setContent {
             MirageTheme {
                 val state by viewModel.state.collectAsStateWithLifecycle()
-                NodeListScreen(state = state, onSelect = viewModel::select)
+                NodeListScreen(
+                    state = state,
+                    onSelect = viewModel::select,
+                    onMove = viewModel::move,
+                    onMoveFinished = viewModel::persistOrder,
+                )
             }
         }
     }
