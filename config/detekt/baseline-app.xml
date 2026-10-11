@@ -1,0 +1,79 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <ManuallySuppressedIssues></ManuallySuppressedIssues>
+  <CurrentIssues>
+    <ID>ComplexCondition:RawUpdater.kt$RawUpdater$ty == null || ty == "" || ty == "dns" || ty == "block" || ty == "direct" || ty == "selector" || ty == "urltest"</ID>
+    <ID>CyclomaticComplexMethod:Commandline.kt$Commandline$fun translateCommandline(toProcess: String?): Array&lt;String&gt;</ID>
+    <ID>CyclomaticComplexMethod:ConfigBuilder.kt$fun buildConfig( proxy: ProxyEntity, forTest: Boolean = false, forExport: Boolean = false ): ConfigBuildResult</ID>
+    <ID>CyclomaticComplexMethod:ConfigEditActivity.kt$ConfigEditActivity$@SuppressLint("InlinedApi") override fun onCreate(savedInstanceState: Bundle?)</ID>
+    <ID>CyclomaticComplexMethod:ConfigurationFragment.kt$ConfigurationFragment$@OptIn(DelicateCoroutinesApi::class) @Suppress("EXPERIMENTAL_API_USAGE") fun pingTest(icmpPing: Boolean)</ID>
+    <ID>CyclomaticComplexMethod:ConfigurationFragment.kt$ConfigurationFragment$override fun onMenuItemClick(item: MenuItem): Boolean</ID>
+    <ID>CyclomaticComplexMethod:ConfigurationFragment.kt$ConfigurationFragment.GroupFragment.ConfigurationHolder$fun bind(proxyEntity: ProxyEntity, trafficData: TrafficData? = null)</ID>
+    <ID>CyclomaticComplexMethod:ConfigurationFragment.kt$ConfigurationFragment.GroupPagerAdapter$fun reload(now: Boolean = false)</ID>
+    <ID>CyclomaticComplexMethod:Formats.kt$suspend fun parseProxies(text: String): List&lt;AbstractBean&gt;</ID>
+    <ID>CyclomaticComplexMethod:GroupFragment.kt$GroupFragment.GroupHolder$fun bind(group: ProxyGroup)</ID>
+    <ID>CyclomaticComplexMethod:HysteriaFmt.kt$fun HysteriaBean.buildHysteria1Config(port: Int, cacheFile: (() -&gt; File)?): String</ID>
+    <ID>CyclomaticComplexMethod:HysteriaFmt.kt$fun HysteriaBean.toUri(): String</ID>
+    <ID>CyclomaticComplexMethod:HysteriaFmt.kt$fun buildSingBoxOutboundHysteriaBean(bean: HysteriaBean): SingBoxOptions.SingBoxOption</ID>
+    <ID>CyclomaticComplexMethod:HysteriaFmt.kt$fun parseHysteria1(url: String): HysteriaBean</ID>
+    <ID>CyclomaticComplexMethod:ProfileSettingsActivity.kt$ProfileSettingsActivity.MyPreferenceFragmentCompat$@SuppressLint("CheckResult") override fun onOptionsItemSelected(item: MenuItem)</ID>
+    <ID>CyclomaticComplexMethod:ProxyEntity.kt$ProxyEntity$fun displayType(): String</ID>
+    <ID>CyclomaticComplexMethod:ProxyEntity.kt$ProxyEntity$fun putBean(bean: AbstractBean): ProxyEntity</ID>
+    <ID>CyclomaticComplexMethod:ProxyEntity.kt$ProxyEntity$fun putByteArray(byteArray: ByteArray)</ID>
+    <ID>CyclomaticComplexMethod:ProxyEntity.kt$ProxyEntity$fun requireBean(): AbstractBean</ID>
+    <ID>CyclomaticComplexMethod:ProxyEntity.kt$ProxyEntity$fun settingIntent(ctx: Context, isSubscription: Boolean): Intent</ID>
+    <ID>CyclomaticComplexMethod:RawUpdater.kt$RawUpdater$@Suppress("UNCHECKED_CAST") suspend fun parseRaw(text: String, fileName: String = ""): List&lt;AbstractBean&gt;?</ID>
+    <ID>CyclomaticComplexMethod:RawUpdater.kt$RawUpdater$@SuppressLint("Recycle") override suspend fun doUpdate( proxyGroup: ProxyGroup, subscription: SubscriptionBean, userInterface: GroupManager.Interface?, byUser: Boolean )</ID>
+    <ID>CyclomaticComplexMethod:RawUpdater.kt$RawUpdater$fun parseJSON(json: Any): List&lt;AbstractBean&gt;</ID>
+    <ID>CyclomaticComplexMethod:SingBoxOptionsUtil.kt$fun SingBoxOptions.Rule_DefaultOptions.makeSingBoxRule(list: List&lt;String&gt;, isIP: Boolean)</ID>
+    <ID>CyclomaticComplexMethod:Theme.kt$Theme$fun getDialogTheme(theme: Int): Int</ID>
+    <ID>CyclomaticComplexMethod:Theme.kt$Theme$fun getTheme(theme: Int): Int</ID>
+    <ID>CyclomaticComplexMethod:TrafficLooper.kt$TrafficLooper$private suspend fun loop()</ID>
+    <ID>CyclomaticComplexMethod:TrojanGoFmt.kt$fun TrojanGoBean.buildTrojanGoConfig(port: Int): String</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun StandardV2RayBean.parseDuckSoft(url: HttpUrl)</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun StandardV2RayBean.toUriVMessVLESSTrojan(isTrojan: Boolean): String</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun buildSingBoxOutboundStandardV2RayBean(bean: StandardV2RayBean): Outbound</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun buildSingBoxOutboundStreamSettings(bean: StandardV2RayBean): V2RayTransportOptions?</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun buildSingBoxOutboundTLS(bean: StandardV2RayBean): OutboundTLSOptions?</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun parseV2Ray(link: String): StandardV2RayBean</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$private fun tryResolveVmess4Kitsunebi(server: String): VMessBean</ID>
+    <ID>CyclomaticComplexMethod:VpnService.kt$VpnService$fun startVpn(tunOptionsJson: String, tunPlatformOptionsJson: String): Int</ID>
+    <ID>EmptyCatchBlock:AutoCollapseTextView.kt$AutoCollapseTextView${ }</ID>
+    <ID>EmptyCatchBlock:ConfigEditActivity.kt$ConfigEditActivity${ }</ID>
+    <ID>EmptyCatchBlock:CrashHandler.kt$CrashHandler${ }</ID>
+    <ID>EmptyCatchBlock:QRCodeDialog.kt$QRCodeDialog${ }</ID>
+    <ID>EmptyFunctionBlock:ConfigurationFragment.kt$ConfigurationFragment.GroupFragment.&lt;no name provided&gt;${ }</ID>
+    <ID>EmptyFunctionBlock:DataStore.kt$DataStore${ }</ID>
+    <ID>EmptyFunctionBlock:ProxyEntity.kt$ProxyEntity${ }</ID>
+    <ID>EmptyFunctionBlock:QuickDisableShortcut.kt$QuickDisableShortcut${}</ID>
+    <ID>EmptyFunctionBlock:QuickEnableShortcut.kt$QuickEnableShortcut${}</ID>
+    <ID>EmptyFunctionBlock:QuickToggleShortcut.kt$QuickToggleShortcut${}</ID>
+    <ID>EmptyFunctionBlock:Utils.kt$RestartCallback${ }</ID>
+    <ID>ExplicitItLambdaParameter:RawUpdater.kt$RawUpdater${ _, it -&gt; if (isJsonObjectValid(it)) { proxies.addAll(parseJSON(it)) } }</ID>
+    <ID>LongMethod:ConfigBuilder.kt$fun buildChain( chainId: Long, entity: ProxyEntity ): String</ID>
+    <ID>LongMethod:ConfigBuilder.kt$fun buildConfig( proxy: ProxyEntity, forTest: Boolean = false, forExport: Boolean = false ): ConfigBuildResult</ID>
+    <ID>LongMethod:ConfigurationFragment.kt$ConfigurationFragment$override fun onMenuItemClick(item: MenuItem): Boolean</ID>
+    <ID>LongMethod:RawUpdater.kt$RawUpdater$@Suppress("UNCHECKED_CAST") suspend fun parseRaw(text: String, fileName: String = ""): List&lt;AbstractBean&gt;?</ID>
+    <ID>LongMethod:RawUpdater.kt$RawUpdater$@SuppressLint("Recycle") override suspend fun doUpdate( proxyGroup: ProxyGroup, subscription: SubscriptionBean, userInterface: GroupManager.Interface?, byUser: Boolean )</ID>
+    <ID>NestedBlockDepth:ConfigBuilder.kt$fun buildConfig( proxy: ProxyEntity, forTest: Boolean = false, forExport: Boolean = false ): ConfigBuildResult</ID>
+    <ID>NestedBlockDepth:RawUpdater.kt$RawUpdater$@Suppress("UNCHECKED_CAST") suspend fun parseRaw(text: String, fileName: String = ""): List&lt;AbstractBean&gt;?</ID>
+    <ID>PrintStackTrace:NGUtil.kt$NGUtil$e</ID>
+    <ID>PrintStackTrace:SagerConnection.kt$SagerConnection$e</ID>
+    <ID>ProtectedMemberInFinalClass:ScannerActivity.kt$ScannerActivity$protected fun toggleTorchState()</ID>
+    <ID>ThrowingExceptionsWithoutMessageOrCause:ProxyEntity.kt$ProxyEntity$IllegalArgumentException()</ID>
+    <ID>TooGenericExceptionThrown:ConfigBuilder.kt$throw Exception("No direct DNS, check your settings!")</ID>
+    <ID>TooGenericExceptionThrown:ConfigBuilder.kt$throw Exception("No remote DNS, check your settings!")</ID>
+    <ID>TooGenericExceptionThrown:ConfigBuilder.kt$throw Exception("You are using an unsupported $pluginId, please download the correct plugin.")</ID>
+    <ID>TooGenericExceptionThrown:HysteriaFmt.kt$throw Exception("error version: $protocolVersion")</ID>
+    <ID>TooGenericExceptionThrown:NativeInterface.kt$NativeInterface$throw Exception("no VpnService")</ID>
+    <ID>TooGenericExceptionThrown:ScannerActivity.kt$ScannerActivity$throw Exception("QR code not found")</ID>
+    <ID>TooGenericExceptionThrown:StunActivity.kt$StunActivity$throw Exception(_result.text)</ID>
+    <ID>TooGenericExceptionThrown:TuicFmt.kt$throw Exception("TUIC v4 is no longer supported")</ID>
+    <ID>TooGenericExceptionThrown:V2RayFmt.kt$throw Exception("invalid VmessQRCode")</ID>
+    <ID>UseCheckOrError:ConfigBuilder.kt$throw IllegalStateException("can't reach")</ID>
+    <ID>UseCheckOrError:Util.kt$Util$throw IllegalStateException("Cannot decode base64")</ID>
+    <ID>UseCheckOrError:V2RayFmt.kt$throw IllegalStateException("can't reach")</ID>
+    <ID>UseCheckOrError:V2RayFmt.kt$throw IllegalStateException("invalid kitsunebi format")</ID>
+    <ID>UtilityClassWithPublicConstructor:StringCollectionConverter.kt$StringCollectionConverter</ID>
+  </CurrentIssues>
+</SmellBaseline>

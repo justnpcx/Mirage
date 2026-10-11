@@ -72,10 +72,12 @@ jobs:
           restore-keys: gradle-
       - name: Download assets
         run: ./run init action gradle
+      - name: Static analysis & unit tests
+        run: ./gradlew :app:detekt :core:model:detekt :core:model:allTests :app:testOssReleaseUnitTest
       - name: Gradle Build
         env:
           BUILD_PLUGIN: none
-        run: ./gradlew :core:model:allTests app:assembleOssRelease
+        run: ./gradlew app:assembleOssRelease
       - name: Collect APKs
         run: |
           mkdir -p apks

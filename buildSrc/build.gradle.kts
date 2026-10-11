@@ -13,4 +13,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.0.21")
     // kotlinx.serialization compiler plugin
     implementation("org.jetbrains.kotlin:kotlin-serialization:2.0.21")
+    // Static analysis
+    implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.7")
 }

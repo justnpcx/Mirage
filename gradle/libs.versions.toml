@@ -47,6 +47,7 @@ desugar = "2.0.3"
 # Testing
 junit = "4.13.2"
 kotlinxCoroutinesTest = "1.6.4"
+robolectric = "4.14.1"
 
 [libraries]
 # Compose
@@ -106,6 +107,7 @@ desugar-jdk-libs = { group = "com.android.tools", name = "desugar_jdk_libs", ver
 # Testing
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinxCoroutinesTest" }
+robolectric = { group = "org.robolectric", name = "robolectric", version.ref = "robolectric" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

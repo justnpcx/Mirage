@@ -1,0 +1,99 @@
+# Detekt configuration for Mirage.
+#
+# This project adopts detekt on a large legacy codebase, so the configuration starts from the
+# defaults and turns off the rules that produce noise on generated/legacy code. Correctness-oriented
+# rule sets (potential-bugs, exceptions, coroutines) stay enabled and regressions are tracked with a
+# baseline (config/detekt/baseline.xml).
+
+build:
+  maxIssues: 0
+
+config:
+  validation: true
+
+processors:
+  active: true
+
+console-reports:
+  active: true
+
+complexity:
+  active: true
+  LongMethod:
+    threshold: 150
+  LongParameterList:
+    functionThreshold: 12
+    constructorThreshold: 12
+  TooManyFunctions:
+    thresholdInFiles: 40
+    thresholdInClasses: 40
+    thresholdInInterfaces: 40
+    thresholdInObjects: 40
+    thresholdInEnums: 40
+  ComplexCondition:
+    threshold: 6
+  NestedBlockDepth:
+    threshold: 6
+  CognitiveComplexMethod:
+    active: false
+  LargeClass:
+    threshold: 900
+
+coroutines:
+  active: true
+
+exceptions:
+  active: true
+  TooGenericExceptionCaught:
+    active: false
+  SwallowedException:
+    active: false
+  InstanceOfCheckForException:
+    active: false
+
+naming:
+  active: false
+
+performance:
+  active: true
+  SpreadOperator:
+    active: false
+
+potential-bugs:
+  active: true
+  UnsafeCallOnNullableType:
+    active: false
+  ImplicitDefaultLocale:
+    active: false
+
+style:
+  active: true
+  MagicNumber:
+    active: false
+  MaxLineLength:
+    active: false
+  WildcardImport:
+    active: false
+  ReturnCount:
+    active: false
+  UnusedPrivateMember:
+    active: false
+  UnusedParameter:
+    active: false
+  UnusedPrivateProperty:
+    active: false
+  ForbiddenComment:
+    active: false
+  LoopWithTooManyJumpStatements:
+    active: false
+  ThrowsCount:
+    active: false
+  DataClassContainsFunctions:
+    active: false
+  FunctionOnlyReturningConstant:
+    active: false
+  NewLineAtEndOfFile:
+    active: false
+
+comments:
+  active: false
