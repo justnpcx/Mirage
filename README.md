@@ -120,18 +120,19 @@ ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.0.8775105 \
 ./gradlew app:bundleOssRelease     # .aab（用于商店分发）
 ```
 
-### Baseline Profile（启动性能，可选）
+### Baseline Profile（启动性能）
 
-应用已依赖 `androidx.profileinstaller`，只要产出 profile 即会在安装时生效。
-生成需要**连接真机或模拟器**（生成过程会实际启动应用）：
+仓库已包含 `:baselineprofile` 模块（`com.android.test`）与 app 的 `benchmark` 构建类型，
+并已依赖 `androidx.profileinstaller`。**生成过程会真实启动应用，必须连接真机或模拟器**
+（无法在 CI 中完成）：
 
 ```bash
-# 需在 app 模块中先声明一个 benchmark 构建类型并加入 :baselineprofile 测试模块
-./gradlew :app:generateBaselineProfile
+# 设备已连接（adb devices 可见）后执行：
+./gradlew :app:generateOssBenchmarkBaselineProfile
 ```
 
-该模块尚未随仓库提供（生成依赖设备，无法在 CI 里完成）；在设备上生成后，
-profile 会落到 `app/src/<variant>/generated/baselineProfiles/`。
+生成的 profile 会写入 `app/src/ossBenchmark/generated/baselineProfiles/`，随下次构建打进 APK，
+安装后由 `profileinstaller` 生效。
 
 > ⚠️ **Go 版本**：`gomobile` 的 `go.mod` 使用了 `godebug gotypesalias=0`，该 GODEBUG 在 **Go 1.27 被移除**，
 > 因此编译内核必须使用 **Go 1.26.x**（CI 已固定）。

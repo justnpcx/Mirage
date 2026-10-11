@@ -1,6 +1,7 @@
 package io.nekohasekai.sagernet.group
 
 import android.annotation.SuppressLint
+import com.justnpcx.mirage.core.subscription.ClashProxyOptions
 import io.nekohasekai.sagernet.R
 import io.nekohasekai.sagernet.database.*
 import io.nekohasekai.sagernet.fmt.AbstractBean
@@ -270,36 +271,12 @@ object RawUpdater : GroupUpdater() {
                         }
 
                         "ss" -> {
-                            val ssPlugin = mutableListOf<String>()
-                            if (proxy.contains("plugin")) {
-                                val opts = proxy["plugin-opts"] as Map<String, Any?>
-                                when (proxy["plugin"]) {
-                                    "obfs" -> {
-                                        ssPlugin.apply {
-                                            add("obfs-local")
-                                            add("obfs=" + (opts["mode"]?.toString() ?: ""))
-                                            add("obfs-host=" + (opts["host"]?.toString() ?: ""))
-                                        }
-                                    }
-
-                                    "v2ray-plugin" -> {
-                                        ssPlugin.apply {
-                                            add("v2ray-plugin")
-                                            add("mode=" + (opts["mode"]?.toString() ?: ""))
-                                            if (opts["mode"]?.toString() == "true") add("tls")
-                                            add("host=" + (opts["host"]?.toString() ?: ""))
-                                            add("path=" + (opts["path"]?.toString() ?: ""))
-                                            if (opts["mux"]?.toString() == "true") add("mux=8")
-                                        }
-                                    }
-                                }
-                            }
                             proxies.add(ShadowsocksBean().apply {
                                 serverAddress = proxy["server"] as String
                                 serverPort = proxy["port"].toString().toInt()
                                 password = proxy["password"]?.toString()
-                                method = clashCipher(proxy["cipher"] as String)
-                                plugin = ssPlugin.joinToString(";")
+                                method = ClashProxyOptions.normalizeCipher(proxy["cipher"] as String)
+                                plugin = ClashProxyOptions.shadowsocksPlugin(proxy)
                                 name = proxy["name"]?.toString()
                             })
                         }
@@ -322,172 +299,51 @@ object RawUpdater : GroupUpdater() {
                             bean.serverAddress = proxy["server"]?.toString() ?: continue
                             bean.serverPort = proxy["port"]?.toString()?.toIntOrNull() ?: continue
 
-                            for (opt in proxy) {
-                                when (opt.key) {
-                                    "name" -> bean.name = opt.value?.toString()
-                                    "password" -> if (bean is TrojanBean) bean.password =
-                                        opt.value?.toString()
+                            // The dense Clash option parsing lives in :core:subscription.
+                            val clash = ClashProxyOptions.from(proxy)
 
-                                    "uuid" -> if (bean is VMessBean) bean.uuid =
-                                        opt.value?.toString()
-
-                                    "alterId" -> if (bean is VMessBean && !bean.isVLESS) bean.alterId =
-                                        opt.value?.toString()?.toIntOrNull()
-
-                                    "cipher" -> if (bean is VMessBean && !bean.isVLESS) bean.encryption =
-                                        (opt.value as? String)
-
-                                    "flow" -> if (bean is VMessBean && bean.isVLESS) {
-                                        (opt.value as? String)?.let {
-                                            if (it.contains("xtls-rprx-vision")) {
-                                                bean.encryption = "xtls-rprx-vision"
-                                            }
-                                        }
-                                    }
-
-                                    "packet-encoding" -> if (bean is VMessBean) {
-                                        bean.packetEncoding = when ((opt.value as? String)) {
-                                            "packetaddr" -> 1
-                                            "xudp" -> 2
-                                            else -> 0
-                                        }
-                                    }
-
-                                    "tls" -> if (bean is VMessBean) {
-                                        bean.security =
-                                            if (opt.value as? Boolean == true) "tls" else ""
-                                    }
-
-                                    "servername", "sni" -> bean.sni = opt.value?.toString()
-
-                                    "alpn" -> bean.alpn =
-                                        (opt.value as? List<Any>)?.joinToString("\n")
-
-                                    "skip-cert-verify" -> bean.allowInsecure =
-                                        opt.value as? Boolean == true
-
-                                    "client-fingerprint" -> bean.utlsFingerprint =
-                                        opt.value as String
-
-                                    "reality-opts" -> (opt.value as? Map<String, Any?>)?.also {
-                                        for (realityOpt in it) {
-                                            bean.security = "tls"
-
-                                            when (realityOpt.key) {
-                                                "public-key" -> bean.realityPubKey =
-                                                    realityOpt.value?.toString()
-
-                                                "short-id" -> bean.realityShortId =
-                                                    realityOpt.value?.toString()
-                                            }
-                                        }
-                                    }
-
-                                    "network" -> {
-                                        when (opt.value) {
-                                            "h2", "http" -> bean.type = "http"
-                                            "ws", "grpc" -> bean.type = opt.value as String
-                                        }
-                                    }
-
-                                    "ws-opts" -> (opt.value as? Map<String, Any?>)?.also {
-                                        for (wsOpt in it) {
-                                            when (wsOpt.key) {
-                                                "headers" -> (wsOpt.value as? Map<Any, Any?>)?.forEach { (key, value) ->
-                                                    when (key.toString().lowercase()) {
-                                                        "host" -> {
-                                                            bean.host = value?.toString()
-                                                        }
-                                                    }
-                                                }
-
-                                                "path" -> {
-                                                    bean.path = wsOpt.value?.toString()
-                                                }
-
-                                                "max-early-data" -> {
-                                                    bean.wsMaxEarlyData =
-                                                        wsOpt.value?.toString()?.toIntOrNull()
-                                                }
-
-                                                "early-data-header-name" -> {
-                                                    bean.earlyDataHeaderName =
-                                                        wsOpt.value?.toString()
-                                                }
-
-                                                "v2ray-http-upgrade" -> {
-                                                    if (wsOpt.value as? Boolean == true) {
-                                                        bean.type = "httpupgrade"
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    "h2-opts" -> (opt.value as? Map<String, Any?>)?.also {
-                                        for (h2Opt in it) {
-                                            when (h2Opt.key) {
-                                                "host" -> bean.host =
-                                                    (h2Opt.value as? List<Any>)?.joinToString("\n")
-
-                                                "path" -> bean.path = h2Opt.value?.toString()
-                                            }
-                                        }
-                                    }
-
-                                    "http-opts" -> (opt.value as? Map<String, Any?>)?.also {
-                                        for (httpOpt in it) {
-                                            when (httpOpt.key) {
-                                                "path" -> bean.path =
-                                                    (httpOpt.value as? List<Any>)?.joinToString("\n")
-
-                                                "headers" -> {
-                                                    (httpOpt.value as? Map<Any, List<Any>>)?.forEach { (key, value) ->
-                                                        when (key.toString().lowercase()) {
-                                                            "host" -> {
-                                                                bean.host = value.joinToString("\n")
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
-
-                                    "grpc-opts" -> (opt.value as? Map<String, Any?>)?.also {
-                                        for (grpcOpt in it) {
-                                            when (grpcOpt.key) {
-                                                "grpc-service-name" -> bean.path =
-                                                    grpcOpt.value?.toString()
-                                            }
-                                        }
-                                    }
-
-                                    "smux" -> (opt.value as? Map<String, Any?>)?.also {
-                                        for (smuxOpt in it) {
-                                            when (smuxOpt.key) {
-                                                "enabled" -> bean.enableMux =
-                                                    smuxOpt.value.toString() == "true"
-
-                                                "max-streams" -> bean.muxConcurrency =
-                                                    smuxOpt.value.toString().toInt()
-
-                                                "padding" -> bean.muxPadding =
-                                                    smuxOpt.value.toString() == "true"
-                                            }
-                                        }
-                                    }
-
-                                    "ech-opts" -> (opt.value as? Map<String, Any?>)?.also {
-                                        for (echOpt in it) {
-                                            when (echOpt.key) {
-                                                "enable" -> bean.enableECH =
-                                                    echOpt.value.toString() == "true"
-                                            }
-                                        }
+                            bean.name = proxy["name"]?.toString() ?: ""
+                            if (bean is TrojanBean) {
+                                bean.password = proxy["password"]?.toString() ?: ""
+                            } else if (bean is VMessBean) {
+                                bean.uuid = proxy["uuid"]?.toString() ?: ""
+                                if (!bean.isVLESS) {
+                                    (proxy["alterId"]?.toString()?.toIntOrNull())?.let { bean.alterId = it }
+                                    (proxy["cipher"] as? String)?.let { bean.encryption = it }
+                                } else {
+                                    (proxy["flow"] as? String)?.let {
+                                        if (it.contains("xtls-rprx-vision")) bean.encryption = "xtls-rprx-vision"
                                     }
                                 }
+                                (proxy["packet-encoding"] as? String)?.let {
+                                    bean.packetEncoding = when (it) {
+                                        "packetaddr" -> 1
+                                        "xudp" -> 2
+                                        else -> 0
+                                    }
+                                }
+                                // `tls` is only meaningful for VMess/VLESS here.
+                                clash.security?.let { bean.security = it }
                             }
+
+                            if (clash.network.isNotEmpty()) bean.type = clash.network
+                            if (clash.sni.isNotEmpty()) bean.sni = clash.sni
+                            if (clash.alpn.isNotEmpty()) bean.alpn = clash.alpn
+                            clash.allowInsecure?.let { bean.allowInsecure = it }
+                            if (clash.fingerprint.isNotEmpty()) bean.utlsFingerprint = clash.fingerprint
+                            if (clash.realityPublicKey.isNotEmpty()) bean.realityPubKey = clash.realityPublicKey
+                            if (clash.realityShortId.isNotEmpty()) bean.realityShortId = clash.realityShortId
+                            if (clash.host.isNotEmpty()) bean.host = clash.host
+                            if (clash.path.isNotEmpty()) bean.path = clash.path
+                            clash.maxEarlyData?.let { bean.wsMaxEarlyData = it }
+                            if (clash.earlyDataHeaderName.isNotEmpty()) {
+                                bean.earlyDataHeaderName = clash.earlyDataHeaderName
+                            }
+                            clash.enableMux?.let { bean.enableMux = it }
+                            clash.muxConcurrency?.let { bean.muxConcurrency = it }
+                            clash.muxPadding?.let { bean.muxPadding = it }
+                            clash.enableEch?.let { bean.enableECH = it }
+
                             proxies.add(bean)
                         }
 

@@ -15,4 +15,6 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-serialization:2.0.21")
     // Static analysis
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.7")
+    // Baseline profile generation
+    implementation("androidx.baselineprofile:androidx.baselineprofile.gradle.plugin:1.3.4")
 }

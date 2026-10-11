@@ -331,11 +331,22 @@ public class SingBoxOptions {
 
     public static class DNSServerOptions extends SingBoxOption {
 
+        // sing-box 1.12+ typed DNS server (the legacy `address` form was removed in 1.14)
+        public String type;
+
         public String tag;
 
-        public String address;
+        public String server;
 
-        public String address_resolver;
+        public String path;
+
+        public String rcode;
+
+        public String inet4_range;
+
+        public String inet6_range;
+
+        public String domain_resolver;
 
         public String address_strategy;
 
@@ -344,6 +355,11 @@ public class SingBoxOptions {
         public String strategy;
 
         public String detour;
+
+        // legacy fields, no longer emitted
+        public String address;
+
+        public String address_resolver;
 
     }
 
@@ -4517,6 +4533,11 @@ public class SingBoxOptions {
     }
 
     public static class DNSRule_DefaultOptions extends DNSRule {
+
+        // sing-box 1.12+ rule actions (the legacy `rcode://` DNS server was removed in 1.14)
+        public String action;
+
+        public String rcode;
 
         // Generate note: Listable
         public List<String> inbound;

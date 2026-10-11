@@ -164,6 +164,12 @@ fun Project.setupApp() {
                     file("proguard-rules.pro")
                 )
             }
+            // Used by the :baselineprofile module to generate a startup profile on a device.
+            create("benchmark") {
+                initWith(getByName("release"))
+                signingConfig = signingConfigs.findByName("release")
+                matchingFallbacks += listOf("release")
+            }
         }
 
         splits.abi {

@@ -574,8 +574,10 @@ fun buildConfig(
 
                     -2L -> {
                         userDNSRuleList += makeDnsRuleObj().apply {
-                            server = "dns-block"
-                            disable_cache = true
+                            // `rcode://success` is a rule action in sing-box 1.12+ (the rcode
+                            // DNS server was removed in 1.14.0).
+                            action = "predefined"
+                            rcode = "NOERROR"
                         }
                     }
                 }
@@ -649,22 +651,17 @@ fun buildConfig(
         }
 
         dns.servers.add(DNSServerOptions().apply {
-            address = "rcode://success"
-            tag = "dns-block"
-        })
-
-        dns.servers.add(DNSServerOptions().apply {
-            address = "local"
+            type = "local"
             tag = "dns-local"
             detour = TAG_DIRECT
         })
 
         directDNS.firstOrNull().let {
             dns.servers.add(DNSServerOptions().apply {
-                address = it ?: throw Exception("No direct DNS, check your settings!")
+                applyDnsAddress(it ?: throw Exception("No direct DNS, check your settings!"))
                 tag = "dns-direct"
                 detour = TAG_DIRECT
-                address_resolver = "dns-local"
+                domain_resolver = "dns-local"
                 strategy = autoDnsDomainStrategy(SingBoxOptionsUtil.domainStrategy(tag))
             })
         }
@@ -672,9 +669,9 @@ fun buildConfig(
         remoteDns.firstOrNull().let {
             // Always use direct DNS for urlTest
             if (!forTest) dns.servers.add(DNSServerOptions().apply {
-                address = it ?: throw Exception("No remote DNS, check your settings!")
+                applyDnsAddress(it ?: throw Exception("No remote DNS, check your settings!"))
                 tag = "dns-remote"
-                address_resolver = "dns-direct"
+                domain_resolver = "dns-direct"
                 strategy = autoDnsDomainStrategy(SingBoxOptionsUtil.domainStrategy(tag))
             })
         }
@@ -714,15 +711,13 @@ fun buildConfig(
             })
             // FakeDNS obj
             if (useFakeDns) {
-                dns.fakeip = DNSFakeIPOptions().apply {
-                    enabled = true
+                // sing-box 1.12+: fake IP is a typed DNS server; the `dns.fakeip` object was
+                // removed in 1.14.0.
+                dns.servers.add(DNSServerOptions().apply {
+                    type = "fakeip"
+                    tag = "dns-fake"
                     inet4_range = "198.18.0.0/15"
                     inet6_range = "fc00::/18"
-                }
-                dns.servers.add(DNSServerOptions().apply {
-                    address = "fakeip"
-                    tag = "dns-fake"
-                    strategy = "ipv4_only"
                 })
                 dns.rules.add(DNSRule_DefaultOptions().apply {
                     inbound = listOf("tun-in")
@@ -758,4 +753,41 @@ fun buildConfig(
         )
     }
 
+}
+
+/**
+ * Translates a legacy DNS "address" into the typed server form required by sing-box 1.12+
+ * (the legacy form was removed in 1.14.0).
+ */
+private val DNS_SCHEME_TYPES = mapOf(
+    "tcp://" to "tcp",
+    "tls://" to "tls",
+    "quic://" to "quic",
+    "dhcp://" to "dhcp",
+    "udp://" to "udp",
+)
+
+private fun DNSServerOptions.applyDnsAddress(address: String) {
+    if (address == "local") {
+        type = "local"
+        return
+    }
+
+    val scheme = DNS_SCHEME_TYPES.entries.firstOrNull { address.startsWith(it.key) }
+    if (scheme != null) {
+        type = scheme.value
+        server = address.removePrefix(scheme.key)
+        return
+    }
+
+    if (address.startsWith("https://") || address.startsWith("h3://")) {
+        type = if (address.startsWith("h3://")) "h3" else "https"
+        val rest = address.substringAfter("://")
+        server = rest.substringBefore("/")
+        if (rest.contains("/")) path = "/" + rest.substringAfter("/")
+        return
+    }
+
+    type = "udp"
+    server = address
 }

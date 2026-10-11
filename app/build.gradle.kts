@@ -7,6 +7,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("kotlin-parcelize")
     id("io.gitlab.arturbosch.detekt")
+    id("androidx.baselineprofile")
 }
 
 setupApp()
@@ -127,4 +128,7 @@ dependencies {
     testImplementation(libs.junit)
     testImplementation(libs.kotlinx.coroutines.test)
     testImplementation(libs.robolectric)
+
+    // Generates the startup Baseline Profile on a connected device.
+    baselineProfile(project(":baselineprofile"))
 }
