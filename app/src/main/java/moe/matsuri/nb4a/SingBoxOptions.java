@@ -113,6 +113,8 @@ public class SingBoxOptions {
 
         public List<SingBoxOption> outbounds;
 
+        public List<SingBoxOption> endpoints;
+
         public RouteOptions route;
 
         public ExperimentalOptions experimental;
@@ -2793,6 +2795,60 @@ public class SingBoxOptions {
 
         // Generate note: Listable
         public List<String> allowed_ips;
+
+        // Generate note: Base64 String
+        public String reserved;
+
+    }
+
+    // --- WireGuard endpoint (sing-box 1.13+; replaces the removed WireGuard outbound) ---
+
+    public static class WireGuardEndpointOptions extends SingBoxOption {
+
+        public String type;
+
+        public String tag;
+
+        public Boolean system;
+
+        public String name;
+
+        public Integer mtu;
+
+        // Generate note: Listable
+        public List<String> address;
+
+        public String private_key;
+
+        public Integer listen_port;
+
+        public List<WireGuardEndpointPeer> peers;
+
+        public Integer workers;
+
+        // Generate note: nested type DialerOptions
+        public String detour;
+
+        public String bind_interface;
+
+        public String domain_strategy;
+
+    }
+
+    public static class WireGuardEndpointPeer extends SingBoxOption {
+
+        public String address;
+
+        public Integer port;
+
+        public String public_key;
+
+        public String pre_shared_key;
+
+        // Generate note: Listable
+        public List<String> allowed_ips;
+
+        public Integer persistent_keepalive_interval;
 
         // Generate note: Base64 String
         public String reserved;

@@ -33,7 +33,9 @@ vless://<uuid>@host:443?type=tcp&encryption=none&security=reality&flow=xtls-rprx
 当链接带有 `support-x25519mlkem768=true` 时，客户端会在 ClientHello 中保留 `X25519MLKEM768` 混合 key share；
 否则维持旧行为（剥离），以兼容旧版 REALITY 服务端。
 
-> 已知上游变更：sing-box `1.13` 起移除了 WireGuard **outbound**（改为 endpoint）。目前尚未迁移 WireGuard 节点。
+- **WireGuard 已迁移到 endpoint**：sing-box `1.13` 起移除了 WireGuard **outbound**（改为 endpoint）。
+  Mirage 现在生成 `endpoints[]`（单 peer、`allowed_ips: 0.0.0.0/0, ::/0`）。由于 endpoint 在 sing-box 中同样可按 tag 寻址，
+  selector 与路由规则无需改动。
 
 ## 下载 / Downloads
 

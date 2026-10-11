@@ -26,16 +26,27 @@ fun genReserved(anyStr: String): String {
     }
 }
 
-fun buildSingBoxOutboundWireguardBean(bean: WireGuardBean): SingBoxOptions.Outbound_WireGuardOptions {
-    return SingBoxOptions.Outbound_WireGuardOptions().apply {
+/**
+ * Build a sing-box WireGuard *endpoint*.
+ *
+ * sing-box 1.13 removed the WireGuard outbound. Endpoints are still addressable by tag
+ * ([adapter.Endpoint] embeds [adapter.Outbound] and the outbound manager resolves endpoint tags),
+ * so selectors and route rules keep working unchanged after this migration.
+ */
+fun buildSingBoxEndpointWireguardBean(bean: WireGuardBean): SingBoxOptions.WireGuardEndpointOptions {
+    return SingBoxOptions.WireGuardEndpointOptions().apply {
         type = "wireguard"
-        server = bean.serverAddress
-        server_port = bean.serverPort
-        local_address = bean.localAddress.listByLineOrComma()
-        private_key = bean.privateKey
-        peer_public_key = bean.peerPublicKey
-        pre_shared_key = bean.peerPreSharedKey
         mtu = bean.mtu
-        if (bean.reserved.isNotBlank()) reserved = genReserved(bean.reserved)
+        address = bean.localAddress.listByLineOrComma()
+        private_key = bean.privateKey
+        peers = listOf(SingBoxOptions.WireGuardEndpointPeer().apply {
+            address = bean.serverAddress
+            port = bean.serverPort
+            public_key = bean.peerPublicKey
+            pre_shared_key = bean.peerPreSharedKey
+            // Required by sing-box: a single-peer client routes all traffic through the peer.
+            allowed_ips = listOf("0.0.0.0/0", "::/0")
+            if (bean.reserved.isNotBlank()) reserved = genReserved(bean.reserved)
+        })
     }
 }
