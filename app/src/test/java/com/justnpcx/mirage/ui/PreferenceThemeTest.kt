@@ -15,6 +15,7 @@ import com.justnpcx.mirage.R
 import com.justnpcx.mirage.utils.Theme
 import moe.matsuri.nb4a.ui.ColorPickerPreference
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -112,5 +113,39 @@ class PreferenceThemeTest {
         // unset default must land on Theme.SagerNet, whose ramp is the Mirage indigo.
         assertEquals(R.style.Theme_SagerNet, Theme.getTheme(0))
         assertEquals(R.style.Theme_SagerNet_Dialog, Theme.getDialogTheme(0))
+    }
+
+    /** Resolves `attr` in the styled context, then reads `into` from the style it points at. */
+    private fun styleAttr(context: Context, attr: Int, into: Int): Int {
+        val tv = TypedValue()
+        assertTrue(context.theme.resolveAttribute(attr, tv, true))
+        val ta = context.obtainStyledAttributes(tv.resourceId, intArrayOf(into))
+        val res = ta.getResourceId(0, 0)
+        ta.recycle()
+        return res
+    }
+
+    @Test
+    fun widgetAndDialogLayoutsSurviveTheRestyle() {
+        val context = styled()
+        // The switch/checkbox widget is inflated from widgetLayout by PreferenceGroupAdapter (not
+        // by Preference.onBindViewHolder), so if the Mirage style chain loses android:widgetLayout
+        // the switch silently disappears from the row. Same idea for the dialog layouts.
+        assertNotEquals(
+            "switch row lost its switch widget",
+            0, styleAttr(context, R.attr.switchPreferenceStyle, android.R.attr.widgetLayout),
+        )
+        assertNotEquals(
+            0, styleAttr(context, R.attr.switchPreferenceCompatStyle, android.R.attr.widgetLayout),
+        )
+        assertNotEquals(
+            0, styleAttr(context, R.attr.checkBoxPreferenceStyle, android.R.attr.widgetLayout),
+        )
+        assertNotEquals(
+            "edit-text row lost its dialog layout",
+            0, styleAttr(context, R.attr.editTextPreferenceStyle, android.R.attr.dialogLayout),
+        )
+        // DropDownPreference has no widgetLayout — its spinner is a sibling in the row layout,
+        // which dropDownRowsKeepTheSpinnerThePreferenceLooksUp covers.
     }
 }

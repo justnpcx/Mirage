@@ -1,10 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Rounded, roomier preference row used by every preference screen. -->
+<!-- Roomier preference row used by every preference screen.
+     Deliberately a flat, full-bleed list row (ChatGPT / Gemini settings style): generous height,
+     a bigger icon and the ripple. No card fill or radius — a fill equal to the window background
+     is invisible, and a distinct fill would need margins to read as a card. -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/preference"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_preference_item"
+    android:background="?android:attr/selectableItemBackground"
     android:minHeight="64dp"
     android:gravity="center_vertical"
     android:paddingStart="16dp"
@@ -50,5 +53,6 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:gravity="center_vertical"
+        android:paddingStart="16dp"
         android:orientation="vertical" />
 </LinearLayout>
