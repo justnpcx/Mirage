@@ -12,16 +12,25 @@ import kotlin.system.exitProcess
 
 private val Project.android get() = extensions.getByName<ApplicationExtension>("android")
 
-private lateinit var metadata: Properties
+private var metadata: Properties? = null
+private var metadataStamp = -1L
 private lateinit var localProperties: Properties
 
+/**
+ * nb4a.properties carries the version, so it changes on every release. A Gradle daemon outlives a
+ * single build, and this file is not part of buildSrc, so caching it once would silently keep
+ * stamping the previous version into the APK (seen in practice: a 1.0.11 tree produced a 1.0.7
+ * APK). Re-read it whenever the file changes on disk.
+ */
 fun Project.requireMetadata(): Properties {
-    if (!::metadata.isInitialized) {
-        metadata = Properties().apply {
-            load(rootProject.file("nb4a.properties").inputStream())
-        }
+    val file = rootProject.file("nb4a.properties")
+    val stamp = file.lastModified()
+    val cached = metadata
+    if (cached != null && stamp == metadataStamp) return cached
+    return Properties().apply { load(file.inputStream()) }.also {
+        metadata = it
+        metadataStamp = stamp
     }
-    return metadata
 }
 
 fun Project.requireLocalProperties(): Properties {
