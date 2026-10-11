@@ -3,6 +3,8 @@ package com.justnpcx.mirage.ui
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.os.LocaleListCompat
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
@@ -59,6 +61,21 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
         nightTheme.setOnPreferenceChangeListener { _, newTheme ->
             Theme.currentNightMode = (newTheme as String).toInt()
             Theme.applyNightTheme()
+            true
+        }
+        val appLanguage = findPreference<SimpleMenuPreference>(Key.APP_LANGUAGE)!!
+        appLanguage.setOnPreferenceChangeListener { preference, newValue ->
+            val tag = newValue as String
+            val locales = if (tag.isEmpty()) {
+                LocaleListCompat.getEmptyLocaleList()
+            } else {
+                LocaleListCompat.forLanguageTags(tag)
+            }
+            AppCompatDelegate.setApplicationLocales(locales)
+            // apply the summary now; the activity recreate below would otherwise make the
+            // first tap look like it did nothing
+            preference.summary = appLanguage.entries[appLanguage.findIndexOfValue(tag)]
+            activity?.recreate()
             true
         }
         val mixedPort = findPreference<EditTextPreference>(Key.MIXED_PORT)!!

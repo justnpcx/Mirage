@@ -10,9 +10,7 @@ import android.provider.Settings
 import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.compose.runtime.getValue
-import androidx.core.os.LocaleListCompat
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.ComposeView
@@ -56,7 +54,6 @@ class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
                     onOpenUrl = { url -> requireContext().launchCustomTab(url) },
                     onCheckUpdate = ::checkUpdate,
                     onRequestIgnoreBatteryOptimizations = ::requestIgnoreBattery,
-                    onPickLanguage = ::setAppLanguage,
                     onOpenPluginSettings = { packageName ->
                         startActivity(
                             Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
@@ -109,17 +106,9 @@ class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
                     plugins = plugins,
                     needBatteryOptimization = needBattery,
                     license = license,
-                    languageTag = AppCompatDelegate.getApplicationLocales().toLanguageTags(),
                 )
             }
         }
-    }
-
-    private fun setAppLanguage(tag: String) {
-        AppCompatDelegate.setApplicationLocales(
-            if (tag.isEmpty()) LocaleListCompat.getEmptyLocaleList() else LocaleListCompat.forLanguageTags(tag)
-        )
-        requireActivity().recreate()
     }
 
     private fun requestIgnoreBattery() {

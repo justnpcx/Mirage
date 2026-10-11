@@ -86,10 +86,41 @@ fun NodeListScreen(
         ) {
             itemsIndexed(state.nodes, key = { _, node -> node.id }) { index, node ->
                 val isDragging = index == draggingIndex
+                val dragHandleModifier = Modifier.pointerInput(node.id) {
+                    detectDragGesturesAfterLongPress(
+                        onDragStart = {
+                            draggingIndex = index
+                            dragOffset = 0f
+                        },
+                        onDrag = { change, dragAmount ->
+                            change.consume()
+                            dragOffset += dragAmount.y
+                            val from = draggingIndex
+                            if (from < 0) return@detectDragGesturesAfterLongPress
+                            val target = targetIndex(listState, from, dragOffset)
+                            if (target != from) {
+                                onMove(from, target)
+                                draggingIndex = target
+                                dragOffset = 0f
+                            }
+                        },
+                        onDragEnd = {
+                            draggingIndex = -1
+                            dragOffset = 0f
+                            onMoveFinished()
+                        },
+                        onDragCancel = {
+                            draggingIndex = -1
+                            dragOffset = 0f
+                            onMoveFinished()
+                        },
+                    )
+                }
                 NodeCard(
                     node = node,
                     onClick = { onSelect(node.id) },
                     onMenu = { menuNode = node },
+                    dragHandleModifier = dragHandleModifier,
                     modifier = Modifier
                         .zIndex(if (isDragging) 1f else 0f)
                         .graphicsLayer {
@@ -99,36 +130,6 @@ fun NodeListScreen(
                                 scaleY = 1.02f
                                 alpha = 0.94f
                             }
-                        }
-                        .pointerInput(node.id) {
-                            detectDragGesturesAfterLongPress(
-                                onDragStart = {
-                                    draggingIndex = index
-                                    dragOffset = 0f
-                                },
-                                onDrag = { change, dragAmount ->
-                                    change.consume()
-                                    dragOffset += dragAmount.y
-                                    val from = draggingIndex
-                                    if (from < 0) return@detectDragGesturesAfterLongPress
-                                    val target = targetIndex(listState, from, dragOffset)
-                                    if (target != from) {
-                                        onMove(from, target)
-                                        draggingIndex = target
-                                        dragOffset = 0f
-                                    }
-                                },
-                                onDragEnd = {
-                                    draggingIndex = -1
-                                    dragOffset = 0f
-                                    onMoveFinished()
-                                },
-                                onDragCancel = {
-                                    draggingIndex = -1
-                                    dragOffset = 0f
-                                    onMoveFinished()
-                                },
-                            )
                         },
                 )
             }
@@ -141,6 +142,7 @@ private fun NodeCard(
     node: NodeItem,
     onClick: () -> Unit,
     onMenu: () -> Unit,
+    dragHandleModifier: Modifier = Modifier,
     modifier: Modifier = Modifier,
 ) {
     val container = if (node.selected) {
@@ -160,6 +162,17 @@ private fun NodeCard(
                 .padding(horizontal = 18.dp, vertical = 14.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // drag handle: long-press here to reorder, so a plain tap on the card stays a tap
+            Box(
+                modifier = dragHandleModifier.padding(end = 4.dp),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text(
+                    text = "\u2261",
+                    style = MaterialTheme.typography.titleLarge,
+                    color = MaterialTheme.colorScheme.outline,
+                )
+            }
             Column(modifier = Modifier.weight(1f)) {
                 Text(
                     text = node.name.ifBlank { node.address },

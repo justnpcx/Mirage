@@ -21,6 +21,13 @@
             app:title="@string/night_mode"
             app:useSimpleSummaryProvider="true" />
         <moe.matsuri.nb4a.ui.SimpleMenuPreference
+            app:entries="@array/app_language"
+            app:entryValues="@array/app_language_values"
+            app:icon="@drawable/ic_baseline_language_24"
+            app:key="appLanguage"
+            app:title="@string/about_language"
+            app:useSimpleSummaryProvider="true" />
+        <moe.matsuri.nb4a.ui.SimpleMenuPreference
             app:defaultValue="vpn"
             app:entries="@array/service_modes"
             app:entryValues="@array/service_mode_values"

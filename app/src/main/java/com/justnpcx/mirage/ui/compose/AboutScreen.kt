@@ -59,16 +59,9 @@ fun AboutScreen(
     onCheckUpdate: (preview: Boolean) -> Unit,
     onRequestIgnoreBatteryOptimizations: () -> Unit,
     onOpenPluginSettings: (packageName: String) -> Unit,
-    onPickLanguage: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var showLanguageDialog by remember { mutableStateOf(false) }
-    val languageLabel = when (state.languageTag) {
-        "zh-CN" -> stringResource(R.string.language_chinese)
-        "en" -> stringResource(R.string.language_english)
-        else -> stringResource(R.string.language_system)
-    }
-    Surface(modifier = modifier.fillMaxSize()) {
+    Surface(modifier = modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,12 +81,6 @@ fun AboutScreen(
                     InfoRow(title = stringResource(R.string.about_check_update_preview), onClick = { onCheckUpdate(true) })
                     Divider()
                     InfoRow(title = stringResource(R.string.about_singbox), subtitle = state.singBoxVersion, onClick = null)
-                    Divider()
-                    InfoRow(
-                        title = stringResource(R.string.about_language),
-                        subtitle = languageLabel,
-                        onClick = { showLanguageDialog = true },
-                    )
                 }
             }
 
@@ -149,16 +136,6 @@ fun AboutScreen(
         }
     }
 
-    if (showLanguageDialog) {
-        LanguageDialog(
-            current = state.languageTag,
-            onPick = {
-                showLanguageDialog = false
-                onPickLanguage(it)
-            },
-            onDismiss = { showLanguageDialog = false },
-        )
-    }
 }
 
 @Composable
