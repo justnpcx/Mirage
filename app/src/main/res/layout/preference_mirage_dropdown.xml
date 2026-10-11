@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Drop-down variant of the Mirage row. DropDownPreference (and therefore SimpleMenuPreference,
+  GroupPreference, OutboundPreference) looks the Spinner up by id, so it has to stay in the
+  hierarchy. Mirrors the library's preference_dropdown_material.xml, but over the Mirage row.
+-->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <!-- invisible, takes no space; only anchors where the dropdown appears on screen -->
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/preference_dropdown_padding_start"
+        android:visibility="invisible" />
+
+    <include layout="@layout/preference_mirage" />
+</FrameLayout>

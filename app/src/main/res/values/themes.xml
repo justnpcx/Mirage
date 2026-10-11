@@ -487,31 +487,55 @@
 
     <!-- ============ Mirage preference styling ============
          Applied through preferenceTheme so every preference screen (settings, route, and all
-         protocol editors) picks it up without touching their XML. -->
+         protocol editors) picks it up without touching their XML.
+
+         Note it is not enough to override preferenceStyle: MaterialComponents themes resolve
+         BasePreferenceThemeOverlay, which maps each preference family to its own
+         Preference.*.Material style, and every one of those pins android:layout. The app uses
+         plain Preference, SwitchPreference, EditTextPreference and DropDownPreference, so each
+         family is re-pointed here. SeekBarPreference / DropDownPreference-as-widget are left
+         alone: their layouts carry a real widget and are unused by this app. -->
     <style name="PreferenceThemeOverlay.Mirage" parent="PreferenceThemeOverlay">
         <item name="preferenceStyle">@style/Preference.Mirage</item>
         <item name="preferenceCategoryStyle">@style/PreferenceCategory.Mirage</item>
-        <item name="switchPreferenceCompatStyle">@style/Preference.Mirage.Switch</item>
+        <item name="switchPreferenceStyle">@style/Preference.Mirage.Switch</item>
+        <item name="switchPreferenceCompatStyle">@style/Preference.Mirage.SwitchCompat</item>
         <item name="checkBoxPreferenceStyle">@style/Preference.Mirage.CheckBox</item>
-        <item name="android:preferenceStyle">@style/Preference.Mirage</item>
+        <item name="dialogPreferenceStyle">@style/Preference.Mirage.Dialog</item>
+        <item name="editTextPreferenceStyle">@style/Preference.Mirage.EditText</item>
+        <item name="dropdownPreferenceStyle">@style/Preference.Mirage.DropDown</item>
     </style>
 
-    <style name="Preference.Mirage" parent="Preference">
+    <style name="Preference.Mirage" parent="Preference.Material">
         <item name="android:layout">@layout/preference_mirage</item>
         <item name="iconSpaceReserved">true</item>
     </style>
 
-    <style name="Preference.Mirage.Switch" parent="Preference.SwitchPreferenceCompat">
+    <style name="Preference.Mirage.Switch" parent="Preference.SwitchPreference.Material">
         <item name="android:layout">@layout/preference_mirage</item>
-        <item name="iconSpaceReserved">true</item>
     </style>
 
-    <style name="Preference.Mirage.CheckBox" parent="Preference.CheckBoxPreference">
+    <style name="Preference.Mirage.SwitchCompat" parent="Preference.SwitchPreferenceCompat.Material">
         <item name="android:layout">@layout/preference_mirage</item>
-        <item name="iconSpaceReserved">true</item>
     </style>
 
-    <style name="PreferenceCategory.Mirage" parent="Preference.Category">
+    <style name="Preference.Mirage.CheckBox" parent="Preference.CheckBoxPreference.Material">
+        <item name="android:layout">@layout/preference_mirage</item>
+    </style>
+
+    <style name="Preference.Mirage.Dialog" parent="Preference.DialogPreference.Material">
+        <item name="android:layout">@layout/preference_mirage</item>
+    </style>
+
+    <style name="Preference.Mirage.EditText" parent="Preference.DialogPreference.EditTextPreference.Material">
+        <item name="android:layout">@layout/preference_mirage</item>
+    </style>
+
+    <style name="Preference.Mirage.DropDown" parent="Preference.DropDown.Material">
+        <item name="android:layout">@layout/preference_mirage_dropdown</item>
+    </style>
+
+    <style name="PreferenceCategory.Mirage" parent="Preference.Category.Material">
         <item name="android:layout">@layout/preference_category_mirage</item>
     </style>
 </resources>
