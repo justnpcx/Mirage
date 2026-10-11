@@ -2875,6 +2875,9 @@ public class SingBoxOptions {
 
         public String interface_name;
 
+        // sing-box 1.10+ merged inet4_address / inet6_address into `address`
+        public List<String> address;
+
         public Integer mtu;
 
         // Generate note: Listable

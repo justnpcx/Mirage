@@ -2,6 +2,7 @@ package io.nekohasekai.sagernet.fmt
 
 import moe.matsuri.nb4a.SingBoxOptions.DNSRule_DefaultOptions
 import moe.matsuri.nb4a.SingBoxOptions.DNSServerOptions
+import moe.matsuri.nb4a.SingBoxOptions.Inbound_TunOptions
 import moe.matsuri.nb4a.SingBoxOptions.Rule_DefaultOptions
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -84,5 +85,19 @@ class DnsConfigContractTest {
             action = "sniff"
         }.asMap()
         assertEquals("sniff", sniff["action"])
+    }
+
+    @Test
+    fun tunInboundUsesMergedAddressField() {
+        val map = Inbound_TunOptions().apply {
+            type = "tun"
+            tag = "tun-in"
+            address = listOf("172.19.0.1/28", "fdfe:dcba:9876::1/126")
+        }.asMap()
+
+        assertEquals(listOf("172.19.0.1/28", "fdfe:dcba:9876::1/126"), map["address"])
+        // sing-box 1.12 removed the legacy tun address fields
+        assertFalse(map.containsKey("inet4_address"))
+        assertFalse(map.containsKey("inet6_address"))
     }
 }
