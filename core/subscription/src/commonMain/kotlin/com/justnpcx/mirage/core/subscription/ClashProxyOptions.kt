@@ -118,13 +118,15 @@ data class ClashProxyOptions(
                 when (key) {
                     "network" -> when (value) {
                         "h2", "http" -> network = "http"
-                        "ws", "grpc" -> network = value as String
+                        "ws", "grpc", "xhttp" -> network = value as String
                     }
 
                     "ws-opts" -> applyWebsocket(value)
                     "h2-opts" -> applyH2(value)
                     "http-opts" -> applyHttp(value)
                     "grpc-opts" -> applyGrpc(value)
+
+                    "xhttp-opts" -> applyXhttp(value)
                     else -> return false
                 }
                 return true
@@ -159,6 +161,16 @@ data class ClashProxyOptions(
                     when (httpKey) {
                         "path" -> path = (httpValue as? List<*>)?.joinToString("\n").orEmpty()
                         "headers" -> hostHeader(httpValue).let { if (it.isNotEmpty()) host = it }
+                    }
+                }
+            }
+
+            private fun applyXhttp(value: Any?) {
+                val xhttp = value as? Map<*, *> ?: return
+                for ((xhttpKey, xhttpValue) in xhttp) {
+                    when (xhttpKey) {
+                        "host" -> host = xhttpValue?.toString().orEmpty()
+                        "path" -> path = xhttpValue?.toString().orEmpty()
                     }
                 }
             }

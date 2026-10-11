@@ -170,6 +170,8 @@ fun StandardV2RayBean.parseDuckSoft(link: String) {
     realityMlkem = parsed.realityMlkem
     packetEncoding = parsed.packetEncoding
     utlsFingerprint = parsed.fingerprint
+    xhttpMode = parsed.xhttpMode
+    xhttpExtra = parsed.xhttpExtra
 
     // Keep the bean default (e.g. VMess "auto") when the link does not specify one.
     if (parsed.encryption.isNotEmpty()) {
@@ -508,6 +510,60 @@ fun buildSingBoxOutboundStreamSettings(bean: StandardV2RayBean): V2RayTransportO
                 type = "httpupgrade"
                 host = bean.host
                 path = bean.path
+            }
+        }
+
+        "xhttp" -> {
+            return V2RayTransportOptions_XHTTPOptions().apply {
+                type = "xhttp"
+                if (bean.host.isNotBlank()) host = bean.host
+                path = bean.path.takeIf { it.isNotBlank() } ?: "/"
+                if (bean.xhttpMode.isNotBlank()) mode = bean.xhttpMode
+                // Xray carries the advanced xhttp options in an `extra` JSON blob
+                if (bean.xhttpExtra.isNotBlank()) {
+                    runCatching {
+                        val extra = JSONObject(bean.xhttpExtra)
+                        extra.optString("xPaddingBytes").takeIf { it.isNotBlank() }?.let {
+                            x_padding_bytes = it
+                        }
+                        if (extra.has("noGRPCHeader")) {
+                            no_grpc_header = extra.optBoolean("noGRPCHeader")
+                        }
+                        extra.optJSONObject("downloadSettings")?.let { download ->
+                            download_settings = V2RayXHTTPDownloadOptions().apply {
+                                download.optString("address").takeIf { it.isNotBlank() }?.let {
+                                    server = it
+                                }
+                                download.optInt("port").takeIf { it > 0 }?.let { server_port = it }
+                                download.optJSONObject("xhttpSettings")?.let { xhttp ->
+                                    xhttp.optString("host").takeIf { it.isNotBlank() }?.let {
+                                        host = it
+                                    }
+                                    xhttp.optString("path").takeIf { it.isNotBlank() }?.let {
+                                        path = it
+                                    }
+                                }
+                                download.optJSONObject("tlsSettings")?.let { tlsSettings ->
+                                    tls = OutboundTLSOptions().apply {
+                                        enabled = true
+                                        tlsSettings.optString("serverName")
+                                            .takeIf { it.isNotBlank() }?.let { server_name = it }
+                                        tlsSettings.optJSONArray("alpn")?.let { alpnArray ->
+                                            alpn = (0 until alpnArray.length()).map { alpnArray.getString(it) }
+                                        }
+                                        tlsSettings.optString("fingerprint")
+                                            .takeIf { it.isNotBlank() }?.let { fingerprint ->
+                                                utls = OutboundUTLSOptions().apply {
+                                                    enabled = true
+                                                    this.fingerprint = fingerprint
+                                                }
+                                            }
+                                    }
+                                }
+                            }
+                        }
+                    }.onFailure { Logs.w(it) }
+                }
             }
         }
     }

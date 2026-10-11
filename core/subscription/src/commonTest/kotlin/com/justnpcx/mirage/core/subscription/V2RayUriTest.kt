@@ -136,4 +136,25 @@ class V2RayUriTest {
         val p = parse("vless://u@h:443/some/path?type=tcp")
         assertEquals("some/path", p.path)
     }
+
+    @Test
+    fun parsesXhttpTransportWithModeAndExtra() {
+        val link = "vless://uuid@host:443?type=xhttp&security=tls&path=%2Fxhttp%2F" +
+                "&host=cdn.example.com&mode=stream-up" +
+                "&extra=%7B%22xPaddingBytes%22%3A%22100-1000%22%7D"
+        val p = parse(link, isVless = true)
+        assertEquals("xhttp", p.type)
+        assertEquals("/xhttp/", p.path)
+        assertEquals("cdn.example.com", p.host)
+        assertEquals("stream-up", p.xhttpMode)
+        assertEquals("{\"xPaddingBytes\":\"100-1000\"}", p.xhttpExtra)
+    }
+
+    @Test
+    fun xhttpModeAndExtraDefaultToEmpty() {
+        val p = parse("vless://uuid@host:443?type=xhttp", isVless = true)
+        assertEquals("xhttp", p.type)
+        assertEquals("", p.xhttpMode)
+        assertEquals("", p.xhttpExtra)
+    }
 }

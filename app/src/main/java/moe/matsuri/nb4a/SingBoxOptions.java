@@ -4667,6 +4667,42 @@ public class SingBoxOptions {
 
     }
 
+    // --- xhttp (Xray splithttp) ---
+
+    public static class V2RayTransportOptions_XHTTPOptions extends V2RayTransportOptions {
+
+        public String host;
+
+        public String path;
+
+        public String mode;
+
+        public java.util.Map<String, String> headers;
+
+        public String uplink_http_method;
+
+        public Boolean no_grpc_header;
+
+        public String x_padding_bytes;
+
+        public V2RayXHTTPDownloadOptions download_settings;
+
+    }
+
+    public static class V2RayXHTTPDownloadOptions extends SingBoxOption {
+
+        public String server;
+
+        public Integer server_port;
+
+        public String host;
+
+        public String path;
+
+        public OutboundTLSOptions tls;
+
+    }
+
     public static class V2RayTransportOptions_HTTPUpgradeOptions extends V2RayTransportOptions {
 
         public String host;

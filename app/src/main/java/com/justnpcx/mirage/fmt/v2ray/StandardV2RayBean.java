@@ -44,6 +44,11 @@ public abstract class StandardV2RayBean extends AbstractBean {
     // Advertised by the subscription link as support-x25519mlkem768=true.
     public Boolean realityMlkem;
 
+    // xhttp (Xray splithttp)
+    public String xhttpMode;
+
+    public String xhttpExtra;
+
 
     // --------------------------------------- //
 
@@ -105,6 +110,8 @@ public abstract class StandardV2RayBean extends AbstractBean {
         if (realityPubKey == null) realityPubKey = "";
         if (realityShortId == null) realityShortId = "";
         if (realityMlkem == null) realityMlkem = false;
+        if (xhttpMode == null) xhttpMode = "";
+        if (xhttpExtra == null) xhttpExtra = "";
 
         if (enableECH == null) enableECH = false;
         if (JavaUtil.isNullOrBlank(echConfig)) echConfig = "";
@@ -117,7 +124,7 @@ public abstract class StandardV2RayBean extends AbstractBean {
 
     @Override
     public void serialize(ByteBufferOutput output) {
-        output.writeInt(5);
+        output.writeInt(6);
         super.serialize(output);
         output.writeString(uuid);
         output.writeString(encryption);
@@ -172,6 +179,9 @@ public abstract class StandardV2RayBean extends AbstractBean {
         output.writeInt(muxConcurrency);
 
         output.writeBoolean(realityMlkem);
+
+        output.writeString(xhttpMode);
+        output.writeString(xhttpExtra);
     }
 
     @Override
@@ -265,6 +275,10 @@ public abstract class StandardV2RayBean extends AbstractBean {
         }
         if (version >= 5) {
             realityMlkem = input.readBoolean();
+        }
+        if (version >= 6) {
+            xhttpMode = input.readString();
+            xhttpExtra = input.readString();
         }
     }
 

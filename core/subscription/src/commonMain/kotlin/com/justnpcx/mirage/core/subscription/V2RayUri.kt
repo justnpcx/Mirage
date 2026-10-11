@@ -33,6 +33,10 @@ object V2RayUri {
         val earlyDataHeader: String,
         /** 0 = default, 1 = packet, 2 = xudp. */
         val packetEncoding: Int,
+        /** xhttp mode: stream-one / stream-up / packet-up. */
+        val xhttpMode: String,
+        /** Raw xhttp `extra` JSON from the share link. */
+        val xhttpExtra: String,
     )
 
     private data class Tls(
@@ -74,6 +78,8 @@ object V2RayUri {
             earlyData = transport.earlyData,
             earlyDataHeader = transport.earlyDataHeader,
             packetEncoding = parsePacketEncoding(uri),
+            xhttpMode = uri.query("mode").orEmpty(),
+            xhttpExtra = uri.query("extra").orEmpty(),
         )
     }
 
@@ -118,7 +124,7 @@ object V2RayUri {
 
             "grpc" -> Transport(path = uri.query("serviceName") ?: uriPath)
 
-            "httpupgrade" -> Transport(host = uri.query("host").orEmpty(), path = uri.query("path") ?: uriPath)
+            "httpupgrade", "xhttp" -> Transport(host = uri.query("host").orEmpty(), path = uri.query("path") ?: uriPath)
 
             else -> Transport(path = uriPath)
         }
