@@ -206,9 +206,6 @@ fun buildConfig(
                 }
                 endpoint_independent_nat = true
                 mtu = DataStore.mtu
-                domain_strategy = genDomainStrategy(DataStore.resolveDestination)
-                sniff = needSniff
-                sniff_override_destination = needSniffOverride
                 when (ipv6Mode) {
                     IPv6Mode.DISABLE -> {
                         inet4_address = listOf(VpnService.PRIVATE_VLAN4_CLIENT + "/28")
@@ -229,9 +226,6 @@ fun buildConfig(
                 tag = TAG_MIXED
                 listen = bind
                 listen_port = DataStore.mixedPort
-                domain_strategy = genDomainStrategy(DataStore.resolveDestination)
-                sniff = needSniff
-                sniff_override_destination = needSniffOverride
             })
         }
 
@@ -243,6 +237,24 @@ fun buildConfig(
             auto_detect_interface = true
             rules = mutableListOf()
             rule_set = mutableListOf()
+        }
+
+        // sing-box 1.11+ replaced the legacy inbound sniff / resolve fields with rule actions.
+        if (!forTest) {
+            val sniffInbounds = if (isVPN) listOf("tun-in", TAG_MIXED) else listOf(TAG_MIXED)
+            genDomainStrategy(DataStore.resolveDestination).takeIf { it.isNotEmpty() }?.let { strategy ->
+                route.rules.add(Rule_DefaultOptions().apply {
+                    inbound = sniffInbounds
+                    action = "resolve"
+                    this.strategy = strategy
+                })
+            }
+            if (needSniff) {
+                route.rules.add(Rule_DefaultOptions().apply {
+                    inbound = sniffInbounds
+                    action = "sniff"
+                })
+            }
         }
 
         // returns outbound tag
@@ -559,7 +571,10 @@ fun buildConfig(
 
                 when (rule.outbound) {
                     -1L -> {
-                        userDNSRuleList += makeDnsRuleObj().apply { server = "dns-direct" }
+                        userDNSRuleList += makeDnsRuleObj().apply {
+                            server = "dns-direct"
+                            strategy = autoDnsDomainStrategy(SingBoxOptionsUtil.domainStrategy("dns-direct"))
+                        }
                     }
 
                     0L -> {
@@ -662,7 +677,6 @@ fun buildConfig(
                 tag = "dns-direct"
                 detour = TAG_DIRECT
                 domain_resolver = "dns-local"
-                strategy = autoDnsDomainStrategy(SingBoxOptionsUtil.domainStrategy(tag))
             })
         }
 
@@ -672,11 +686,14 @@ fun buildConfig(
                 applyDnsAddress(it ?: throw Exception("No remote DNS, check your settings!"))
                 tag = "dns-remote"
                 domain_resolver = "dns-direct"
-                strategy = autoDnsDomainStrategy(SingBoxOptionsUtil.domainStrategy(tag))
             })
         }
 
         dns.final_ = if (forTest) "dns-direct" else "dns-remote"
+
+        // sing-box 1.12+ moved the per-server `strategy` to the dns object (global) and to the
+        // rules referencing a specific server.
+        dns.strategy = autoDnsDomainStrategy(SingBoxOptionsUtil.domainStrategy("dns-remote"))
 
         // dns object user rules
         if (enableDnsRouting) {
@@ -729,12 +746,14 @@ fun buildConfig(
             dns.rules.add(0, DNSRule_DefaultOptions().apply {
                 outbound = mutableListOf("any")
                 server = "dns-direct"
+                strategy = autoDnsDomainStrategy(SingBoxOptionsUtil.domainStrategy("dns-direct"))
             })
             // force bypass (always top DNS rule)
             if (domainListDNSDirectForce.isNotEmpty()) {
                 dns.rules.add(0, DNSRule_DefaultOptions().apply {
                     makeSingBoxRule(domainListDNSDirectForce.toHashSet().toList())
                     server = "dns-direct"
+                    strategy = autoDnsDomainStrategy(SingBoxOptionsUtil.domainStrategy("dns-direct"))
                 })
             }
         }

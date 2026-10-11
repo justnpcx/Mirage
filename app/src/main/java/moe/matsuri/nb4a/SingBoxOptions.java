@@ -4528,6 +4528,9 @@ public class SingBoxOptions {
 
         public String action;
 
+        // `resolve` rule action (sing-box 1.11+; replaced inbound.domain_strategy)
+        public String strategy;
+
         public String outbound;
 
     }
@@ -4538,6 +4541,9 @@ public class SingBoxOptions {
         public String action;
 
         public String rcode;
+
+        // per-server `strategy` moved onto the rules that reference that server in 1.12+
+        public String strategy;
 
         // Generate note: Listable
         public List<String> inbound;
