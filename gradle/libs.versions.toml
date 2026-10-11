@@ -23,6 +23,7 @@ preference = "1.2.0"
 appcompat = "1.6.1"
 work = "2.8.1"
 material = "1.8.0"
+profileinstaller = "1.4.1"
 
 # Data
 room = "2.6.1"
@@ -77,6 +78,7 @@ androidx-preference-ktx = { group = "androidx.preference", name = "preference-kt
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 androidx-work-runtime-ktx = { group = "androidx.work", name = "work-runtime-ktx", version.ref = "work" }
 androidx-work-multiprocess = { group = "androidx.work", name = "work-multiprocess", version.ref = "work" }
+androidx-profileinstaller = { group = "androidx.profileinstaller", name = "profileinstaller", version.ref = "profileinstaller" }
 
 # Data
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }

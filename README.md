@@ -30,11 +30,17 @@ A universal proxy client for Android, powered by sing-box.
 
 - **Kotlin Multiplatform 共享核心**（`android` + `jvm` 目标）：
   - `:core:model` —— 跨平台领域模型（kotlinx.serialization）
-  - `:core:subscription` —— **订阅链接解析**（vless / vmess / trojan 分享链接 → 传输与 TLS 选项，含 REALITY / ML-KEM）。
+  - `:core:subscription` —— **订阅链接解析**：
+    `ProxyUriParser`（无依赖的 URI 解析，语义对齐 okhttp）+
+    `V2RayUri`（vless / vmess / trojan → 传输与 TLS 选项，含 REALITY / ML-KEM）+
+    `ShadowsocksUri`（ss-android / v2rayN 两种 `ss://` 链接）。
     Android 端不再自己解析，而是委托给该模块，因此同一套逻辑可在其它平台复用。
 - **Jetpack Compose + Material 3**：已接入（Kotlin 2.0 Compose 编译器插件 + BOM + 动态取色），
   `ui/compose/` 下有设计系统（`MirageTheme`）与 **Home/Dashboard** 竖切（抽屉 `nav_home`）。
+  该页已迁移到 **ViewModel + StateFlow** 的单向数据流（`DashboardViewModel`），
   旧 View 栈与新 Compose 栈在迁移期内共存。
+- **全局单例注入化（起步）**：`BuildSettings`（`io.nekohasekai.sagernet.fmt`）把配置构建器需要的全局偏好
+  （如 `globalAllowInsecure`）从 `DataStore` 中抽离出来，默认实现为 `DataStoreBuildSettings`，测试可注入假实现。
 - **Gradle 版本目录**（`gradle/libs.versions.toml`）统一管理版本。
 
 ### 质量 / Quality
@@ -109,9 +115,23 @@ ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.0.8775105 \
 ./gradlew :app:detekt :core:model:detekt :core:subscription:detekt \
           :core:model:allTests :core:subscription:allTests :app:testOssReleaseUnitTest
 
-# 3) 构建 APK
-./gradlew app:assembleOssRelease
+# 3) 构建 APK / App Bundle
+./gradlew app:assembleOssRelease   # 分 ABI 的 APK
+./gradlew app:bundleOssRelease     # .aab（用于商店分发）
 ```
+
+### Baseline Profile（启动性能，可选）
+
+应用已依赖 `androidx.profileinstaller`，只要产出 profile 即会在安装时生效。
+生成需要**连接真机或模拟器**（生成过程会实际启动应用）：
+
+```bash
+# 需在 app 模块中先声明一个 benchmark 构建类型并加入 :baselineprofile 测试模块
+./gradlew :app:generateBaselineProfile
+```
+
+该模块尚未随仓库提供（生成依赖设备，无法在 CI 里完成）；在设备上生成后，
+profile 会落到 `app/src/<variant>/generated/baselineProfiles/`。
 
 > ⚠️ **Go 版本**：`gomobile` 的 `go.mod` 使用了 `godebug gotypesalias=0`，该 GODEBUG 在 **Go 1.27 被移除**，
 > 因此编译内核必须使用 **Go 1.26.x**（CI 已固定）。

@@ -5,6 +5,8 @@ import com.google.gson.Gson
 import com.justnpcx.mirage.core.subscription.ProxyUriParser
 import com.justnpcx.mirage.core.subscription.V2RayUri
 import io.nekohasekai.sagernet.database.DataStore
+import io.nekohasekai.sagernet.fmt.BuildSettings
+import io.nekohasekai.sagernet.fmt.DataStoreBuildSettings
 import io.nekohasekai.sagernet.fmt.http.HttpBean
 import io.nekohasekai.sagernet.fmt.trojan.TrojanBean
 import io.nekohasekai.sagernet.ktx.*
@@ -513,11 +515,14 @@ fun buildSingBoxOutboundStreamSettings(bean: StandardV2RayBean): V2RayTransportO
     return null
 }
 
-fun buildSingBoxOutboundTLS(bean: StandardV2RayBean): OutboundTLSOptions? {
+fun buildSingBoxOutboundTLS(
+    bean: StandardV2RayBean,
+    settings: BuildSettings = DataStoreBuildSettings,
+): OutboundTLSOptions? {
     if (bean.security != "tls") return null
     return OutboundTLSOptions().apply {
         enabled = true
-        insecure = bean.allowInsecure || DataStore.globalAllowInsecure
+        insecure = bean.allowInsecure || settings.globalAllowInsecure
         if (bean.sni.isNotBlank()) server_name = bean.sni
         if (bean.alpn.isNotBlank()) alpn = bean.alpn.listByLineOrComma()
         if (bean.certificates.isNotBlank()) certificate = bean.certificates
@@ -548,7 +553,10 @@ fun buildSingBoxOutboundTLS(bean: StandardV2RayBean): OutboundTLSOptions? {
     }
 }
 
-fun buildSingBoxOutboundStandardV2RayBean(bean: StandardV2RayBean): Outbound {
+fun buildSingBoxOutboundStandardV2RayBean(
+    bean: StandardV2RayBean,
+    settings: BuildSettings = DataStoreBuildSettings,
+): Outbound {
     when (bean) {
         is HttpBean -> {
             return Outbound_HTTPOptions().apply {
@@ -557,7 +565,7 @@ fun buildSingBoxOutboundStandardV2RayBean(bean: StandardV2RayBean): Outbound {
                 server_port = bean.serverPort
                 username = bean.username
                 password = bean.password
-                tls = buildSingBoxOutboundTLS(bean)
+                tls = buildSingBoxOutboundTLS(bean, settings)
             }
         }
 
@@ -575,7 +583,7 @@ fun buildSingBoxOutboundStandardV2RayBean(bean: StandardV2RayBean): Outbound {
                     1 -> packet_encoding = "packetaddr"
                     2 -> packet_encoding = "xudp"
                 }
-                tls = buildSingBoxOutboundTLS(bean)
+                tls = buildSingBoxOutboundTLS(bean, settings)
                 transport = buildSingBoxOutboundStreamSettings(bean)
             }
             return Outbound_VMessOptions().apply {
@@ -590,7 +598,7 @@ fun buildSingBoxOutboundStandardV2RayBean(bean: StandardV2RayBean): Outbound {
                     1 -> packet_encoding = "packetaddr"
                     2 -> packet_encoding = "xudp"
                 }
-                tls = buildSingBoxOutboundTLS(bean)
+                tls = buildSingBoxOutboundTLS(bean, settings)
                 transport = buildSingBoxOutboundStreamSettings(bean)
             }
         }
@@ -601,7 +609,7 @@ fun buildSingBoxOutboundStandardV2RayBean(bean: StandardV2RayBean): Outbound {
                 server = bean.serverAddress
                 server_port = bean.serverPort
                 password = bean.password
-                tls = buildSingBoxOutboundTLS(bean)
+                tls = buildSingBoxOutboundTLS(bean, settings)
                 transport = buildSingBoxOutboundStreamSettings(bean)
             }
         }

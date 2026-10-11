@@ -90,6 +90,12 @@ object ProxyUriParser {
         )
     }
 
+    /**
+     * Decodes a form/query component: percent escapes plus `+` as a space
+     * (matches `java.net.URLDecoder`).
+     */
+    fun decodeFormComponent(value: String): String = decode(value, plusIsSpace = true)
+
     /** `"/a/b" -> ["a", "b"]`, `"/" -> [""]` (matches okhttp path segmentation). */
     private fun splitPath(rawPath: String): List<String> =
         rawPath.split('/').drop(1).map { decode(it, plusIsSpace = false) }

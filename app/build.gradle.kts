@@ -90,6 +90,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.work.runtime.ktx)
     implementation(libs.androidx.work.multiprocess)
+    // Installs baseline profiles (startup performance) when the app ships one.
+    implementation(libs.androidx.profileinstaller)
 
     implementation(libs.material)
     implementation(libs.gson)

@@ -81,17 +81,24 @@ jobs:
       - name: Gradle Build
         env:
           BUILD_PLUGIN: none
-        run: ./gradlew app:assembleOssRelease
-      - name: Collect APKs
+        run: ./gradlew app:assembleOssRelease app:bundleOssRelease
+      - name: Collect artifacts
         run: |
-          mkdir -p apks
+          mkdir -p apks aab
           find app/build/outputs/apk -name '*.apk' -exec cp {} apks/ \;
-          ls -lh apks
+          find app/build/outputs/bundle -name '*.aab' -exec cp {} aab/ \;
+          ls -lh apks aab
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
           name: Mirage-APKs
           path: apks/*.apk
+          if-no-files-found: error
+      - name: Upload App Bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: Mirage-AAB
+          path: aab/*.aab
           if-no-files-found: error
 
   release:

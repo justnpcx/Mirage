@@ -30,11 +30,10 @@
     <ID>CyclomaticComplexMethod:Theme.kt$Theme$fun getTheme(theme: Int): Int</ID>
     <ID>CyclomaticComplexMethod:TrafficLooper.kt$TrafficLooper$private suspend fun loop()</ID>
     <ID>CyclomaticComplexMethod:TrojanGoFmt.kt$fun TrojanGoBean.buildTrojanGoConfig(port: Int): String</ID>
-    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun StandardV2RayBean.parseDuckSoft(url: HttpUrl)</ID>
     <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun StandardV2RayBean.toUriVMessVLESSTrojan(isTrojan: Boolean): String</ID>
-    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun buildSingBoxOutboundStandardV2RayBean(bean: StandardV2RayBean): Outbound</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun buildSingBoxOutboundStandardV2RayBean( bean: StandardV2RayBean, settings: BuildSettings = DataStoreBuildSettings, ): Outbound</ID>
     <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun buildSingBoxOutboundStreamSettings(bean: StandardV2RayBean): V2RayTransportOptions?</ID>
-    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun buildSingBoxOutboundTLS(bean: StandardV2RayBean): OutboundTLSOptions?</ID>
+    <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun buildSingBoxOutboundTLS( bean: StandardV2RayBean, settings: BuildSettings = DataStoreBuildSettings, ): OutboundTLSOptions?</ID>
     <ID>CyclomaticComplexMethod:V2RayFmt.kt$fun parseV2Ray(link: String): StandardV2RayBean</ID>
     <ID>CyclomaticComplexMethod:V2RayFmt.kt$private fun tryResolveVmess4Kitsunebi(server: String): VMessBean</ID>
     <ID>CyclomaticComplexMethod:VpnService.kt$VpnService$fun startVpn(tunOptionsJson: String, tunPlatformOptionsJson: String): Int</ID>

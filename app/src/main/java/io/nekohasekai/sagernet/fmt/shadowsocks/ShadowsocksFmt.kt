@@ -1,9 +1,9 @@
 package io.nekohasekai.sagernet.fmt.shadowsocks
 
+import com.justnpcx.mirage.core.subscription.ShadowsocksUri
 import io.nekohasekai.sagernet.ktx.*
 import moe.matsuri.nb4a.SingBoxOptions
 import moe.matsuri.nb4a.utils.Util
-import okhttp3.HttpUrl.Companion.toHttpUrlOrNull
 import org.json.JSONObject
 
 fun ShadowsocksBean.fixPluginName() {
@@ -13,65 +13,17 @@ fun ShadowsocksBean.fixPluginName() {
 }
 
 fun parseShadowsocks(url: String): ShadowsocksBean {
-
-    if (url.substringBefore("#").contains("@")) {
-        var link = url.replace("ss://", "https://").toHttpUrlOrNull() ?: error(
-            "invalid ss-android link $url"
-        )
-
-        if (link.username.isBlank()) { // fix justmysocks's shit link
-            link = (("https://" + url.substringAfter("ss://")
-                .substringBefore("#")
-                .decodeBase64UrlSafe()).toHttpUrlOrNull()
-                ?: error("invalid jms link $url")
-                    ).newBuilder().fragment(url.substringAfter("#")).build()
-        }
-
-        // ss-android style
-
-        if (link.password.isNotBlank()) {
-            return ShadowsocksBean().apply {
-                serverAddress = link.host
-                serverPort = link.port
-                method = link.username
-                password = link.password
-                plugin = link.queryParameter("plugin") ?: ""
-                name = link.fragment
-                fixPluginName()
-            }
-        }
-
-        val methodAndPswd = link.username.decodeBase64UrlSafe()
-
-        return ShadowsocksBean().apply {
-            serverAddress = link.host
-            serverPort = link.port
-            method = methodAndPswd.substringBefore(":")
-            password = methodAndPswd.substringAfter(":")
-            plugin = link.queryParameter("plugin") ?: ""
-            name = link.fragment
-            fixPluginName()
-        }
-    } else {
-        // v2rayN style
-        var v2Url = url
-
-        if (v2Url.contains("#")) v2Url = v2Url.substringBefore("#")
-
-        val link = ("https://" + v2Url.substringAfter("ss://")
-            .decodeBase64UrlSafe()).toHttpUrlOrNull() ?: error("invalid v2rayN link $url")
-
-        return ShadowsocksBean().apply {
-            serverAddress = link.host
-            serverPort = link.port
-            method = link.username
-            password = link.password
-            plugin = ""
-            val remarks = url.substringAfter("#").unUrlSafe()
-            if (remarks.isNotBlank()) name = remarks
-        }
+    // Parsing lives in :core:subscription so it is shared across platforms and testable on the JVM.
+    val link = ShadowsocksUri.parse(url)
+    return ShadowsocksBean().apply {
+        serverAddress = link.host
+        serverPort = link.port
+        method = link.method
+        password = link.password
+        plugin = link.plugin
+        name = link.name
+        fixPluginName()
     }
-
 }
 
 fun ShadowsocksBean.toUri(): String {
