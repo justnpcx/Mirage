@@ -33,7 +33,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         uses: actions/setup-go@v5
         with:
-          go-version: ^1.25
+          go-version: 1.26.x
       - name: Native Build
         if: steps.cache.outputs.cache-hit != 'true'
         run: ./run lib core
@@ -73,7 +73,7 @@ jobs:
       - name: Gradle Build
         env:
           BUILD_PLUGIN: none
-        run: ./gradlew app:assemblePreviewRelease
+        run: ./gradlew :core:model:allTests app:assemblePreviewRelease
       - name: Collect APKs
         run: |
           mkdir -p apks

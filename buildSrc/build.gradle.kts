@@ -9,4 +9,8 @@ dependencies {
     // Gradle Plugins
     implementation("com.android.tools.build:gradle:8.8.1")
     implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.0.21")
+    // Compose compiler Gradle plugin (Kotlin 2.0+ ships the Compose compiler as a Kotlin plugin)
+    implementation("org.jetbrains.kotlin:compose-compiler-gradle-plugin:2.0.21")
+    // kotlinx.serialization compiler plugin
+    implementation("org.jetbrains.kotlin:kotlin-serialization:2.0.21")
 }
