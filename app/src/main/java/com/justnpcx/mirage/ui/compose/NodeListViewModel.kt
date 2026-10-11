@@ -4,7 +4,11 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.justnpcx.mirage.database.DataStore
+import com.justnpcx.mirage.database.ProfileManager
 import com.justnpcx.mirage.database.SagerDatabase
+import kotlinx.coroutines.Dispatchers
+import java.net.InetSocketAddress
+import java.net.Socket
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,6 +31,10 @@ data class NodeListState(
 class NodeListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _state = MutableStateFlow(NodeListState())
+
+    private companion object {
+        const val PING_TIMEOUT_MS = 3000
+    }
     val state: StateFlow<NodeListState> = _state.asStateFlow()
 
     fun refresh() {
@@ -53,6 +61,30 @@ class NodeListViewModel(application: Application) : AndroidViewModel(application
         DataStore.selectedProxy = id
         DataStore.currentProfile = id
         refresh()
+    }
+
+    /** TCP-connect probe; stores the latency (or -1 on failure) and refreshes. */
+    fun ping(id: Long) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val entity = runCatching { SagerDatabase.proxyDao.getById(id) }.getOrNull() ?: return@launch
+            val bean = runCatching { entity.requireBean() }.getOrNull() ?: return@launch
+            val started = System.currentTimeMillis()
+            val reachable = runCatching {
+                Socket().use {
+                    it.connect(InetSocketAddress(bean.serverAddress, bean.serverPort), PING_TIMEOUT_MS)
+                }
+            }.isSuccess
+            entity.ping = if (reachable) (System.currentTimeMillis() - started).toInt() else -1
+            runCatching { SagerDatabase.proxyDao.updateProxy(entity) }
+            refresh()
+        }
+    }
+
+    fun delete(id: Long) {
+        viewModelScope.launch {
+            runCatching { ProfileManager.deleteProfile(DataStore.currentGroupId(), id) }
+            refresh()
+        }
     }
 
     /** Live reorder while dragging; call [persistOrder] once the drag ends. */

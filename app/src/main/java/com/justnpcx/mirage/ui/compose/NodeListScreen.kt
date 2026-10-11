@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,13 +19,19 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ModalBottomSheetDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -50,9 +57,14 @@ fun NodeListScreen(
     onSelect: (Long) -> Unit,
     onMove: (Int, Int) -> Unit,
     onMoveFinished: () -> Unit,
+    onEdit: (Long) -> Unit,
+    onShare: (Long) -> Unit,
+    onPing: (Long) -> Unit,
+    onDelete: (Long) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val listState = rememberLazyListState()
+    var menuNode by remember { mutableStateOf<NodeItem?>(null) }
     var draggingIndex by remember { mutableIntStateOf(-1) }
     var dragOffset by remember { mutableFloatStateOf(0f) }
     Surface(modifier = modifier.fillMaxSize()) {
@@ -77,6 +89,7 @@ fun NodeListScreen(
                 NodeCard(
                     node = node,
                     onClick = { onSelect(node.id) },
+                    onMenu = { menuNode = node },
                     modifier = Modifier
                         .zIndex(if (isDragging) 1f else 0f)
                         .graphicsLayer {
@@ -124,7 +137,12 @@ fun NodeListScreen(
 }
 
 @Composable
-private fun NodeCard(node: NodeItem, onClick: () -> Unit, modifier: Modifier = Modifier) {
+private fun NodeCard(
+    node: NodeItem,
+    onClick: () -> Unit,
+    onMenu: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     val container = if (node.selected) {
         MaterialTheme.colorScheme.primaryContainer
     } else {
@@ -160,6 +178,10 @@ private fun NodeCard(node: NodeItem, onClick: () -> Unit, modifier: Modifier = M
                 )
             }
             LatencyChip(ping = node.ping)
+            Spacer(Modifier.width(4.dp))
+            IconButton(onClick = onMenu) {
+                Text(text = "\u22ee", style = MaterialTheme.typography.titleLarge)
+            }
         }
     }
 }
@@ -174,6 +196,51 @@ private fun targetIndex(listState: LazyListState, currentIndex: Int, offset: Flo
         .firstOrNull { center >= it.offset && center <= it.offset + it.size }
         ?.index
         ?: currentIndex
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun NodeActionSheet(
+    node: NodeItem,
+    onDismiss: () -> Unit,
+    onEdit: () -> Unit,
+    onShare: () -> Unit,
+    onPing: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    ModalBottomSheet(onDismissRequest = onDismiss) {
+        Column(modifier = Modifier.fillMaxWidth().padding(bottom = 24.dp)) {
+            Text(
+                text = node.name.ifBlank { node.address },
+                style = MaterialTheme.typography.titleMedium,
+                fontWeight = FontWeight.SemiBold,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                modifier = Modifier.padding(horizontal = 24.dp, vertical = 8.dp),
+            )
+            Text(
+                text = node.address,
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.padding(horizontal = 24.dp),
+            )
+            Spacer(Modifier.height(12.dp))
+            SheetAction(stringResource(R.string.node_action_edit), onEdit)
+            SheetAction(stringResource(R.string.node_action_share), onShare)
+            SheetAction(stringResource(R.string.node_action_ping), onPing)
+            SheetAction(stringResource(R.string.node_action_delete), onDelete)
+        }
+    }
+}
+
+@Composable
+private fun SheetAction(label: String, onClick: () -> Unit) {
+    TextButton(
+        onClick = onClick,
+        modifier = Modifier.fillMaxWidth(),
+    ) {
+        Text(text = label, style = MaterialTheme.typography.bodyLarge)
+    }
 }
 
 @Composable

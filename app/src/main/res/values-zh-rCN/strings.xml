@@ -524,4 +524,9 @@
     <string name="node_untested">—</string>
     <string name="node_selected">当前</string>
     <string name="node_empty">该分组暂无节点</string>
+    <string name="node_action_edit">编辑</string>
+    <string name="node_action_share">分享</string>
+    <string name="node_action_ping">测试延迟</string>
+    <string name="node_action_delete">删除</string>
+    <string name="node_action_copied">链接已复制</string>
 </resources>

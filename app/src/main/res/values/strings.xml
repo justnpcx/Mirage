@@ -605,4 +605,9 @@
     <string name="node_untested">—</string>
     <string name="node_selected">Selected</string>
     <string name="node_empty">No nodes in this group</string>
+    <string name="node_action_edit">Edit</string>
+    <string name="node_action_share">Share</string>
+    <string name="node_action_ping">Test latency</string>
+    <string name="node_action_delete">Delete</string>
+    <string name="node_action_copied">Link copied</string>
 </resources>
