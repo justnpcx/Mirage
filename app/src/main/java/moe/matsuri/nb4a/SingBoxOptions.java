@@ -1991,6 +1991,8 @@ public class SingBoxOptions {
 
         public String short_id;
 
+        public Boolean support_x25519mlkem768;
+
     }
 
     public static class InboundACMEOptions extends SingBoxOption {

@@ -1,31 +1,43 @@
-# NekoBox for Android
+# Mirage for Android
 
 [![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
-[![Releases](https://img.shields.io/github/v/release/MatsuriDayo/NekoBoxForAndroid)](https://github.com/MatsuriDayo/NekoBoxForAndroid/releases)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-sing-box / universal proxy toolchain for Android.
+基于 sing-box 的 Android 通用代理客户端。
 
-一款使用 sing-box 的 Android 通用代理软件.
+A universal proxy client for Android, powered by sing-box.
+
+> Mirage 由 [NekoBoxForAndroid](https://github.com/MatsuriDayo/NekoBoxForAndroid) 衍生而来，并持续独立演进。
+
+## 特性 / Features
+
+- **sing-box `1.14.x` 内核**：由上游的 `1.12.19` 升级到 `1.14.x`
+  （基于 [MatsuriDayo/sing-box](https://github.com/MatsuriDayo/sing-box) 的 `1.14.x` 分支，见 [justnpcx/sing-box](https://github.com/justnpcx/sing-box)）。
+- **支持 Xray-core v26+ 的 REALITY（后量子）**：
+  Xray-core 自 `v26.9.8` 起要求 REALITY 的 ClientHello 携带后量子混合密钥交换 `X25519MLKEM768`。
+  上游 sing-box 会主动剥离该 key share，导致与运行新版 Xray 内核（如 3x-ui 的 `v26.10.10`）的服务端握手失败
+  (`reality verification failed`)。
+  Mirage 依据订阅链接中的 `support-x25519mlkem768=true` 参数决定是否启用该 key share，
+  并在计算 REALITY 认证密钥时回退到 `MlkemEcdhe`（行为与 Xray-core / mihomo 一致）。
+- **独立应用身份**：包名 `com.justnpcx.mirage`，可与官方 NekoBox 共存安装。
+
+### REALITY / X25519MLKEM768
+
+分享链接示例：
+
+```
+vless://<uuid>@host:443?type=tcp&encryption=none&security=reality&flow=xtls-rprx-vision\
+&sni=intel.com&fp=chrome&pbk=<public-key>&sid=<short-id>&support-x25519mlkem768=true#node
+```
+
+当链接带有 `support-x25519mlkem768=true` 时，客户端会在 ClientHello 中保留 `X25519MLKEM768` 混合 key share；
+否则维持旧行为（剥离），以兼容旧版 REALITY 服务端。
+
+> 已知上游变更：sing-box `1.13` 起移除了 WireGuard **outbound**（改为 endpoint）。目前尚未迁移 WireGuard 节点。
 
 ## 下载 / Downloads
 
-[![GitHub All Releases](https://img.shields.io/github/downloads/Matsuridayo/NekoBoxForAndroid/total?label=downloads-total&logo=github&style=flat-square)](https://github.com/Matsuridayo/NekoBoxForAndroid/releases)
-
-[GitHub Releases 下载](https://github.com/Matsuridayo/NekoBoxForAndroid/releases)
-
-**Google Play 版本自 2024 年 5 月起已被第三方控制，为非开源版本，请不要下载。**
-
-**The Google Play version has been controlled by a third party since May 2024 and is a non-open
-source version. Please do not download it.**
-
-## 更新日志 & Telegram 发布频道 / Changelog & Telegram Channel
-
-https://t.me/Matsuridayo
-
-## 项目主页 & 文档 / Homepage & Documents
-
-https://matsuridayo.github.io
+[GitHub Releases](https://github.com/justnpcx/Mirage/releases)
 
 ## 支持的代理协议 / Supported Proxy Protocols
 
@@ -45,7 +57,7 @@ https://matsuridayo.github.io
 * NaïveProxy (naive-plugin)
 * Mieru (mieru-plugin)
 
-请到[这里](https://matsuridayo.github.io/nb4a-plugin/)下载插件以获得完整的代理支持.
+请到[这里](https://matsuridayo.github.io/nb4a-plugin/)下载插件以获得完整的代理支持。
 
 Please visit [here](https://matsuridayo.github.io/nb4a-plugin/) to download plugins for full proxy
 supports.
@@ -62,37 +74,23 @@ supports.
 
 Only resolving outbound, i.e. nodes, is supported. Information such as diversion rules are ignored.
 
-## 捐助 / Donate
+## 构建 / Building
 
-<details>
-
-如果这个项目对您有帮助, 可以通过捐赠的方式帮助我们维持这个项目.
-
-捐赠满等额 50 USD 可以在「[捐赠榜](https://mtrdnt.pages.dev/donation_list)」显示头像, 如果您未被添加到这里,
-欢迎联系我们补充.
-
-Donations of 50 USD or more can display your avatar on
-the [Donation List](https://mtrdnt.pages.dev/donation_list). If you are not added here, please
-contact us to add it.
-
-USDT TRC20
-
-`TRhnA7SXE5Sap5gSG3ijxRmdYFiD4KRhPs`
-
-XMR
-
-`49bwESYQjoRL3xmvTcjZKHEKaiGywjLYVQJMUv79bXonGiyDCs8AzE3KiGW2ytTybBCpWJUvov8SjZZEGg66a4e59GXa6k5`
-
-</details>
+CI 使用 [`.github/workflows/build.yml`](.github/workflows/build.yml)：
+先由 Go 编译 `libcore`（sing-box 的 gomobile 绑定），再编译并签名 APK。
+签名使用仓库内的 `release.keystore`（自签名，凭据见 `keystore.properties`）。
+手动触发 `Build Mirage` workflow 即可产出 APK；推送 `v*` tag 会自动发布 Release。
 
 ## Credits
 
 Core:
 
 - [SagerNet/sing-box](https://github.com/SagerNet/sing-box)
+- [MatsuriDayo/sing-box](https://github.com/MatsuriDayo/sing-box)
 
 Android GUI:
 
+- [MatsuriDayo/NekoBoxForAndroid](https://github.com/MatsuriDayo/NekoBoxForAndroid)
 - [shadowsocks/shadowsocks-android](https://github.com/shadowsocks/shadowsocks-android)
 - [SagerNet/SagerNet](https://github.com/SagerNet/SagerNet)
 

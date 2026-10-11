@@ -9,9 +9,10 @@ pushd ..
 ####
 
 if [ ! -d "sing-box" ]; then
-  git clone --no-checkout https://github.com/MatsuriDayo/sing-box.git
+  git clone --no-checkout "$URL_SING_BOX"
 fi
 pushd sing-box
+git fetch --all --tags >/dev/null 2>&1 || true
 git checkout "$COMMIT_SING_BOX"
 popd
 

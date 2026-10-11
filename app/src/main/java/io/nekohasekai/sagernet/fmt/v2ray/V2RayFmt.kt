@@ -184,6 +184,10 @@ fun StandardV2RayBean.parseDuckSoft(url: HttpUrl) {
             url.queryParameter("sid")?.let {
                 realityShortId = it
             }
+            // Xray-core >= v26.9.8 REALITY servers require the X25519MLKEM768 key share.
+            url.queryParameter("support-x25519mlkem768")?.let {
+                realityMlkem = it == "1" || it == "true"
+            }
         }
     }
 
@@ -498,6 +502,9 @@ fun StandardV2RayBean.toUriVMessVLESSTrojan(isTrojan: Boolean): String {
                     builder.setQueryParameter("security", "reality")
                     builder.addQueryParameter("pbk", realityPubKey)
                     builder.addQueryParameter("sid", realityShortId)
+                    if (realityMlkem == true) {
+                        builder.addQueryParameter("support-x25519mlkem768", "true")
+                    }
                 }
             }
         }
@@ -603,6 +610,7 @@ fun buildSingBoxOutboundTLS(bean: StandardV2RayBean): OutboundTLSOptions? {
                 enabled = true
                 public_key = bean.realityPubKey
                 short_id = bean.realityShortId
+                support_x25519mlkem768 = bean.realityMlkem
             }
             if (fp.isNullOrBlank()) fp = "chrome"
         }
