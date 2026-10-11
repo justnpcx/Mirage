@@ -134,10 +134,15 @@ fun buildConfig(
     val bypassDNSBeans = hashSetOf<AbstractBean>()
     val isVPN = DataStore.serviceMode == Key.MODE_VPN
     val bind = if (!forTest && DataStore.allowAccess) "0.0.0.0" else LOCALHOST
-    val remoteDns = DataStore.remoteDns.split("\n")
+    fun parseDnsSetting(raw: String) = raw.split("\n")
         .mapNotNull { dns -> dns.trim().takeIf { it.isNotBlank() && !it.startsWith("#") } }
-    val directDNS = DataStore.directDns.split("\n")
-        .mapNotNull { dns -> dns.trim().takeIf { it.isNotBlank() && !it.startsWith("#") } }
+
+    // sing-box has no DNS failover, so pick a reachable server up front (issue #1176).
+    // Exports stay deterministic, and the probe is fail-open.
+    val remoteDns = parseDnsSetting(DataStore.remoteDns)
+        .let { if (forExport) it else DnsHealth.reorder(it) }
+    val directDNS = parseDnsSetting(DataStore.directDns)
+        .let { if (forExport) it else DnsHealth.reorder(it) }
     val enableDnsRouting = DataStore.enableDnsRouting
     val useFakeDns = DataStore.enableFakeDns && !forTest
     val needSniff = DataStore.trafficSniffing > 0
@@ -662,17 +667,18 @@ fun buildConfig(
             }
         }
 
+        // No `detour` here on purpose: a DNS server without a detour dials directly, while
+        // detouring to the (empty) `direct` outbound is rejected by sing-box 1.14 with
+        // "detour to an empty direct outbound makes no sense".
         dns.servers.add(DNSServerOptions().apply {
             type = "local"
             tag = "dns-local"
-            detour = TAG_DIRECT
         })
 
         directDNS.firstOrNull().let {
             dns.servers.add(DNSServerOptions().apply {
                 applyDnsAddress(it ?: throw Exception("No direct DNS, check your settings!"))
                 tag = "dns-direct"
-                detour = TAG_DIRECT
                 domain_resolver = "dns-local"
             })
         }

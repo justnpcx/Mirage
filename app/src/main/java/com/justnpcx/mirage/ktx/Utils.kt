@@ -78,6 +78,18 @@ val Throwable.readableMessage
     get() = localizedMessage.takeIf { !it.isNullOrBlank() } ?: javaClass.simpleName
 
 /**
+ * True when a failure looks like the proxy server's domain could not be resolved — the symptom of
+ * a blocked/blackholed DNS server (issue #1176).
+ */
+fun Throwable.isDnsFailure(): Boolean {
+    val m = readableMessage.lowercase()
+    val dnsish = "lookup" in m || "no such host" in m || "dns" in m || "resolve" in m
+    val failing = "timeout" in m || "timed out" in m || "refused" in m || "no such host" in m ||
+        "unreachable" in m || "connection failed" in m
+    return dnsish && failing
+}
+
+/**
  * https://android.googlesource.com/platform/prebuilts/runtime/+/94fec32/appcompat/hiddenapi-light-greylist.txt#9466
  */
 

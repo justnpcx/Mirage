@@ -390,7 +390,9 @@ class BaseService {
                         Logs.w(exc)
                     }
                     stopRunner(
-                        false, "${getString(R.string.service_failed)}: ${exc.readableMessage}"
+                        false,
+                        "${getString(R.string.service_failed)}: ${exc.readableMessage}" +
+                            if (exc.isDnsFailure()) "\n\n${getString(R.string.dns_failure_hint)}" else ""
                     )
                 } finally {
                     data.connectingJob = null
