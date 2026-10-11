@@ -9,6 +9,8 @@
         <item name="colorPrimaryDark">@color/material_pink_700</item>
         <item name="colorAccent">@color/material_pink_accent_200</item>
 
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.Mirage</item>
+
         <item name="colorMaterial100">@color/material_pink_100</item>
         <item name="colorMaterial300">@color/material_pink_300</item>
 
@@ -482,4 +484,34 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+
+    <!-- ============ Mirage preference styling ============
+         Applied through preferenceTheme so every preference screen (settings, route, and all
+         protocol editors) picks it up without touching their XML. -->
+    <style name="PreferenceThemeOverlay.Mirage" parent="PreferenceThemeOverlay">
+        <item name="preferenceStyle">@style/Preference.Mirage</item>
+        <item name="preferenceCategoryStyle">@style/PreferenceCategory.Mirage</item>
+        <item name="switchPreferenceCompatStyle">@style/Preference.Mirage.Switch</item>
+        <item name="checkBoxPreferenceStyle">@style/Preference.Mirage.CheckBox</item>
+        <item name="android:preferenceStyle">@style/Preference.Mirage</item>
+    </style>
+
+    <style name="Preference.Mirage" parent="Preference">
+        <item name="android:layout">@layout/preference_mirage</item>
+        <item name="iconSpaceReserved">true</item>
+    </style>
+
+    <style name="Preference.Mirage.Switch" parent="Preference.SwitchPreferenceCompat">
+        <item name="android:layout">@layout/preference_mirage</item>
+        <item name="iconSpaceReserved">true</item>
+    </style>
+
+    <style name="Preference.Mirage.CheckBox" parent="Preference.CheckBoxPreference">
+        <item name="android:layout">@layout/preference_mirage</item>
+        <item name="iconSpaceReserved">true</item>
+    </style>
+
+    <style name="PreferenceCategory.Mirage" parent="Preference.Category">
+        <item name="android:layout">@layout/preference_category_mirage</item>
+    </style>
 </resources>
