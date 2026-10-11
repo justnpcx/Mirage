@@ -31,7 +31,14 @@ object Theme {
     const val BLUE_GREY = 20
     const val BLACK = 21
 
-    private fun defaultTheme() = PINK_SSR
+    /**
+     * The out-of-the-box theme. PINK_SSR maps to `Theme.SagerNet.Pink_SSR`, whose colourPrimary is
+     * the raw `@color/color_pink_ssr` (#fb7299) — the old NekoBox pink. That is why the app kept
+     * looking like the original even after the `material_pink_*` ramp was re-tinted: the default
+     * never used that ramp. PINK maps to `Theme.SagerNet`, which is the Mirage palette; the pink
+     * stays available in the colour picker.
+     */
+    private fun defaultTheme() = PINK
 
     fun apply(context: Context) {
         context.setTheme(getTheme())
