@@ -65,8 +65,7 @@ A universal proxy client for Android, powered by sing-box.
 
 ## 下载 / Downloads
 
-- GitHub Releases：<https://github.com/justnpcx/Mirage/releases>
-- 备用镜像（不依赖 GitHub CDN）：<https://edu.justnpc.com/local/>
+<https://github.com/justnpcx/Mirage/releases>
 
 包名 `com.justnpcx.mirage`，可与官方 NekoBox 共存；手机一般选 `arm64-v8a`。
 
