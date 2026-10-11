@@ -26,6 +26,7 @@ import com.justnpcx.mirage.SagerNet
 import com.justnpcx.mirage.aidl.ISagerNetService
 import com.justnpcx.mirage.aidl.SpeedDisplayData
 import com.justnpcx.mirage.aidl.TrafficData
+import com.justnpcx.mirage.ui.compose.SpeedRegistry
 import com.justnpcx.mirage.bg.BaseService
 import com.justnpcx.mirage.bg.SagerConnection
 import com.justnpcx.mirage.database.DataStore
@@ -408,6 +409,7 @@ class MainActivity : ThemedActivity(),
     // ONLY do UI update here, write DB in bg process
     override fun cbSpeedUpdate(stats: SpeedDisplayData) {
         binding.stats.updateSpeed(stats.txRateProxy, stats.rxRateProxy)
+        SpeedRegistry.update(stats.txRateProxy, stats.rxRateProxy)
     }
 
     override fun cbTrafficUpdate(data: TrafficData) {
