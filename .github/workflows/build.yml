@@ -81,24 +81,17 @@ jobs:
       - name: Gradle Build
         env:
           BUILD_PLUGIN: none
-        run: ./gradlew app:assembleOssRelease app:bundleOssRelease
+        run: ./gradlew app:assembleOssRelease
       - name: Collect artifacts
         run: |
-          mkdir -p apks aab
+          mkdir -p apks
           find app/build/outputs/apk -name '*.apk' -exec cp {} apks/ \;
-          find app/build/outputs/bundle -name '*.aab' -exec cp {} aab/ \;
-          ls -lh apks aab
+          ls -lh apks
       - name: Upload APKs
         uses: actions/upload-artifact@v4
         with:
           name: Mirage-APKs
           path: apks/*.apk
-          if-no-files-found: error
-      - name: Upload App Bundle
-        uses: actions/upload-artifact@v4
-        with:
-          name: Mirage-AAB
-          path: aab/*.aab
           if-no-files-found: error
 
   release:
@@ -117,4 +110,13 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: apks/*.apk
-          generate_release_notes: true
+          body: |
+            Mirage 1.0.0 —— 首个公开版本。
+
+            - 内核 sing-box `1.14.x`（[justnpcx/sing-box](https://github.com/justnpcx/sing-box)）
+            - 支持 Xray-core v26+ REALITY 后量子 `X25519MLKEM768`
+            - 实现 xhttp（`stream-one` / `stream-up` / `downloadSettings`）
+            - Compose + Material 3 界面，全 App 统一主题配色
+            - 订阅 / 分享链接解析下沉到 KMP 共享核心
+
+            按 ABI 拆分的 APK：手机一般选 `arm64-v8a`。包名 `com.justnpcx.mirage`，可与官方 NekoBox 共存。
