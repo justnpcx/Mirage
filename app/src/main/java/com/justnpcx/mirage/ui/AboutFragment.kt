@@ -30,12 +30,19 @@ import com.justnpcx.mirage.utils.PackageCache
 import libcore.Libcore
 import moe.matsuri.nb4a.plugin.Plugins
 import moe.matsuri.nb4a.utils.Util
-import org.json.JSONObject
+import org.json.JSONArray
 
 /**
  * About screen — Compose implementation (replaces the old `material-about-library` screen).
  */
 class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
+
+    private companion object {
+        const val RELEASES_API = "https://api.github.com/repos/justnpcx/Mirage/releases?per_page=30"
+
+        /** tag of the optional preview channel; it has no release most of the time */
+        const val PREVIEW_TAG = "preview"
+    }
 
     private val requestIgnoreBatteryOptimizations = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -116,6 +123,14 @@ class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
         )
     }
 
+    /**
+     * Queries the GitHub releases list.
+     *
+     * Not `releases/latest` or `releases/tags/<t>`: libbox's HTTP client throws on any non-200
+     * (`Execute()` -> "HTTP 404 Not Found: {...}") and exposes no status code, so the preview
+     * channel — which has no release most of the time — surfaced as a raw error toast. The list
+     * endpoint always answers 200, and an empty channel is then just "nothing to show".
+     */
     private fun checkUpdate(checkPreview: Boolean) {
         runOnIoDispatcher {
             try {
@@ -124,25 +139,33 @@ class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
                     trySocks5(DataStore.mixedPort)
                 }
                 val response = client.newRequest().apply {
-                    if (checkPreview) {
-                        setURL("https://api.github.com/repos/justnpcx/Mirage/releases/tags/preview")
-                    } else {
-                        setURL("https://api.github.com/repos/justnpcx/Mirage/releases/latest")
-                    }
+                    setURL(RELEASES_API)
                 }.execute()
-                val release = JSONObject(Util.getStringBox(response.contentString))
-                val releaseName = release.getString("name")
-                val releaseUrl = release.getString("html_url")
-                var haveUpdate = releaseName.isNotBlank()
-                haveUpdate = if (isPreview) {
-                    if (checkPreview) {
-                        haveUpdate && releaseName != BuildConfig.PRE_VERSION_NAME
-                    } else {
-                        haveUpdate && releaseName != BuildConfig.VERSION_NAME
+                val releases = JSONArray(Util.getStringBox(response.contentString))
+                val release = (0 until releases.length())
+                    .map { releases.getJSONObject(it) }
+                    .firstOrNull { candidate ->
+                        if (candidate.optBoolean("draft")) return@firstOrNull false
+                        val tag = candidate.optString("tag_name")
+                        if (checkPreview) tag == PREVIEW_TAG
+                        else !candidate.optBoolean("prerelease") && tag != PREVIEW_TAG
                     }
-                } else {
-                    haveUpdate && !releaseName.contains(BuildConfig.VERSION_NAME)
+                // never getString(): a release may carry no `name`, and a missing channel has no
+                // object at all
+                val tag = release?.optString("tag_name").orEmpty()
+                if (tag.isBlank()) {
+                    runOnMainDispatcher {
+                        Toast.makeText(
+                            app,
+                            if (checkPreview) R.string.check_update_no_preview else R.string.check_update_no,
+                            Toast.LENGTH_SHORT,
+                        ).show()
+                    }
+                    return@runOnIoDispatcher
                 }
+                val expected = if (checkPreview) BuildConfig.PRE_VERSION_NAME else BuildConfig.VERSION_NAME
+                val haveUpdate = !tag.contains(expected)
+                val releaseUrl = release?.optString("html_url").orEmpty()
                 runOnMainDispatcher {
                     if (haveUpdate) {
                         val context = requireContext()
@@ -152,7 +175,7 @@ class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
                                 context.getString(
                                     R.string.update_dialog_message,
                                     SagerNet.appVersionNameForDisplay,
-                                    releaseName
+                                    tag
                                 )
                             )
                             .setPositiveButton(R.string.yes) { _, _ ->
