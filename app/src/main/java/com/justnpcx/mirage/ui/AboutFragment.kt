@@ -68,10 +68,6 @@ class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
 
     private fun refresh() {
         runOnDefaultDispatcher {
-            val license = runCatching {
-                requireContext().assets.open("LICENSE").bufferedReader().readText()
-            }.getOrDefault("")
-
             PackageCache.awaitLoadSync()
             val plugins = PackageCache.installedPluginPackages.values.mapNotNull { pkg ->
                 runCatching {
@@ -105,7 +101,7 @@ class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
                     singBoxVersion = Libcore.versionBox(),
                     plugins = plugins,
                     needBatteryOptimization = needBattery,
-                    license = license,
+                    showPreviewUpdate = isPreview,
                 )
             }
         }
