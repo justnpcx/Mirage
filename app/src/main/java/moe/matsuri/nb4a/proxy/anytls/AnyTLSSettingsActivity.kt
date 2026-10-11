@@ -3,11 +3,11 @@ package moe.matsuri.nb4a.proxy.anytls
 import android.os.Bundle
 import androidx.preference.EditTextPreference
 import androidx.preference.PreferenceFragmentCompat
-import io.nekohasekai.sagernet.Key
-import io.nekohasekai.sagernet.R
-import io.nekohasekai.sagernet.database.preference.EditTextPreferenceModifiers
-import io.nekohasekai.sagernet.ktx.applyDefaultValues
-import io.nekohasekai.sagernet.ui.profile.ProfileSettingsActivity
+import com.justnpcx.mirage.Key
+import com.justnpcx.mirage.R
+import com.justnpcx.mirage.database.preference.EditTextPreferenceModifiers
+import com.justnpcx.mirage.ktx.applyDefaultValues
+import com.justnpcx.mirage.ui.profile.ProfileSettingsActivity
 import moe.matsuri.nb4a.proxy.PreferenceBinding
 import moe.matsuri.nb4a.proxy.PreferenceBindingManager
 import moe.matsuri.nb4a.proxy.Type

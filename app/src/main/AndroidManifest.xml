@@ -48,7 +48,7 @@
     </queries>
 
     <application
-        android:name="io.nekohasekai.sagernet.SagerNet"
+        android:name="com.justnpcx.mirage.SagerNet"
         android:allowBackup="true"
         android:autoRevokePermissions="allowed"
         android:banner="@mipmap/ic_launcher"
@@ -69,11 +69,11 @@
             android:resource="@xml/shortcuts" />
 
         <activity
-            android:name="io.nekohasekai.sagernet.ui.BlankActivity"
+            android:name="com.justnpcx.mirage.ui.BlankActivity"
             android:configChanges="uiMode" />
 
         <activity
-            android:name="io.nekohasekai.sagernet.ui.MainActivity"
+            android:name="com.justnpcx.mirage.ui.MainActivity"
             android:configChanges="uiMode"
             android:exported="true"
             android:launchMode="singleTask">
@@ -142,50 +142,50 @@
                 android:resource="@xml/shortcuts" />
         </activity>
         <activity
-            android:name="io.nekohasekai.sagernet.ui.VpnRequestActivity"
+            android:name="com.justnpcx.mirage.ui.VpnRequestActivity"
             android:excludeFromRecents="true"
             android:taskAffinity="" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.ConfigEditActivity"
+            android:name="com.justnpcx.mirage.ui.profile.ConfigEditActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.SocksSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.SocksSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.HttpSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.HttpSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.ShadowsocksSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.ShadowsocksSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.VMessSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.VMessSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.TrojanSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.TrojanSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.TrojanGoSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.TrojanGoSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.MieruSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.MieruSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.NaiveSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.NaiveSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.HysteriaSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.HysteriaSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.SSHSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.SSHSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.WireGuardSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.WireGuardSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.TuicSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.TuicSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.profile.ChainSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.profile.ChainSettingsActivity"
             android:configChanges="uiMode" />
         <activity
             android:name="moe.matsuri.nb4a.proxy.shadowtls.ShadowTLSSettingsActivity"
@@ -197,16 +197,16 @@
             android:name="moe.matsuri.nb4a.proxy.config.ConfigSettingActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.GroupSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.GroupSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.RouteSettingsActivity"
+            android:name="com.justnpcx.mirage.ui.RouteSettingsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.AssetsActivity"
+            android:name="com.justnpcx.mirage.ui.AssetsActivity"
             android:configChanges="uiMode" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.AppListActivity"
+            android:name="com.justnpcx.mirage.ui.AppListActivity"
             android:configChanges="uiMode" />
         <activity
             android:name=".QuickToggleShortcut"
@@ -222,7 +222,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="io.nekohasekai.sagernet.ui.QuickEnableShortcut"
+            android:name="com.justnpcx.mirage.ui.QuickEnableShortcut"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="@string/quick_enable"
@@ -231,7 +231,7 @@
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.QuickDisableShortcut"
+            android:name="com.justnpcx.mirage.ui.QuickDisableShortcut"
             android:excludeFromRecents="true"
             android:exported="true"
             android:label="@string/quick_disable"
@@ -240,47 +240,47 @@
             android:taskAffinity=""
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.AppManagerActivity"
+            android:name="com.justnpcx.mirage.ui.AppManagerActivity"
             android:configChanges="uiMode"
             android:excludeFromRecents="true"
             android:label="@string/proxied_apps"
             android:launchMode="singleTask"
             android:parentActivityName=".ui.MainActivity" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.ScannerActivity"
+            android:name="com.justnpcx.mirage.ui.ScannerActivity"
             android:configChanges="uiMode"
             android:excludeFromRecents="true"
             android:label="@string/add_profile_methods_scan_qr_code"
             android:launchMode="singleTask"
-            android:parentActivityName="io.nekohasekai.sagernet.ui.MainActivity" />
+            android:parentActivityName="com.justnpcx.mirage.ui.MainActivity" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.ProfileSelectActivity"
+            android:name="com.justnpcx.mirage.ui.ProfileSelectActivity"
             android:configChanges="uiMode"
             android:label="@string/select_profile"
             android:launchMode="singleTask"
-            android:parentActivityName="io.nekohasekai.sagernet.ui.MainActivity" />
+            android:parentActivityName="com.justnpcx.mirage.ui.MainActivity" />
         <activity
-            android:name="io.nekohasekai.sagernet.ui.StunActivity"
+            android:name="com.justnpcx.mirage.ui.StunActivity"
             android:configChanges="uiMode"
             android:launchMode="singleTask"
-            android:parentActivityName="io.nekohasekai.sagernet.ui.MainActivity" />
+            android:parentActivityName="com.justnpcx.mirage.ui.MainActivity" />
 
         <activity
-            android:name="io.nekohasekai.sagernet.ui.SwitchActivity"
+            android:name="com.justnpcx.mirage.ui.SwitchActivity"
             android:configChanges="uiMode"
             android:excludeFromRecents="true"
             android:launchMode="singleInstance"
             android:theme="@style/Theme.SagerNet.Dialog" />
 
         <service
-            android:name="io.nekohasekai.sagernet.bg.ProxyService"
+            android:name="com.justnpcx.mirage.bg.ProxyService"
             android:exported="false"
             android:foregroundServiceType="systemExempted"
             android:process=":bg"
             tools:ignore="ForegroundServicePermission" />
 
         <service
-            android:name="io.nekohasekai.sagernet.bg.VpnService"
+            android:name="com.justnpcx.mirage.bg.VpnService"
             android:exported="false"
             android:foregroundServiceType="systemExempted"
             android:label="@string/app_name"
@@ -294,7 +294,7 @@
         </service>
 
         <service
-            android:name="io.nekohasekai.sagernet.bg.TileService"
+            android:name="com.justnpcx.mirage.bg.TileService"
             android:exported="true"
             android:foregroundServiceType="systemExempted"
             android:icon="@drawable/ic_service_active"
@@ -327,7 +327,7 @@
             tools:node="remove" />
 
         <receiver
-            android:name="io.nekohasekai.sagernet.BootReceiver"
+            android:name="com.justnpcx.mirage.BootReceiver"
             android:enabled="false"
             android:exported="true"
             android:process=":bg">

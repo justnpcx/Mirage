@@ -4,8 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.Drawable
 import androidx.appcompat.content.res.AppCompatResources
-import io.nekohasekai.sagernet.SagerNet
-import io.nekohasekai.sagernet.ktx.Logs
+import com.justnpcx.mirage.SagerNet
+import com.justnpcx.mirage.ktx.Logs
 import java.io.File
 
 // SagerNet Class

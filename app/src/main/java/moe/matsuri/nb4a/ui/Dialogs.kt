@@ -3,10 +3,10 @@ package moe.matsuri.nb4a.ui
 import android.content.Context
 import android.widget.TextView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
-import io.nekohasekai.sagernet.R
-import io.nekohasekai.sagernet.ktx.Logs
-import io.nekohasekai.sagernet.ktx.readableMessage
-import io.nekohasekai.sagernet.ktx.runOnMainDispatcher
+import com.justnpcx.mirage.R
+import com.justnpcx.mirage.ktx.Logs
+import com.justnpcx.mirage.ktx.readableMessage
+import com.justnpcx.mirage.ktx.runOnMainDispatcher
 
 object Dialogs {
     fun logExceptionAndShow(context: Context, e: Exception, callback: Runnable) {

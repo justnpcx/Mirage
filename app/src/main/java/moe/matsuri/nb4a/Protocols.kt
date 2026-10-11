@@ -1,11 +1,11 @@
 package moe.matsuri.nb4a
 
 import android.content.Context
-import io.nekohasekai.sagernet.R
-import io.nekohasekai.sagernet.database.ProxyEntity.Companion.TYPE_NEKO
-import io.nekohasekai.sagernet.fmt.AbstractBean
-import io.nekohasekai.sagernet.ktx.app
-import io.nekohasekai.sagernet.ktx.getColorAttr
+import com.justnpcx.mirage.R
+import com.justnpcx.mirage.database.ProxyEntity.Companion.TYPE_NEKO
+import com.justnpcx.mirage.fmt.AbstractBean
+import com.justnpcx.mirage.ktx.app
+import com.justnpcx.mirage.ktx.getColorAttr
 import moe.matsuri.nb4a.proxy.config.ConfigBean
 
 // Settings for all protocols, built-in or plugin

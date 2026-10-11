@@ -38,7 +38,7 @@ android {
         aidl = true
         compose = true
     }
-    namespace = "io.nekohasekai.sagernet"
+    namespace = "com.justnpcx.mirage"
     packaging {
         jniLibs {
             useLegacyPackaging = true

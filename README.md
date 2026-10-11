@@ -39,7 +39,7 @@ A universal proxy client for Android, powered by sing-box.
   `ui/compose/` 下有设计系统（`MirageTheme`）与 **Home/Dashboard** 竖切（抽屉 `nav_home`）。
   该页已迁移到 **ViewModel + StateFlow** 的单向数据流（`DashboardViewModel`），
   旧 View 栈与新 Compose 栈在迁移期内共存。
-- **全局单例注入化（起步）**：`BuildSettings`（`io.nekohasekai.sagernet.fmt`）把配置构建器需要的全局偏好
+- **全局单例注入化（起步）**：`BuildSettings`（`com.justnpcx.mirage.fmt`）把配置构建器需要的全局偏好
   （如 `globalAllowInsecure`）从 `DataStore` 中抽离出来，默认实现为 `DataStoreBuildSettings`，测试可注入假实现。
 - **Gradle 版本目录**（`gradle/libs.versions.toml`）统一管理版本。
 

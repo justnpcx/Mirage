@@ -1,7 +1,7 @@
 -repackageclasses ''
 -allowaccessmodification
 
--keep class io.nekohasekai.sagernet.** { *;}
+-keep class com.justnpcx.mirage.** { *;}
 -keep class moe.matsuri.nb4a.** { *;}
 
 # Clean Kotlin

@@ -7,9 +7,9 @@ import android.content.pm.ProviderInfo
 import android.net.Uri
 import android.os.Build
 import android.widget.Toast
-import io.nekohasekai.sagernet.SagerNet
+import com.justnpcx.mirage.SagerNet
 import io.nekohasekai.sagernet.plugin.PluginManager.loadString
-import io.nekohasekai.sagernet.utils.PackageCache
+import com.justnpcx.mirage.utils.PackageCache
 
 object Plugins {
     const val AUTHORITIES_PREFIX_SEKAI_EXE = "io.nekohasekai.sagernet.plugin."
@@ -107,7 +107,7 @@ object Plugins {
                 flags or PackageManager.MATCH_DIRECT_BOOT_UNAWARE or PackageManager.MATCH_DIRECT_BOOT_AWARE
         }
         val list1 = SagerNet.application.packageManager.queryIntentContentProviders(
-            Intent(ACTION_NATIVE_PLUGIN, buildUri(pluginId, "io.nekohasekai.sagernet")), flags
+            Intent(ACTION_NATIVE_PLUGIN, buildUri(pluginId, "com.justnpcx.mirage")), flags
         )
         val list2 = SagerNet.application.packageManager.queryIntentContentProviders(
             Intent(ACTION_NATIVE_PLUGIN, buildUri(pluginId, "moe.matsuri.lite")), flags

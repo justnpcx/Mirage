@@ -7,8 +7,8 @@ import android.widget.LinearLayout
 import androidx.core.content.res.TypedArrayUtils
 import androidx.core.view.isVisible
 import androidx.preference.EditTextPreference
-import io.nekohasekai.sagernet.R
-import io.nekohasekai.sagernet.database.DataStore
+import com.justnpcx.mirage.R
+import com.justnpcx.mirage.database.DataStore
 
 class UrlTestPreference
 @JvmOverloads

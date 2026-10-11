@@ -7,8 +7,8 @@ import com.esotericsoftware.kryo.io.ByteBufferOutput;
 
 import org.jetbrains.annotations.NotNull;
 
-import io.nekohasekai.sagernet.fmt.AbstractBean;
-import io.nekohasekai.sagernet.fmt.KryoConverters;
+import com.justnpcx.mirage.fmt.AbstractBean;
+import com.justnpcx.mirage.fmt.KryoConverters;
 
 public class AnyTLSBean extends AbstractBean {
 

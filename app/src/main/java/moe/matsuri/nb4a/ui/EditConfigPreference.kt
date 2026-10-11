@@ -4,12 +4,12 @@ import android.content.Context
 import android.content.Intent
 import android.util.AttributeSet
 import androidx.preference.Preference
-import io.nekohasekai.sagernet.Key
-import io.nekohasekai.sagernet.R
-import io.nekohasekai.sagernet.database.DataStore
-import io.nekohasekai.sagernet.ktx.Logs
-import io.nekohasekai.sagernet.ktx.app
-import io.nekohasekai.sagernet.ui.profile.ConfigEditActivity
+import com.justnpcx.mirage.Key
+import com.justnpcx.mirage.R
+import com.justnpcx.mirage.database.DataStore
+import com.justnpcx.mirage.ktx.Logs
+import com.justnpcx.mirage.ktx.app
+import com.justnpcx.mirage.ui.profile.ConfigEditActivity
 
 class EditConfigPreference : Preference {
 

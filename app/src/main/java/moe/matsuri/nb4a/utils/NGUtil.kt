@@ -7,7 +7,7 @@ import android.content.Intent
 import android.net.Uri
 import android.text.Editable
 import android.util.Base64
-import io.nekohasekai.sagernet.ktx.Logs
+import com.justnpcx.mirage.ktx.Logs
 import java.net.URLDecoder
 import java.net.URLEncoder
 import java.util.*
