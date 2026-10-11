@@ -58,6 +58,10 @@ dependencies {
 
     implementation(fileTree("libs"))
 
+    // --- Shared (Kotlin Multiplatform) core ---
+    implementation(project(":core:model"))
+    implementation(project(":core:subscription"))
+
     // --- Jetpack Compose / Material 3 ---
     val composeBom = platform(libs.androidx.compose.bom)
     implementation(composeBom)

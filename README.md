@@ -11,17 +11,39 @@ A universal proxy client for Android, powered by sing-box.
 
 ## 特性 / Features
 
-- **sing-box `1.14.x` 内核**：由上游的 `1.12.19` 升级到 `1.14.x`
-  （基于 [MatsuriDayo/sing-box](https://github.com/MatsuriDayo/sing-box) 的 `1.14.x` 分支，见 [justnpcx/sing-box](https://github.com/justnpcx/sing-box)）。
-- **支持 Xray-core v26+ 的 REALITY（后量子）**：
+### 内核 / Core
+
+- **sing-box `1.14.x`**（由上游的 `1.12.19` 升级）。内核补丁维护在
+  [justnpcx/sing-box](https://github.com/justnpcx/sing-box) 的 `nb-next-1.14.x` 分支。
+
+- **支持 Xray-core v26+ 的 REALITY（后量子 `X25519MLKEM768`）**：
   Xray-core 自 `v26.9.8` 起要求 REALITY 的 ClientHello 携带后量子混合密钥交换 `X25519MLKEM768`。
   上游 sing-box 会主动剥离该 key share，导致与运行新版 Xray 内核（如 3x-ui 的 `v26.10.10`）的服务端握手失败
-  (`reality verification failed`)。
-  Mirage 依据订阅链接中的 `support-x25519mlkem768=true` 参数决定是否启用该 key share，
+  (`reality verification failed`)。Mirage 依据订阅链接中的 `support-x25519mlkem768=true` 决定是否启用，
   并在计算 REALITY 认证密钥时回退到 `MlkemEcdhe`（行为与 Xray-core / mihomo 一致）。
-- **独立应用身份**：包名 `com.justnpcx.mirage`，可与官方 NekoBox 共存安装。
 
-### REALITY / X25519MLKEM768
+- **WireGuard 使用 endpoint**：sing-box `1.13` 起移除了 WireGuard **outbound**。
+  Mirage 生成 `endpoints[]`（单 peer、`allowed_ips: 0.0.0.0/0, ::/0`）。
+  由于 endpoint 在 sing-box 中同样按 tag 寻址，selector 与路由规则无需改动。
+
+### 架构 / Architecture
+
+- **Kotlin Multiplatform 共享核心**（`android` + `jvm` 目标）：
+  - `:core:model` —— 跨平台领域模型（kotlinx.serialization）
+  - `:core:subscription` —— **订阅链接解析**（vless / vmess / trojan 分享链接 → 传输与 TLS 选项，含 REALITY / ML-KEM）。
+    Android 端不再自己解析，而是委托给该模块，因此同一套逻辑可在其它平台复用。
+- **Jetpack Compose + Material 3**：已接入（Kotlin 2.0 Compose 编译器插件 + BOM + 动态取色），
+  `ui/compose/` 下有设计系统（`MirageTheme`）与 **Home/Dashboard** 竖切（抽屉 `nav_home`）。
+  旧 View 栈与新 Compose 栈在迁移期内共存。
+- **Gradle 版本目录**（`gradle/libs.versions.toml`）统一管理版本。
+
+### 质量 / Quality
+
+- **静态检查**：detekt（配置见 `config/detekt/detekt.yml`，遗留问题用 baseline 固化，新问题会被 CI 拦下）。
+- **单元测试**：共享核心为纯 Kotlin 测试（无需 Android）；Android 端用 Robolectric 覆盖 bean 映射与 sing-box JSON 契约。
+- **CI**（`.github/workflows/build.yml`）：编译 libcore → 静态检查 + 全部单测 → 构建并签名 APK；推 `v*` tag 自动发布 Release。
+
+## REALITY / X25519MLKEM768
 
 分享链接示例：
 
@@ -30,16 +52,13 @@ vless://<uuid>@host:443?type=tcp&encryption=none&security=reality&flow=xtls-rprx
 &sni=intel.com&fp=chrome&pbk=<public-key>&sid=<short-id>&support-x25519mlkem768=true#node
 ```
 
-当链接带有 `support-x25519mlkem768=true` 时，客户端会在 ClientHello 中保留 `X25519MLKEM768` 混合 key share；
+链接带 `support-x25519mlkem768=true` 时，客户端会在 ClientHello 中保留 `X25519MLKEM768` 混合 key share；
 否则维持旧行为（剥离），以兼容旧版 REALITY 服务端。
-
-- **WireGuard 已迁移到 endpoint**：sing-box `1.13` 起移除了 WireGuard **outbound**（改为 endpoint）。
-  Mirage 现在生成 `endpoints[]`（单 peer、`allowed_ips: 0.0.0.0/0, ::/0`）。由于 endpoint 在 sing-box 中同样可按 tag 寻址，
-  selector 与路由规则无需改动。
 
 ## 下载 / Downloads
 
-[GitHub Releases](https://github.com/justnpcx/Mirage/releases)
+[GitHub Releases](https://github.com/justnpcx/Mirage/releases) —— 包名 `com.justnpcx.mirage`，可与官方 NekoBox 共存；
+手机一般选 `arm64-v8a`。
 
 ## 支持的代理协议 / Supported Proxy Protocols
 
@@ -78,10 +97,26 @@ Only resolving outbound, i.e. nodes, is supported. Information such as diversion
 
 ## 构建 / Building
 
-CI 使用 [`.github/workflows/build.yml`](.github/workflows/build.yml)：
-先由 Go 编译 `libcore`（sing-box 的 gomobile 绑定），再编译并签名 APK。
-签名使用仓库内的 `release.keystore`（自签名，凭据见 `keystore.properties`）。
-手动触发 `Build Mirage` workflow 即可产出 APK；推送 `v*` tag 会自动发布 Release。
+```bash
+# 1) 编译内核（需要 Go 1.26.x + Android NDK 25.0.8775105）
+JAVA_HOME=/path/to/jdk17 \
+PATH=$JAVA_HOME/bin:$GOPATH/bin:$PATH \
+ANDROID_HOME=/path/to/android-sdk \
+ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.0.8775105 \
+./run lib core
+
+# 2) 静态检查 + 单测
+./gradlew :app:detekt :core:model:detekt :core:subscription:detekt \
+          :core:model:allTests :core:subscription:allTests :app:testOssReleaseUnitTest
+
+# 3) 构建 APK
+./gradlew app:assembleOssRelease
+```
+
+> ⚠️ **Go 版本**：`gomobile` 的 `go.mod` 使用了 `godebug gotypesalias=0`，该 GODEBUG 在 **Go 1.27 被移除**，
+> 因此编译内核必须使用 **Go 1.26.x**（CI 已固定）。
+
+签名使用仓库内的 `release.keystore`（自签名，凭据见 `keystore.properties`，CI 通过 `LOCAL_PROPERTIES` 传入）。
 
 ## Credits
 

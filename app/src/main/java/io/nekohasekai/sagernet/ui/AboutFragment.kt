@@ -108,17 +108,6 @@ class AboutFragment : ToolbarFragment(R.layout.layout_about) {
                                 .subText(Libcore.versionBox())
                                 .setOnClickAction { }
                                 .build())
-                        .addItem(
-                            MaterialAboutActionItem.Builder()
-                                .icon(R.drawable.ic_baseline_card_giftcard_24)
-                                .text(R.string.donate)
-                                .subText(R.string.donate_info)
-                                .setOnClickAction {
-                                    requireContext().launchCustomTab(
-                                        "https://matsuridayo.github.io/index_docs/#donate"
-                                    )
-                                }
-                                .build())
                         .apply {
                             PackageCache.awaitLoadSync()
                             for ((_, pkg) in PackageCache.installedPluginPackages) {
@@ -185,16 +174,6 @@ class AboutFragment : ToolbarFragment(R.layout.layout_about) {
                                     requireContext().launchCustomTab(
                                         "https://github.com/justnpcx/Mirage"
 
-                                    )
-                                }
-                                .build())
-                        .addItem(
-                            MaterialAboutActionItem.Builder()
-                                .icon(R.drawable.ic_qu_shadowsocks_foreground)
-                                .text(R.string.telegram)
-                                .setOnClickAction {
-                                    requireContext().launchCustomTab(
-                                        "https://t.me/MatsuriDayo"
                                     )
                                 }
                                 .build())

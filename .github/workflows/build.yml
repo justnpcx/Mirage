@@ -73,7 +73,11 @@ jobs:
       - name: Download assets
         run: ./run init action gradle
       - name: Static analysis & unit tests
-        run: ./gradlew :app:detekt :core:model:detekt :core:model:allTests :app:testOssReleaseUnitTest
+        run: >-
+          ./gradlew
+          :app:detekt :core:model:detekt :core:subscription:detekt
+          :core:model:allTests :core:subscription:allTests
+          :app:testOssReleaseUnitTest
       - name: Gradle Build
         env:
           BUILD_PLUGIN: none

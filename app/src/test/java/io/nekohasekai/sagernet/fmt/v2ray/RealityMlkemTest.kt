@@ -2,7 +2,6 @@ package io.nekohasekai.sagernet.fmt.v2ray
 
 import moe.matsuri.nb4a.SingBoxOptions.OutboundRealityOptions
 import moe.matsuri.nb4a.SingBoxOptions.OutboundTLSOptions
-import okhttp3.HttpUrl.Companion.toHttpUrl
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
@@ -39,14 +38,14 @@ class RealityMlkemTest {
      *
      * [parseV2Ray] itself is avoided because its error path calls `Logs`, and the `ktx` package
      * static-initializes an Android-only `Socket` reflection hack that does not exist on the JVM.
+     *
+     * The URI/field logic itself lives in `:core:subscription`; this is an integration check that
+     * the parsed values are mapped onto the Android bean correctly.
      */
-    private fun parse(link: String): StandardV2RayBean {
-        val url = link.replace("vmess://", "https://").replace("vless://", "https://").toHttpUrl()
-        return VMessBean().apply {
-            initializeDefaultValues()
-            alterId = -1
-            parseDuckSoft(url)
-        }
+    private fun parse(link: String): StandardV2RayBean = VMessBean().apply {
+        initializeDefaultValues()
+        alterId = -1
+        parseDuckSoft(link)
     }
 
     @Test

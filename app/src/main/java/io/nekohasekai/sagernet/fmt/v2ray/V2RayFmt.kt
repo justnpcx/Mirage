@@ -2,6 +2,8 @@ package io.nekohasekai.sagernet.fmt.v2ray
 
 import android.text.TextUtils
 import com.google.gson.Gson
+import com.justnpcx.mirage.core.subscription.ProxyUriParser
+import com.justnpcx.mirage.core.subscription.V2RayUri
 import io.nekohasekai.sagernet.database.DataStore
 import io.nekohasekai.sagernet.fmt.http.HttpBean
 import io.nekohasekai.sagernet.fmt.trojan.TrojanBean
@@ -129,132 +131,47 @@ fun parseV2Ray(link: String): StandardV2RayBean {
         }
     } else {
         // also vless format
-        bean.parseDuckSoft(url)
+        bean.parseDuckSoft(link)
     }
 
     return bean
 }
 
 // https://github.com/XTLS/Xray-core/issues/91
-fun StandardV2RayBean.parseDuckSoft(url: HttpUrl) {
-    serverAddress = url.host
-    serverPort = url.port
-    name = url.fragment
+fun StandardV2RayBean.parseDuckSoft(link: String) {
+    val uri = ProxyUriParser.parse(link)
+    val isTrojan = this is TrojanBean
+    val parsed = V2RayUri.parse(uri, isTrojan = isTrojan, isVless = isVLESS)
 
-    if (this is TrojanBean) {
-        password = url.username
+    serverAddress = uri.host
+    serverPort = uri.port
+    name = uri.fragment
+
+    if (isTrojan) {
+        password = uri.username
     } else {
-        uuid = url.username
+        uuid = uri.username
     }
 
-    // not ducksoft fmt path
-    if (url.pathSegments.size > 1 || url.pathSegments[0].isNotBlank()) {
-        path = url.pathSegments.joinToString("/")
-    }
+    type = parsed.type
+    path = parsed.path
+    security = parsed.security
+    sni = parsed.sni
+    alpn = parsed.alpn
+    certificates = parsed.certificates
+    allowInsecure = parsed.allowInsecure
+    host = parsed.host
+    wsMaxEarlyData = parsed.earlyData
+    earlyDataHeaderName = parsed.earlyDataHeader
+    realityPubKey = parsed.realityPublicKey
+    realityShortId = parsed.realityShortId
+    realityMlkem = parsed.realityMlkem
+    packetEncoding = parsed.packetEncoding
+    utlsFingerprint = parsed.fingerprint
 
-    type = url.queryParameter("type") ?: "tcp"
-    if (type == "h2" || url.queryParameter("headerType") == "http") type = "http"
-
-    security = url.queryParameter("security")
-    if (security.isNullOrBlank()) {
-        security = if (this is TrojanBean) "tls" else "none"
-    }
-
-    when (security) {
-        "tls", "reality" -> {
-            security = "tls"
-            url.queryParameter("allowInsecure")?.let {
-                allowInsecure = it == "1" || it == "true"
-            }
-            url.queryParameter("sni")?.let {
-                sni = it
-            }
-            url.queryParameter("host")?.let {
-                if (sni.isNullOrBlank()) sni = it
-            }
-            url.queryParameter("alpn")?.let {
-                alpn = it
-            }
-            url.queryParameter("cert")?.let {
-                certificates = it
-            }
-            url.queryParameter("pbk")?.let {
-                realityPubKey = it
-            }
-            url.queryParameter("sid")?.let {
-                realityShortId = it
-            }
-            // Xray-core >= v26.9.8 REALITY servers require the X25519MLKEM768 key share.
-            url.queryParameter("support-x25519mlkem768")?.let {
-                realityMlkem = it == "1" || it == "true"
-            }
-        }
-    }
-
-    when (type) {
-        "http" -> {
-            url.queryParameter("host")?.let {
-                host = it
-            }
-            url.queryParameter("path")?.let {
-                path = it
-            }
-        }
-
-        "ws" -> {
-            url.queryParameter("host")?.let {
-                host = it
-            }
-            url.queryParameter("path")?.let {
-                path = it
-            }
-            url.queryParameter("ed")?.let { ed ->
-                wsMaxEarlyData = ed.toInt()
-
-                url.queryParameter("eh")?.let {
-                    earlyDataHeaderName = it
-                }
-            }
-        }
-
-        "grpc" -> {
-            url.queryParameter("serviceName")?.let {
-                path = it
-            }
-        }
-
-        "httpupgrade" -> {
-            url.queryParameter("host")?.let {
-                host = it
-            }
-            url.queryParameter("path")?.let {
-                path = it
-            }
-        }
-    }
-
-    // maybe from matsuri vmess exoprt
-    if (this is VMessBean && !isVLESS) {
-        url.queryParameter("encryption")?.let {
-            encryption = it
-        }
-    }
-
-    url.queryParameter("packetEncoding")?.let {
-        when (it) {
-            "packet" -> packetEncoding = 1
-            "xudp" -> packetEncoding = 2
-        }
-    }
-
-    url.queryParameter("flow")?.let {
-        if (isVLESS) {
-            encryption = it.removeSuffix("-udp443")
-        }
-    }
-
-    url.queryParameter("fp")?.let {
-        utlsFingerprint = it
+    // Keep the bean default (e.g. VMess "auto") when the link does not specify one.
+    if (parsed.encryption.isNotEmpty()) {
+        encryption = parsed.encryption
     }
 }
 
