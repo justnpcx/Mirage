@@ -520,4 +520,8 @@
     <string name="about_ignore_battery_sum">保持代理服务在后台运行</string>
     <string name="about_license">开源许可</string>
     <string name="about_singbox">sing-box</string>
+    <string name="menu_nodes">节点</string>
+    <string name="node_untested">—</string>
+    <string name="node_selected">当前</string>
+    <string name="node_empty">该分组暂无节点</string>
 </resources>

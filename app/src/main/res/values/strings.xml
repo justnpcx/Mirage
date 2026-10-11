@@ -601,4 +601,8 @@
     <string name="about_ignore_battery_sum">Keeps the proxy service alive in the background</string>
     <string name="about_license">License</string>
     <string name="about_singbox">sing-box</string>
+    <string name="menu_nodes">Nodes</string>
+    <string name="node_untested">—</string>
+    <string name="node_selected">Selected</string>
+    <string name="node_empty">No nodes in this group</string>
 </resources>

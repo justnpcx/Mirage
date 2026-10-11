@@ -26,6 +26,7 @@ import com.justnpcx.mirage.SagerNet
 import com.justnpcx.mirage.aidl.ISagerNetService
 import com.justnpcx.mirage.aidl.SpeedDisplayData
 import com.justnpcx.mirage.aidl.TrafficData
+import com.justnpcx.mirage.ui.compose.NodeListFragment
 import com.justnpcx.mirage.ui.compose.SpeedRegistry
 import com.justnpcx.mirage.bg.BaseService
 import com.justnpcx.mirage.bg.SagerConnection
