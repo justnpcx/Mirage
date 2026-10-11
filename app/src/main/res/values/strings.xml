@@ -610,4 +610,8 @@
     <string name="node_action_ping">Test latency</string>
     <string name="node_action_delete">Delete</string>
     <string name="node_action_copied">Link copied</string>
+    <string name="about_language">Language</string>
+    <string name="language_system" translatable="false">Follow system</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_chinese" translatable="false">简体中文</string>
 </resources>

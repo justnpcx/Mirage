@@ -3,6 +3,7 @@ package com.justnpcx.mirage.ui.compose
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import com.justnpcx.mirage.SagerNet
 import com.justnpcx.mirage.database.DataStore
 import com.justnpcx.mirage.database.ProfileManager
 import com.justnpcx.mirage.database.SagerDatabase
@@ -58,8 +59,14 @@ class NodeListViewModel(application: Application) : AndroidViewModel(application
     }
 
     fun select(id: Long) {
+        val previous = DataStore.selectedProxy
         DataStore.selectedProxy = id
         DataStore.currentProfile = id
+        // tell the running service to switch, otherwise the tap appears to do nothing
+        if (DataStore.serviceState.canStop) {
+            SagerNet.reloadService()
+        }
+        viewModelScope.launch { runCatching { ProfileManager.postUpdate(previous, true) } }
         refresh()
     }
 

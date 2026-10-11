@@ -529,4 +529,8 @@
     <string name="node_action_ping">测试延迟</string>
     <string name="node_action_delete">删除</string>
     <string name="node_action_copied">链接已复制</string>
+    <string name="about_language">语言</string>
+    <string name="language_system" translatable="false">跟随系统</string>
+    <string name="language_english" translatable="false">English</string>
+    <string name="language_chinese" translatable="false">简体中文</string>
 </resources>

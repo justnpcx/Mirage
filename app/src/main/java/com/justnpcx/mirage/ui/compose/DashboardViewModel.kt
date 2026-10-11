@@ -4,6 +4,8 @@ import android.app.Application
 import android.text.format.Formatter
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.preference.PreferenceDataStore
+import com.justnpcx.mirage.database.preference.OnPreferenceDataStoreChangeListener
 import com.justnpcx.mirage.SagerNet
 import com.justnpcx.mirage.bg.BaseService
 import com.justnpcx.mirage.database.DataStore
@@ -17,7 +19,9 @@ import kotlinx.coroutines.launch
  * State holder for the Compose Home screen — the first screen moved to the
  * unidirectional-data-flow (ViewModel + StateFlow) architecture.
  */
-class DashboardViewModel(application: Application) : AndroidViewModel(application) {
+class DashboardViewModel(application: Application) :
+    AndroidViewModel(application),
+    OnPreferenceDataStoreChangeListener {
 
     private val _state = MutableStateFlow(DashboardState.empty())
     val state: StateFlow<DashboardState> = _state.asStateFlow()
@@ -27,6 +31,10 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
     private val rxHistory = ArrayDeque<Long>()
 
     init {
+        // the service state lives in the preference store; without this the UI would never
+        // notice a connect/disconnect (it looked "stuck" on the old build)
+        DataStore.configurationStore.registerChangeListener(this)
+
         // the service pushes transfer rates to MainActivity; surface them on the dashboard
         viewModelScope.launch {
             SpeedRegistry.speed.collect { speed ->
@@ -49,6 +57,14 @@ class DashboardViewModel(application: Application) : AndroidViewModel(applicatio
 
     private companion object {
         const val HISTORY_SIZE = 48
+    }
+
+    override fun onPreferenceDataStoreChanged(store: PreferenceDataStore, key: String) {
+        refresh()
+    }
+
+    override fun onCleared() {
+        DataStore.configurationStore.unregisterChangeListener(this)
     }
 
     private fun formatRate(bytesPerSecond: Long): String =
