@@ -10,7 +10,7 @@
     <string name="app_version">Version</string>
     <string name="version_x">Version (%s)</string>
     <string name="logcat">Export debug information</string>
-    <string name="menu_configuration">Configuration</string>
+    <string name="menu_configuration">Subscriptions &amp; Groups</string>
     <string name="menu_home">Home</string>
     <string name="menu_group">Group</string>
     <string name="menu_about">About</string>

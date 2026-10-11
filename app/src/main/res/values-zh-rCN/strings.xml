@@ -7,7 +7,7 @@
     <string name="oss_licenses">开放源代码协议</string>
     <string name="app_version">版本</string>
     <string name="logcat">导出调试信息</string>
-    <string name="menu_configuration">配置</string>
+    <string name="menu_configuration">订阅与分组</string>
     <string name="menu_group">分组</string>
     <string name="menu_about">关于</string>
     <string name="group_default">未分组</string>
