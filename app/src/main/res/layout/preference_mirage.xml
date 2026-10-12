@@ -27,11 +27,15 @@
         android:layout_height="wrap_content"
         android:layout_weight="1">
 
+        <!-- textAppearanceListItem / textAppearanceSmall: exactly what the library's own
+             preference_material.xml uses (16sp title over a 14sp summary). Using
+             textAppearanceMedium here made the title 18sp, which read as oversized next to the
+             summary and differed from every stock preference row. -->
         <TextView
             android:id="@android:id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceListItem"
             android:textColor="?android:attr/textColorPrimary"
             android:maxLines="2"
             android:ellipsize="end" />
