@@ -612,6 +612,8 @@
     <string name="about_hl_core">Shared core: subscription and share-link parsing live in Kotlin Multiplatform</string>
     <string name="about_protocols">Protocols</string>
     <string name="about_protocols_list">SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard</string>
+    <string name="about_transports">Transports</string>
+    <string name="about_transports_list">TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · xhttp</string>
     <string name="menu_nodes">Nodes</string>
     <string name="node_untested">—</string>
     <string name="node_selected">Selected</string>

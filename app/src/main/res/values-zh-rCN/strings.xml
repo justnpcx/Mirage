@@ -531,6 +531,8 @@
     <string name="about_hl_core">共享核心：订阅与分享链接解析下沉到 Kotlin Multiplatform</string>
     <string name="about_protocols">支持的协议</string>
     <string name="about_protocols_list">SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard</string>
+    <string name="about_transports">支持的传输</string>
+    <string name="about_transports_list">TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · xhttp</string>
     <string name="menu_nodes">节点</string>
     <string name="node_untested">—</string>
     <string name="node_selected">当前</string>

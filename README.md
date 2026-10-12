@@ -36,6 +36,12 @@ AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard
 
 Trojan-Go / NaïveProxy / Mieru 需[插件](https://matsuridayo.github.io/nb4a-plugin/)。
 
+## 支持的传输 / Transports
+
+TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · **xhttp**
+
+其中 **xhttp** 是 sing-box 官方没有的传输，由本项目的 fork 内核实现（见上方「xhttp 传输」）。
+
 ## 构建 / Building
 
 ```bash

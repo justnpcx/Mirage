@@ -31,6 +31,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.justnpcx.mirage.R
 
@@ -124,16 +125,7 @@ fun AboutScreen(
                 }
             }
 
-            item {
-                SectionCard(stringResource(R.string.about_protocols)) {
-                    Text(
-                        text = stringResource(R.string.about_protocols_list),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                    )
-                }
-            }
+            item { ProtocolsCard() }
 
             if (state.plugins.isNotEmpty()) {
                 item {
@@ -211,6 +203,37 @@ private fun SectionCard(title: String, content: @Composable ColumnScope.() -> Un
             content()
         }
     }
+}
+
+/**
+ * Protocols, then the transports they can run over.
+ *
+ * Kept as two labelled lists rather than one: xhttp is a *transport* (a sibling of ws / gRPC / h2),
+ * not a protocol, and folding it into the protocol list would misrepresent both.
+ */
+@Composable
+private fun ProtocolsCard() {
+    SectionCard(stringResource(R.string.about_protocols)) {
+        BodyText(stringResource(R.string.about_protocols_list))
+        Spacer(Modifier.height(12.dp))
+        Text(
+            text = stringResource(R.string.about_transports),
+            style = MaterialTheme.typography.labelMedium,
+            modifier = Modifier.padding(start = 16.dp, end = 16.dp),
+        )
+        Spacer(Modifier.height(2.dp))
+        BodyText(stringResource(R.string.about_transports_list), bottom = 16.dp)
+    }
+}
+
+@Composable
+private fun BodyText(text: String, bottom: Dp = 0.dp) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.bodyMedium,
+        color = MaterialTheme.colorScheme.onSurfaceVariant,
+        modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = bottom),
+    )
 }
 
 /** Card with no section header — used when the single row already reads as its own title. */
