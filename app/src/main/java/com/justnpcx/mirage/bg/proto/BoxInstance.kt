@@ -17,7 +17,7 @@ import com.justnpcx.mirage.fmt.naive.buildNaiveConfig
 import com.justnpcx.mirage.fmt.trojan_go.TrojanGoBean
 import com.justnpcx.mirage.fmt.trojan_go.buildTrojanGoConfig
 import com.justnpcx.mirage.ktx.*
-import io.nekohasekai.sagernet.plugin.PluginManager
+import com.justnpcx.mirage.plugin.PluginManager
 import kotlinx.coroutines.*
 import libcore.BoxInstance
 import libcore.Libcore

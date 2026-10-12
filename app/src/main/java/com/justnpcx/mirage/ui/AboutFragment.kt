@@ -21,7 +21,7 @@ import com.justnpcx.mirage.R
 import com.justnpcx.mirage.SagerNet
 import com.justnpcx.mirage.database.DataStore
 import com.justnpcx.mirage.ktx.*
-import io.nekohasekai.sagernet.plugin.PluginManager.loadString
+import com.justnpcx.mirage.plugin.PluginManager.loadString
 import com.justnpcx.mirage.ui.compose.AboutScreen
 import com.justnpcx.mirage.ui.compose.AboutState
 import com.justnpcx.mirage.ui.compose.PluginInfo

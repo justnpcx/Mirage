@@ -16,7 +16,7 @@ import com.justnpcx.mirage.bg.proto.ProxyInstance
 import com.justnpcx.mirage.database.DataStore
 import com.justnpcx.mirage.database.SagerDatabase
 import com.justnpcx.mirage.ktx.*
-import io.nekohasekai.sagernet.plugin.PluginManager
+import com.justnpcx.mirage.plugin.PluginManager
 import com.justnpcx.mirage.utils.DefaultNetworkListener
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.Mutex

@@ -76,7 +76,7 @@ import com.justnpcx.mirage.ktx.showAllowingStateLoss
 import com.justnpcx.mirage.ktx.snackbar
 import com.justnpcx.mirage.ktx.startFilesForResult
 import com.justnpcx.mirage.ktx.tryToShow
-import io.nekohasekai.sagernet.plugin.PluginManager
+import com.justnpcx.mirage.plugin.PluginManager
 import com.justnpcx.mirage.ui.profile.ChainSettingsActivity
 import com.justnpcx.mirage.ui.profile.HttpSettingsActivity
 import com.justnpcx.mirage.ui.profile.HysteriaSettingsActivity

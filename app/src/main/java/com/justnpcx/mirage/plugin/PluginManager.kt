@@ -1,4 +1,4 @@
-package io.nekohasekai.sagernet.plugin
+package com.justnpcx.mirage.plugin
 
 import android.content.pm.ComponentInfo
 import android.content.pm.ProviderInfo

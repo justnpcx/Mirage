@@ -8,7 +8,7 @@ import android.net.Uri
 import android.os.Build
 import android.widget.Toast
 import com.justnpcx.mirage.SagerNet
-import io.nekohasekai.sagernet.plugin.PluginManager.loadString
+import com.justnpcx.mirage.plugin.PluginManager.loadString
 import com.justnpcx.mirage.utils.PackageCache
 
 object Plugins {
