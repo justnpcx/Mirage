@@ -111,7 +111,11 @@ jobs:
         with:
           files: apks/*.apk
           body: |
-            Mirage 1.0.0 —— 首个公开版本。
+            Mirage 1.0.1
+
+            - 修复：Android TV / Fire TV 的 320×180 banner 之前误用方形桌面图标，现提供真正的 16:9 banner（`res/drawable-xhdpi/tv_banner.png`）
+
+            内核与特性：
 
             - 内核 sing-box `1.14.x`（[justnpcx/sing-box](https://github.com/justnpcx/sing-box)）
             - 支持 Xray-core v26+ REALITY 后量子 `X25519MLKEM768`

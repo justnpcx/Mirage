@@ -51,7 +51,7 @@
         android:name="com.justnpcx.mirage.SagerNet"
         android:allowBackup="true"
         android:autoRevokePermissions="allowed"
-        android:banner="@mipmap/ic_launcher"
+        android:banner="@drawable/tv_banner"
         android:dataExtractionRules="@xml/backup_rules"
         android:fullBackupContent="@xml/backup_descriptor"
         android:fullBackupOnly="true"
