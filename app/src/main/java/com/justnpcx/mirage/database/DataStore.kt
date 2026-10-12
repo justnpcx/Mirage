@@ -144,7 +144,13 @@ object DataStore : OnPreferenceDataStoreChangeListener {
         configurationStore.putString(key, "$value")
     }
 
-    var ipv6Mode by configurationStore.stringToInt(Key.IPV6_MODE) { IPv6Mode.DISABLE }
+    // ENABLE, not the upstream DISABLE default. DISABLE maps to the DNS strategy `ipv4_only`
+    // (see ConfigBuilder.autoDnsDomainStrategy), which makes sing-box resolve outbound server
+    // addresses with an A query only (dns/client.go) — so a server whose domain has no A record
+    // (e.g. an IPv6-only `home.example.com`) can never be resolved and the node fails to connect.
+    // ENABLE maps to `prefer_ipv4`: IPv4 is still preferred, but AAAA is resolvable, and the TUN
+    // carries IPv6 too, so IPv6 is tunnelled rather than leaking out the native interface.
+    var ipv6Mode by configurationStore.stringToInt(Key.IPV6_MODE) { IPv6Mode.ENABLE }
 
     var meteredNetwork by configurationStore.boolean(Key.METERED_NETWORK)
     var proxyApps by configurationStore.boolean(Key.PROXY_APPS)
