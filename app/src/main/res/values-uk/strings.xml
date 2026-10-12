@@ -489,7 +489,6 @@
     <string name="ads">Реклама</string>
     <string name="bypass_lan_in_core">Обходити ЛВС в ядрі</string>
     <string name="need_restart">Перезапустіть програму, щоб застосувати зміни</string>
-    <string name="use_selector">Використовувати селектор</string>
     <string name="front_proxy">Передній проксі</string>
     <string name="landing_proxy">Проксі-призначення</string>
     <string name="action_shadowtls" translatable="false">ShadowTLS</string>

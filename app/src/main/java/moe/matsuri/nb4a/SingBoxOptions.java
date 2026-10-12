@@ -4466,7 +4466,9 @@ public class SingBoxOptions {
 
         public String url;
 
-        public Long interval;
+        // A duration string such as "3m". sing-box parses this as badoption.Duration, where a bare
+        // number means *nanoseconds* -- a Long here would be a silent 1e9x mistake.
+        public String interval;
 
         public Integer tolerance;
 

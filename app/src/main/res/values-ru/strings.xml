@@ -468,7 +468,6 @@
 <string name="update_subscription_warning">Прокси-сервер не подключен, вы уверены, что хотите продолжить обновление?</string>
 <string name="update_when_connected_only">Обновлять только при подключении</string>
 <string name="update_when_connected_only_sum">Предотвратить утечку IP-адреса</string>
-<string name="use_selector">Использовать селектор</string>
 <string name="username">Имя пользователя</string>
 <string name="username_opt">Имя пользователя (необязательно)</string>
 <string name="utls_fingerprint">Отпечаток uTLS</string>

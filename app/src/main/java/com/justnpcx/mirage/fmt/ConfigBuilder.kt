@@ -128,7 +128,9 @@ fun buildConfig(
         if (forTest) mapOf() else SagerDatabase.proxyDao.getEntities(extraRules.mapNotNull { rule ->
             rule.outbound.takeIf { it > 0 && it != proxy.id }
         }.toHashSet().toList()).associateBy { it.id }
-    val buildSelector = !forTest && group?.isSelector == true && !forExport
+    // urltest wins when both are somehow set: it is the stricter, more useful mode.
+    val buildUrlTest = !forTest && group?.isUrlTest == true && !forExport
+    val buildSelector = !forTest && !buildUrlTest && group?.isSelector == true && !forExport
     val userDNSRuleList = mutableListOf<DNSRule_DefaultOptions>()
     val domainListDNSDirectForce = mutableListOf<String>()
     val bypassDNSBeans = hashSetOf<AbstractBean>()
@@ -161,10 +163,17 @@ fun buildConfig(
     }
 
     return MyOptions().apply {
-        if (!forTest && DataStore.enableClashAPI) experimental = ExperimentalOptions().apply {
-            clash_api = ClashAPIOptions().apply {
+        if (!forTest && (DataStore.enableClashAPI || useFakeDns)) experimental = ExperimentalOptions().apply {
+            if (DataStore.enableClashAPI) clash_api = ClashAPIOptions().apply {
                 external_controller = "127.0.0.1:9090"
                 external_ui = "../files/yacd"
+            }
+            // Persist the fakeip mappings (and nothing else) so they survive a restart. The path
+            // is left unset: libbox chdirs into a writable directory at startup, so the default
+            // `cache.db` lands somewhere the app owns.
+            if (useFakeDns) cache_file = CacheFile().apply {
+                enabled = true
+                store_fakeip = true
             }
         }
 
@@ -239,6 +248,12 @@ fun buildConfig(
             auto_detect_interface = true
             rules = mutableListOf()
             rule_set = mutableListOf()
+            // Pin the catch-all outbound explicitly. With `final` unset, sing-box falls back to the
+            // *first outbound that was created* (adapter/outbound/manager.go), which happens to be
+            // the proxy today only because we always insert it at index 0. Relying on that ordering
+            // is fragile -- adding or reordering an outbound would silently reroute every unmatched
+            // connection. Say what we mean: everything not matched by a rule goes through the proxy.
+            final_ = TAG_PROXY
             // Every outbound turns its own server domain into an address through this resolver.
             // Left unset they fall back to the default DNS transport, which for us is dns-remote —
             // and dns-remote is dialled through the proxy. That is a cycle: the proxy cannot come
@@ -486,17 +501,29 @@ fun buildConfig(
         }
 
         // build outbounds
-        if (buildSelector) {
+        if (buildSelector || buildUrlTest) {
             val list = group.id.let { SagerDatabase.proxyDao.getByGroup(it) }
             list.forEach {
                 tagMap[it.id] = buildChain(it.id, it)
             }
-            outbounds.add(0, Outbound_SelectorOptions().apply {
-                type = "selector"
-                tag = TAG_PROXY
-                default_ = tagMap[proxy.id]
-                outbounds = tagMap.values.toList()
-            })
+            val groupOutbound: SingBoxOption = if (buildUrlTest) {
+                // `urltest` probes every member on its own and always dials the fastest one, so the
+                // node picks itself. No `default` here -- that is a selector concept.
+                Outbound_URLTestOptions().apply {
+                    type = "urltest"
+                    tag = TAG_PROXY
+                    outbounds = tagMap.values.toList()
+                    url = DataStore.connectionTestURL
+                }
+            } else {
+                Outbound_SelectorOptions().apply {
+                    type = "selector"
+                    tag = TAG_PROXY
+                    default_ = tagMap[proxy.id]
+                    outbounds = tagMap.values.toList()
+                }
+            }
+            outbounds.add(0, groupOutbound)
         } else {
             buildChain(0, proxy)
         }

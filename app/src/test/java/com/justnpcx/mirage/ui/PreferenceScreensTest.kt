@@ -42,7 +42,6 @@ class PreferenceScreensTest {
         "global_preferences" to R.xml.global_preferences,
         "route_preferences" to R.xml.route_preferences,
         "group_preferences" to R.xml.group_preferences,
-        "neko_preferences" to R.xml.neko_preferences,
         "config_preferences" to R.xml.config_preferences,
         "name_preferences" to R.xml.name_preferences,
         // the 16 protocol editors

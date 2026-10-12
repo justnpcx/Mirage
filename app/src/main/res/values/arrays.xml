@@ -387,6 +387,12 @@
         <item>@string/subscription</item>
     </string-array>
 
+    <string-array name="group_modes">
+        <item>@string/group_mode_none</item>
+        <item>@string/group_mode_selector</item>
+        <item>@string/group_mode_urltest</item>
+    </string-array>
+
     <string-array name="hysteria_auth_type">
         <item>@string/plugin_disabled</item>
         <item>STRING</item>

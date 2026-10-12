@@ -20,6 +20,7 @@ data class ProxyGroup(
     var subscription: SubscriptionBean? = null,
     var order: Int = GroupOrder.ORIGIN,
     var isSelector: Boolean = false,
+    @ColumnInfo(defaultValue = "0") var isUrlTest: Boolean = false,
     var frontProxy: Long = -1L,
     var landingProxy: Long = -1L
 ) : Serializable() {

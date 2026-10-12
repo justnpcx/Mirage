@@ -500,7 +500,6 @@
     <string name="ads">تبلیغات</string>
     <string name="bypass_lan_in_core">دورزدن شبکه محلی در هسته برنامه</string>
     <string name="need_restart">برای اجرای تغییرات، برنامه را دوباره راه‌اندازی کنید</string>
-    <string name="use_selector">استفاده از انتخاب‌گر</string>
     <string name="front_proxy">پراکسی جلویی</string>
     <string name="landing_proxy" >پراکسی در حال فرود</string>
     <string name="action_shadowtls" translatable="false">ShadowTLS</string>

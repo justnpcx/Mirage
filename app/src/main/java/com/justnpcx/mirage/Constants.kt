@@ -134,7 +134,7 @@ object Key {
     const val GROUP_NAME = "groupName"
     const val GROUP_TYPE = "groupType"
     const val GROUP_ORDER = "groupOrder"
-    const val GROUP_IS_SELECTOR = "groupIsSelector"
+    const val GROUP_MODE = "groupMode"
     const val GROUP_FRONT_PROXY = "groupFrontProxy"
     const val GROUP_LANDING_PROXY = "groupLandingProxy"
 
@@ -170,6 +170,19 @@ object IPv6Mode {
 object GroupType {
     const val BASIC = 0
     const val SUBSCRIPTION = 1
+}
+
+/**
+ * How a group turns its nodes into a single outbound.
+ *
+ * NONE     no wrapper -- the group's nodes are only reachable through rules
+ * SELECTOR a `selector` outbound: the user picks a node, switching does not reload the core
+ * URL_TEST a `urltest` outbound: sing-box probes every node and always uses the fastest one
+ */
+object GroupMode {
+    const val NONE = 0
+    const val SELECTOR = 1
+    const val URL_TEST = 2
 }
 
 object GroupOrder {

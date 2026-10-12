@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat
 import androidx.preference.*
 import com.github.shadowsocks.plugin.Empty
 import com.github.shadowsocks.plugin.fragment.AlertDialogFragment
+import com.justnpcx.mirage.GroupMode
 import com.justnpcx.mirage.GroupType
 import com.justnpcx.mirage.Key
 import com.justnpcx.mirage.R
@@ -48,7 +49,11 @@ class GroupSettingsActivity(
         DataStore.groupName = name ?: if (ungrouped) getString(R.string.group_default) else ""
         DataStore.groupType = type
         DataStore.groupOrder = order
-        DataStore.groupIsSelector = isSelector
+        DataStore.groupMode = when {
+            isUrlTest -> GroupMode.URL_TEST
+            isSelector -> GroupMode.SELECTOR
+            else -> GroupMode.NONE
+        }
 
         DataStore.frontProxy = frontProxy
         DataStore.landingProxy = landingProxy
@@ -69,7 +74,8 @@ class GroupSettingsActivity(
         name = DataStore.groupName.takeIf { it.isNotBlank() } ?: "My group"
         type = DataStore.groupType
         order = DataStore.groupOrder
-        isSelector = DataStore.groupIsSelector
+        isSelector = DataStore.groupMode == GroupMode.SELECTOR
+        isUrlTest = DataStore.groupMode == GroupMode.URL_TEST
 
         frontProxy = if (DataStore.frontProxyTmp == 3) DataStore.frontProxy else -1
         landingProxy = if (DataStore.landingProxyTmp == 3) DataStore.landingProxy else -1
