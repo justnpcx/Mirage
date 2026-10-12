@@ -26,7 +26,6 @@ import com.justnpcx.mirage.SagerNet
 import com.justnpcx.mirage.aidl.ISagerNetService
 import com.justnpcx.mirage.aidl.SpeedDisplayData
 import com.justnpcx.mirage.aidl.TrafficData
-import com.justnpcx.mirage.ui.compose.NodeListFragment
 import com.justnpcx.mirage.ui.compose.SpeedRegistry
 import com.justnpcx.mirage.bg.BaseService
 import com.justnpcx.mirage.bg.SagerConnection
@@ -466,11 +465,10 @@ class MainActivity : ThemedActivity(),
  * A pure function rather than an inline `when` so `MainActivityNavTest` can assert that every item
  * in `main_drawer_menu.xml` is covered. A missing branch is a *silent* no-op: [MainActivity
  * .displayFragmentWithId] returns false, `onNavigationItemSelected` returns false, and the drawer
- * does not even move its selection — which is how `nav_nodes` shipped dead for several releases.
+ * does not even move its selection. A drawer item once shipped dead exactly this way.
  */
 internal fun fragmentForNavId(@IdRes id: Int): ToolbarFragment? = when (id) {
     R.id.nav_home -> DashboardFragment()
-    R.id.nav_nodes -> NodeListFragment()
     R.id.nav_configuration -> ConfigurationFragment()
     R.id.nav_group -> GroupFragment()
     R.id.nav_route -> RouteFragment()

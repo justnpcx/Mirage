@@ -381,13 +381,13 @@ class GroupFragment : ToolbarFragment(R.layout.layout_group),
         fun bind(group: ProxyGroup) {
             proxyGroup = group
 
-            // Tapping a row makes it the "current" group and opens the node list. This is the only
-            // way to see what a group actually contains, and it matters most for the built-in
-            // "ungrouped" group -- that is the bucket every standalone import lands in, and its row
-            // used to be completely inert (upstream NekoBox ships the same empty listener).
+            // Tapping a row makes it the "current" group and opens the node picker with that group's
+            // tab selected. This matters most for the built-in "ungrouped" group -- that is the
+            // bucket every standalone import lands in, and its row used to be completely inert
+            // (upstream NekoBox ships the same empty listener).
             itemView.setOnClickListener {
                 DataStore.selectedGroup = proxyGroup.id
-                (activity as? MainActivity)?.displayFragmentWithId(R.id.nav_nodes)
+                (activity as? MainActivity)?.displayFragmentWithId(R.id.nav_configuration)
             }
 
             editButton.isGone = false

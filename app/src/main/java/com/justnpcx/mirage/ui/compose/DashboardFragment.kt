@@ -31,10 +31,10 @@ class DashboardFragment : ToolbarFragment(R.layout.layout_compose) {
                 DashboardScreen(
                     state = state,
                     onToggleConnection = viewModel::toggleConnection,
-                    // go to the Compose node list (the daily picker), not the legacy
-                    // Configuration screen — that one is for subscriptions / groups
+                    // The node picker lives in the Configuration screen: it is the one with a tab
+                    // per group, each tab listing that group's nodes.
                     onOpenProfiles = {
-                        (activity as? MainActivity)?.displayFragmentWithId(R.id.nav_nodes)
+                        (activity as? MainActivity)?.displayFragmentWithId(R.id.nav_configuration)
                     },
                 )
             }

@@ -10,7 +10,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Generates the Baseline Profile: app startup, then the drawer and the node list.
+ * Generates the Baseline Profile: app startup, then the drawer and the node picker.
  *
  * Regeneration is documented in `.github/workflows/baselineprofile.yml`. Run it against a device or
  * emulator with API 28+:
@@ -22,8 +22,8 @@ import org.junit.runner.RunWith
  *
  * Every step here is best-effort on purpose: a missing label or an empty list must not fail the
  * test, because a failed test means no profile is produced at all. On a freshly installed app the
- * node list has no entries, so that part mostly profiles the LazyColumn machinery — on a device
- * that already has profiles it covers the node cards as well.
+ * node lists have no entries, so that part mostly profiles the RecyclerView machinery — on a device
+ * that already has nodes it covers the node rows as well.
  */
 @RunWith(AndroidJUnit4::class)
 class BaselineProfileGenerator {
@@ -43,9 +43,9 @@ class BaselineProfileGenerator {
         device.waitForIdle(SETTLE_MS)
 
         // The drawer has no hamburger button: MainActivity.onKeyDown opens it on DPAD_LEFT.
-        // Then jump to the node list.
+        // Then jump to the node picker (Configuration: a tab per group, each listing its nodes).
         device.pressDPadLeft()
-        clickAnyOf(device, timeoutMs = SETTLE_MS, "Nodes", "节点")
+        clickAnyOf(device, timeoutMs = SETTLE_MS, "Subscriptions & Groups", "订阅与分组")
         device.waitForIdle(SETTLE_MS)
 
         // Scroll the node list both ways so the LazyColumn compose + scroll path is profiled.

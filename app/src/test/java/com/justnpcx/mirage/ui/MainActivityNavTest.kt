@@ -5,7 +5,6 @@ import android.view.View
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.appcompat.widget.PopupMenu
 import com.justnpcx.mirage.R
-import com.justnpcx.mirage.ui.compose.NodeListFragment
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -20,8 +19,8 @@ import org.robolectric.annotation.Config
  * Every item in `main_drawer_menu.xml` must be mapped to a screen by [fragmentForNavId]. A missing
  * branch is completely silent: `displayFragmentWithId` returns false, `onNavigationItemSelected`
  * returns false, the drawer does not even move its selection, and the user just sees nothing
- * happen. That is how `nav_nodes` shipped dead — the menu item existed, `NodeListFragment` existed
- * and was even imported, but no branch ever opened it.
+ * happen. A drawer item once shipped dead exactly this way -- the menu item existed and the
+ * fragment it should have opened existed too, but no branch ever opened it.
  */
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [34], application = android.app.Application::class)
@@ -45,13 +44,5 @@ class MainActivityNavTest {
             .map { it.title.toString() }
 
         assertEquals("drawer items with no screen wired up", emptyList<String>(), dead)
-    }
-
-    @Test
-    fun nodesItemOpensTheNodeList() {
-        assertTrue(
-            "nav_nodes must open NodeListFragment",
-            fragmentForNavId(R.id.nav_nodes) is NodeListFragment,
-        )
     }
 }
