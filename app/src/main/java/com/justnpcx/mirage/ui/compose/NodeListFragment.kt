@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.justnpcx.mirage.R
 import com.justnpcx.mirage.database.SagerDatabase
+import com.justnpcx.mirage.ktx.Logs
 import com.justnpcx.mirage.ktx.onMainDispatcher
 import com.justnpcx.mirage.ktx.runOnDefaultDispatcher
 import com.justnpcx.mirage.ui.ToolbarFragment
@@ -59,6 +60,7 @@ class NodeListFragment : ToolbarFragment(R.layout.layout_compose) {
     }
 
     private fun shareNode(id: Long) {
+        Logs.w(Throwable("share sheet requested by NodeListFragment.shareNode(id=$id)"))
         val context = context ?: return
         runOnDefaultDispatcher {
             val entity = SagerDatabase.proxyDao.getById(id) ?: return@runOnDefaultDispatcher
