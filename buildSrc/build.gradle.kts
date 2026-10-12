@@ -5,6 +5,9 @@ plugins {
 
 apply(from = "../repositories.gradle.kts")
 
+// NOTE: this file is the single source of truth for the Gradle plugin versions (AGP, Kotlin,
+// KSP, detekt). The app/core modules apply them version-less via id(...), so the version catalog's
+// [plugins] aliases are NOT what drives the build.
 dependencies {
     // Gradle Plugins
     implementation("com.android.tools.build:gradle:8.8.1")

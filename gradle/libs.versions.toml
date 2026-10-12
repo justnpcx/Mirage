@@ -1,4 +1,7 @@
 [versions]
+# NOTE: agp/kotlin/ksp below are NOT used by the build — the [plugins] aliases that referenced them
+# are unused, because every module applies its plugins version-less (id("kotlin-android"), ...).
+# The real versions live in buildSrc/build.gradle.kts and the root build.gradle.kts.
 # Build toolchain
 agp = "8.8.1"
 kotlin = "2.0.21"
