@@ -53,8 +53,16 @@ fun Project.setupCommon() {
         buildToolsVersion = "35.0.1"
         compileSdk = 35
         defaultConfig {
-            minSdk = 21
+            minSdk = 24
             targetSdk = 35
+        }
+        packaging {
+            jniLibs {
+                // From minSdk 23 AGP defaults to storing native libs uncompressed (the loader
+                // mmaps them straight out of the APK). Here that would nearly double the download
+                // because libgojni.so alone is ~29 MB uncompressed. Keep the compressed form.
+                useLegacyPackaging = true
+            }
         }
         buildTypes {
             getByName("release") {
@@ -170,6 +178,7 @@ fun Project.setupApp() {
 
         buildTypes {
             getByName("release") {
+                isShrinkResources = true
                 proguardFiles(
                     getDefaultProguardFile("proguard-android-optimize.txt"),
                     file("proguard-rules.pro")
