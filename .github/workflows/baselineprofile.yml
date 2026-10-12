@@ -7,7 +7,10 @@ name: Baseline Profile
 #
 # Two ways to run it:
 #   - Actions -> Baseline Profile -> Run workflow (needs a token with Actions:write)
-#   - push to the `baseline-profile` branch (the token used to push code only needs Contents:write)
+#   - push to a `baseline-profile` branch, which only needs Contents:write. That branch is not
+#     kept in the repo; create it on demand and remove it again afterwards:
+#       git push origin main:baseline-profile      # triggers the run
+#       git push origin --delete baseline-profile  # clean up
 
 on:
   workflow_dispatch:
