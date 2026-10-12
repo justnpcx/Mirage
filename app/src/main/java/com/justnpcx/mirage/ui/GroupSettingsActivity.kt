@@ -42,7 +42,10 @@ class GroupSettingsActivity(
     private lateinit var landingProxyPreference: OutboundPreference
 
     fun ProxyGroup.init() {
-        DataStore.groupName = name ?: ""
+        // The built-in "ungrouped" group stores no name -- it falls back to group_default at display
+        // time. Prefill that here so the field is not empty, which would otherwise be saved back as
+        // the literal "My group" (see serialize()) the first time the group is edited.
+        DataStore.groupName = name ?: if (ungrouped) getString(R.string.group_default) else ""
         DataStore.groupType = type
         DataStore.groupOrder = order
         DataStore.groupIsSelector = isSelector

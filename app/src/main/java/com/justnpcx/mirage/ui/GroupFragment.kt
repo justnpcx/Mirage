@@ -381,9 +381,16 @@ class GroupFragment : ToolbarFragment(R.layout.layout_group),
         fun bind(group: ProxyGroup) {
             proxyGroup = group
 
-            itemView.setOnClickListener { }
+            // Tapping a row makes it the "current" group and opens the node list. This is the only
+            // way to see what a group actually contains, and it matters most for the built-in
+            // "ungrouped" group -- that is the bucket every standalone import lands in, and its row
+            // used to be completely inert (upstream NekoBox ships the same empty listener).
+            itemView.setOnClickListener {
+                DataStore.selectedGroup = proxyGroup.id
+                (activity as? MainActivity)?.displayFragmentWithId(R.id.nav_nodes)
+            }
 
-            editButton.isGone = proxyGroup.ungrouped
+            editButton.isGone = false
             updateButton.isInvisible = proxyGroup.type != GroupType.SUBSCRIPTION
             groupName.text = proxyGroup.displayName()
 
@@ -436,7 +443,7 @@ class GroupFragment : ToolbarFragment(R.layout.layout_group),
 
                 subscriptionUpdateProgress.isVisible = false
                 updateButton.isInvisible = proxyGroup.type != GroupType.SUBSCRIPTION
-                editButton.isGone = proxyGroup.ungrouped
+                editButton.isGone = false
             }
 
             val subscription = proxyGroup.subscription
