@@ -1062,6 +1062,13 @@ public class SingBoxOptions {
 
     }
 
+    public static class DomainResolveOptions extends SingBoxOption {
+
+        public String server;
+
+    }
+
+
     public static class RouteOptions extends SingBoxOption {
 
         public List<Rule> rules;
@@ -1080,6 +1087,13 @@ public class SingBoxOptions {
         public String default_interface;
 
         public Integer default_mark;
+
+        /**
+         * sing-box 1.12+. The resolver every outbound uses to turn its own server domain into an
+         * address. Without it they fall back to the default DNS transport — which is the one that
+         * is itself dialled through the proxy, and that is a cycle.
+         */
+        public DomainResolveOptions default_domain_resolver;
 
     }
 

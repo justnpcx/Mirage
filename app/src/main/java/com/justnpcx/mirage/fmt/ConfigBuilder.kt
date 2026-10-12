@@ -239,6 +239,12 @@ fun buildConfig(
             auto_detect_interface = true
             rules = mutableListOf()
             rule_set = mutableListOf()
+            // Every outbound turns its own server domain into an address through this resolver.
+            // Left unset they fall back to the default DNS transport, which for us is dns-remote —
+            // and dns-remote is dialled through the proxy. That is a cycle: the proxy cannot come
+            // up until its own server name resolves. Pin it to the direct resolver, which is
+            // reachable without the tunnel.
+            default_domain_resolver = DomainResolveOptions().apply { server = "dns-direct" }
         }
 
         // sing-box 1.11+ replaced the legacy inbound sniff / resolve fields with rule actions.
@@ -688,6 +694,12 @@ fun buildConfig(
             if (!forTest) dns.servers.add(DNSServerOptions().apply {
                 applyDnsAddress(it ?: throw Exception("No remote DNS, check your settings!"))
                 tag = "dns-remote"
+                // A DNS server with no detour is dialled by a *plain* dialer: it does not consult
+                // the route rules or route.final (see dns/transport_dialer.go -> dialer.NewWithOptions,
+                // which only detours when `detour` is set). Left empty, a foreign DoH such as
+                // dns.google is dialled straight out and dies on the way — which then takes every
+                // non-CN lookup with it. Route it through the proxy.
+                detour = TAG_PROXY
                 domain_resolver = "dns-direct"
             })
         }
