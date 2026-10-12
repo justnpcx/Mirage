@@ -521,6 +521,16 @@
     <string name="about_ignore_battery_sum">保持代理服务在后台运行</string>
     <string name="about_license">开源许可</string>
     <string name="about_singbox">sing-box</string>
+    <string name="about_tagline">基于 sing-box 1.14 的通用代理客户端</string>
+    <string name="about_info">信息</string>
+    <string name="about_highlights">本版要点</string>
+    <string name="about_hl_kernel">自维护内核 sing-box 1.14.x —— 上游新特性可以先落到这里</string>
+    <string name="about_hl_xhttp">xhttp 传输：stream-one / stream-up / downloadSettings</string>
+    <string name="about_hl_reality">REALITY 后量子：X25519MLKEM768</string>
+    <string name="about_hl_dns">DNS 健康检查：连接前探测并自动故障转移</string>
+    <string name="about_hl_core">共享核心：订阅与分享链接解析下沉到 Kotlin Multiplatform</string>
+    <string name="about_protocols">支持的协议</string>
+    <string name="about_protocols_list">SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard</string>
     <string name="menu_nodes">节点</string>
     <string name="node_untested">—</string>
     <string name="node_selected">当前</string>

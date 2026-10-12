@@ -163,8 +163,16 @@ class AboutFragment : ToolbarFragment(R.layout.layout_compose) {
                     }
                     return@runOnIoDispatcher
                 }
-                val expected = if (checkPreview) BuildConfig.PRE_VERSION_NAME else BuildConfig.VERSION_NAME
-                val haveUpdate = !tag.contains(expected)
+                // Compare the tag against our version exactly, both without the leading "v".
+                // `tag.contains(version)` looked right for v1.0.0 but treats v1.0.10 as an
+                // update to a 1.0.1 build (and v1.0.1 as one to a 1.0.10 build).
+                // The preview channel is a single rolling tag whose name carries no version, so
+                // there is nothing to compare — any preview release counts as newer.
+                val haveUpdate = if (checkPreview) {
+                    true
+                } else {
+                    tag.removePrefix("v") != BuildConfig.VERSION_NAME.removePrefix("v")
+                }
                 val releaseUrl = release?.optString("html_url").orEmpty()
                 runOnMainDispatcher {
                     if (haveUpdate) {

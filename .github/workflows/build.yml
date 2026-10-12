@@ -111,26 +111,36 @@ jobs:
         with:
           files: apks/*.apk
           body: |
-            Mirage 1.0.4
+            Mirage 1.0.0 —— 基于 **sing-box 1.14** 的 Android 通用代理客户端。
 
-            - 界面：删掉抽屉里多余的「节点」。它和「订阅与分组」展示的是同一份内容（后者本来就是**一个分组一个 tab、tab 里是该分组的节点**），属于重复入口。现在的结构回到上游：**首页 = 连接状态/流量/当前节点**，**订阅与分组 = 选节点**，**分组 = 管理分组**。
-            - 界面：设置页等所有偏好行的标题字号由 18sp 改回 **16sp**（摘要 14sp），和系统 Material 偏好行、以及原版一致。
-            - 界面：分组列表的每一行现在都可以点击 —— 点进去会把该分组设为当前分组并打开「订阅与分组」对应 tab；「未分组」也补上了编辑按钮（之前被隐藏，无法改名）。
+            **内核走在前面**
 
-            上一版（1.0.3）：
+            内核是自维护的 [justnpcx/sing-box](https://github.com/justnpcx/sing-box) fork（分支 `nb-next-1.14.x`），基于 sing-box `1.14.x`。上游还没发版、甚至还没实现的能力，可以先落到客户端。
 
-            - 修复：抽屉里的「节点」点不动（完全没反应）——该菜单项从未接到任何页面，返回 false 时连抽屉的选中态都不会变。**1.0.4 已把该菜单直接移除（见上）。**
-            - 修复：默认 IPv6 路由由「禁用」改为「启用」。禁用时 DNS 策略是 `ipv4_only`，sing-box 只发 A 查询，于是**纯 IPv6 域名**的服务器（没有 A 记录）永远解析不到。改为「启用」后策略是 `prefer_ipv4`：仍优先 IPv4，但 AAAA 可解析，且 IPv6 走隧道内、不会从原生网卡泄漏。
-              ⚠️ 只影响新安装。已装设备请在「设置 → IPv6 路由」手动切到「启用」。
-            - 修复：Android TV / Fire TV 的 320×180 banner 之前误用方形桌面图标，现提供真正的 16:9 banner（`res/drawable-xhdpi/tv_banner.png`）
+            **xhttp 传输**
 
-            内核与特性：
+            sing-box 官方**没有**这个传输。已在 fork 内核中实现，支持 `stream-one` / `stream-up` / `downloadSettings` —— 上下行可以分流到不同服务器。
 
-            - 内核 sing-box `1.14.x`（[justnpcx/sing-box](https://github.com/justnpcx/sing-box)）
-            - 支持 Xray-core v26+ REALITY 后量子 `X25519MLKEM768`
-            - 实现 xhttp（`stream-one` / `stream-up` / `downloadSettings`）
-            - Compose + Material 3 界面（Compose 1.11 / Material 3 1.4），全 App 统一主题配色
-            - 订阅 / 分享链接解析下沉到 KMP 共享核心
+            **REALITY 后量子**
+
+            支持 Xray-core v26+ 要求的 `X25519MLKEM768`。缺了它的客户端与新版 Xray 服务端（例如 3x-ui）握手会直接失败。
+
+            **DNS 健康检查**
+
+            sing-box 本身没有 DNS 故障转移。客户端在连接前探测所配 DNS，选用首个可达的（失败开放 + 结果缓存），避免某个 DNS 挂掉就整体连不上。
+
+            **共享核心**
+
+            订阅与分享链接解析全部下沉到 Kotlin Multiplatform 的 `:core:model` / `:core:subscription`，Android 端不再自行解析，同一份逻辑可跨平台测试。
+
+            **界面**
+
+            Jetpack Compose + Material 3，单向数据流（ViewModel + StateFlow），全 App 统一主题与配色。
+
+            **支持的协议**
+
+            SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard
+            （Trojan-Go / NaïveProxy / Mieru 需[插件](https://matsuridayo.github.io/nb4a-plugin/)）
 
             按 ABI 拆分的 APK：手机一般选 `arm64-v8a`。包名 `com.justnpcx.mirage`，可与官方 NekoBox 共存。
 
