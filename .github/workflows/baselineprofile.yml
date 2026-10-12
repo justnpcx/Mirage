@@ -5,12 +5,38 @@ name: Baseline Profile
 # The result is uploaded as an artifact rather than committed by CI, so the profile goes through
 # review like any other source change.
 #
-# Two ways to run it:
-#   - Actions -> Baseline Profile -> Run workflow (needs a token with Actions:write)
-#   - push to a `baseline-profile` branch, which only needs Contents:write. That branch is not
-#     kept in the repo; create it on demand and remove it again afterwards:
+# HOW TO REGENERATE
+#
+# 1. Trigger this workflow (the fine-grained PAT can push code but has no Actions:write, so the
+#    branch route is the one that works unattended):
 #       git push origin main:baseline-profile      # triggers the run
-#       git push origin --delete baseline-profile  # clean up
+#       git push origin --delete baseline-profile  # clean up afterwards
+#    Or use Actions -> Baseline Profile -> Run workflow with a token that has Actions:write.
+#
+# 2. Wait for the run (~20 min: libcore is cached, then the emulator boots and the test runs).
+#
+# 3. Take the artifact named `baseline-profile` and put its single file at
+#    app/src/ossRelease/generated/baselineProfiles/baseline-prof.txt
+#    (the artifact keeps the path relative to app/src, so it unpacks as
+#     ossRelease/generated/baselineProfiles/baseline-prof.txt). Only the oss flavor gets a
+#    profile; the others are not shipped.
+#
+# 4. Verify it is really merged, without a device:
+#       ./gradlew :app:assembleOssRelease
+#       # merged rule size: ~796 KB with our profile vs ~321 KB without (library profiles only)
+#       wc -c app/build/intermediates/l8_art_profile/ossRelease/expandOssReleaseL8ArtProfileWildcards/baseline-prof.txt
+#       # and the shipped APK must no longer carry the stub
+#       unzip -l app/build/outputs/apk/oss/release/Mirage-*-arm64-v8a-unsigned.apk | grep dexopt
+#
+# 5. Commit the profile, then bump VERSION_CODE in nb4a.properties (monotonic; never reuse a value)
+#    and move the release tag so the APK actually ships it.
+#
+# To collect on a real phone instead (better: the profile then matches real usage), connect it with
+# API 28+ and run ./gradlew :app:generateOssBaselineProfile locally — it writes the same file in
+# step 3. Edit BaselineProfileGenerator.kt first if you want it to cover more than app startup.
+#
+# Do NOT bump androidx.baselineprofile past 1.3.4: its jar carries Kotlin 2.1.0 metadata while
+# buildSrc's kotlin-dsl compiler expects 1.9.0, and :buildSrc:compileKotlin fails.
 
 on:
   workflow_dispatch:
