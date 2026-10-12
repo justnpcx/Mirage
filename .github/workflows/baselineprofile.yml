@@ -1,12 +1,19 @@
 name: Baseline Profile
 
-# Manual only. Baseline Profile generation needs a device running API 28+, and the emulator needs
-# KVM — GitHub's ubuntu runners have it, so this is the only place it can run without a phone
-# plugged in. The result is uploaded as an artifact rather than committed by CI, so the profile
-# goes through review like any other source change.
+# Baseline Profile generation needs a device running API 28+, and the emulator needs KVM —
+# GitHub's ubuntu runners have it, so this is the only place it can run without a phone plugged in.
+# The result is uploaded as an artifact rather than committed by CI, so the profile goes through
+# review like any other source change.
+#
+# Two ways to run it:
+#   - Actions -> Baseline Profile -> Run workflow (needs a token with Actions:write)
+#   - push to the `baseline-profile` branch (the token used to push code only needs Contents:write)
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - baseline-profile
 
 permissions:
   contents: read
