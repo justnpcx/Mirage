@@ -19,5 +19,5 @@ dependencies {
     // Static analysis
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.23.7")
     // Baseline profile generation
-    implementation("androidx.baselineprofile:androidx.baselineprofile.gradle.plugin:1.3.4")
+    implementation("androidx.baselineprofile:androidx.baselineprofile.gradle.plugin:1.5.0")
 }
