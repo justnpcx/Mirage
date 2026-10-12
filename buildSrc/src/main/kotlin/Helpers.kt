@@ -14,7 +14,8 @@ private val Project.android get() = extensions.getByName<ApplicationExtension>("
 
 private var metadata: Properties? = null
 private var metadataStamp = -1L
-private lateinit var localProperties: Properties
+private var localProperties: Properties? = null
+private var localPropertiesKey: String? = null
 
 /**
  * nb4a.properties carries the version, so it changes on every release. A Gradle daemon outlives a
@@ -33,19 +34,35 @@ fun Project.requireMetadata(): Properties {
     }
 }
 
+/**
+ * Signing material. Read from the LOCAL_PROPERTIES env var when present (CI base64-encodes
+ * keystore.properties into it), otherwise from local.properties.
+ *
+ * Same daemon trap as [requireMetadata]: the values are fixed for the daemon's lifetime unless the
+ * cache is keyed on the inputs, so a build that sets LOCAL_PROPERTIES inside an already-warm daemon
+ * would silently keep using local.properties and produce an -unsigned APK. Key the cache on the env
+ * var value and the file's mtime.
+ */
 fun Project.requireLocalProperties(): Properties {
-    if (!::localProperties.isInitialized) {
-        localProperties = Properties()
-
-        val base64 = System.getenv("LOCAL_PROPERTIES")
-        if (!base64.isNullOrBlank()) {
-
-            localProperties.load(Base64.getDecoder().decode(base64).inputStream())
-        } else if (project.rootProject.file("local.properties").exists()) {
-            localProperties.load(rootProject.file("local.properties").inputStream())
-        }
+    val base64 = System.getenv("LOCAL_PROPERTIES")
+    val file = rootProject.file("local.properties")
+    val key = when {
+        !base64.isNullOrBlank() -> "env:$base64"
+        file.exists() -> "file:${file.lastModified()}"
+        else -> "none"
     }
-    return localProperties
+    val cached = localProperties
+    if (cached != null && key == localPropertiesKey) return cached
+    return Properties().apply {
+        if (!base64.isNullOrBlank()) {
+            load(Base64.getDecoder().decode(base64).inputStream())
+        } else if (file.exists()) {
+            load(file.inputStream())
+        }
+    }.also {
+        localProperties = it
+        localPropertiesKey = key
+    }
 }
 
 fun Project.setupCommon() {
