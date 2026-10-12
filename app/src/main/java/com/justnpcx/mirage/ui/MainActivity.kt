@@ -331,22 +331,8 @@ class MainActivity : ThemedActivity(),
     }
 
     fun displayFragmentWithId(@IdRes id: Int): Boolean {
-        when (id) {
-            R.id.nav_home -> displayFragment(DashboardFragment())
-
-            R.id.nav_configuration -> {
-                displayFragment(ConfigurationFragment())
-            }
-
-            R.id.nav_group -> displayFragment(GroupFragment())
-            R.id.nav_route -> displayFragment(RouteFragment())
-            R.id.nav_settings -> displayFragment(SettingsFragment())
-            R.id.nav_traffic -> displayFragment(WebviewFragment())
-            R.id.nav_tools -> displayFragment(ToolsFragment())
-            R.id.nav_logcat -> displayFragment(LogcatFragment())
-            R.id.nav_about -> displayFragment(AboutFragment())
-            else -> return false
-        }
+        val fragment = fragmentForNavId(id) ?: return false
+        displayFragment(fragment)
         navigation.menu.findItem(id).isChecked = true
         return true
     }
@@ -472,4 +458,26 @@ class MainActivity : ThemedActivity(),
         return fragment != null && fragment.onKeyDown(keyCode, event)
     }
 
+}
+
+/**
+ * Maps a drawer menu id to the screen it opens.
+ *
+ * A pure function rather than an inline `when` so `MainActivityNavTest` can assert that every item
+ * in `main_drawer_menu.xml` is covered. A missing branch is a *silent* no-op: [MainActivity
+ * .displayFragmentWithId] returns false, `onNavigationItemSelected` returns false, and the drawer
+ * does not even move its selection — which is how `nav_nodes` shipped dead for several releases.
+ */
+internal fun fragmentForNavId(@IdRes id: Int): ToolbarFragment? = when (id) {
+    R.id.nav_home -> DashboardFragment()
+    R.id.nav_nodes -> NodeListFragment()
+    R.id.nav_configuration -> ConfigurationFragment()
+    R.id.nav_group -> GroupFragment()
+    R.id.nav_route -> RouteFragment()
+    R.id.nav_settings -> SettingsFragment()
+    R.id.nav_traffic -> WebviewFragment()
+    R.id.nav_tools -> ToolsFragment()
+    R.id.nav_logcat -> LogcatFragment()
+    R.id.nav_about -> AboutFragment()
+    else -> null
 }
