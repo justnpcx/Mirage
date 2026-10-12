@@ -1,6 +1,6 @@
 # Mirage for Android
 
-[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=21)
+[![API](https://img.shields.io/badge/API-24%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=24)
 [![License: GPL-3.0](https://img.shields.io/badge/license-GPL--3.0-orange.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
 基于 sing-box 的 Android 通用代理客户端。
@@ -45,10 +45,16 @@ ANDROID_NDK_HOME=$ANDROID_HOME/ndk/25.0.8775105 \
 
 # 3) 构建 APK（按 ABI 拆分）
 ./gradlew app:assembleOssRelease
+
+# 4) 重新生成图标 / TV banner（只在改几何或品牌色时需要；需 Pillow + ttf-dejavu）
+python3 tools/gen_icon.py
 ```
 
 推 `v*` tag 会触发 CI 自动构建并发布。`VERSION_NAME` 与 `VERSION_CODE` 在 `nb4a.properties`
 （`VERSION_CODE` 是单调递增的 `versionCode`，与 `VERSION_NAME` 解耦）。
+
+`app/src/main/res` 下的桌面图标与 TV banner **全部由 `tools/gen_icon.py` 生成**，不要手改 PNG：
+改脚本后重跑，产物必须是确定性的（干净树上 `git status` 为空）。
 
 ## 致谢 / Credits
 
