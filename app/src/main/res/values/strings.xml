@@ -608,6 +608,22 @@
     <string name="about_hl_kernel">Self-maintained sing-box 1.14.x kernel — upstream features can land here first</string>
     <string name="about_hl_xhttp">xhttp transport: stream-one / stream-up / downloadSettings</string>
     <string name="about_hl_reality">Post-quantum REALITY: X25519MLKEM768</string>
+
+    <string name="reality_mlkem">Post-quantum REALITY</string>
+    <string name="reality_mlkem_sum">Send X25519MLKEM768 in the REALITY handshake — required by Xray v26+ servers, unsupported by older ones</string>
+
+    <string name="diag_title">Connection problem detected</string>
+    <string name="diag_dismiss">Got it</string>
+    <string name="diag_reality_title">REALITY authentication rejected</string>
+    <string name="diag_reality_msg">The server refused the REALITY handshake, so nothing can flow through this node.\n\nCheck that Public Key, ShortId and SNI match the server. If the server was re-keyed, re-import the share link.</string>
+    <string name="diag_dns_title">DNS lookups are failing</string>
+    <string name="diag_dns_msg">Your remote DNS server could not be reached. Remote DNS is dialled through the default outbound (the proxy), so this usually means the proxy itself is not connected.\n\nIf the node connects but this persists, point Settings → Remote DNS at a server reachable from your network.</string>
+    <string name="diag_timeout_title">Connection timed out</string>
+    <string name="diag_timeout_msg">The outbound never completed a connection. The node is reachable but not usable — check the server is up, the port is open, and the credentials are current.</string>
+    <string name="diag_cert_title">TLS certificate problem</string>
+    <string name="diag_cert_msg">The server\'s certificate was rejected. Check the SNI, the server name, and whether \"Allow insecure\" should be enabled for this node.</string>
+    <string name="diag_none_title">No known problem found</string>
+    <string name="diag_none_msg">Nothing in the current log matches a failure this build knows how to explain. The full log is above.</string>
     <string name="about_hl_dns">DNS health check: probes your resolvers and fails over before connecting</string>
     <string name="about_hl_core">Shared core: subscription and share-link parsing live in Kotlin Multiplatform</string>
     <string name="about_protocols">Protocols</string>

@@ -141,6 +141,12 @@
             app:key="realityShortId"
             app:title="Reality ShortId"
             app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            app:defaultValue="false"
+            app:icon="@drawable/ic_baseline_security_24"
+            app:key="realityMlkem"
+            app:summary="@string/reality_mlkem_sum"
+            app:title="@string/reality_mlkem" />
     </PreferenceCategory>
 
     <PreferenceCategory

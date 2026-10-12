@@ -527,6 +527,22 @@
     <string name="about_hl_kernel">自维护内核 sing-box 1.14.x —— 上游新特性可以先落到这里</string>
     <string name="about_hl_xhttp">xhttp 传输：stream-one / stream-up / downloadSettings</string>
     <string name="about_hl_reality">REALITY 后量子：X25519MLKEM768</string>
+
+    <string name="reality_mlkem">REALITY 后量子</string>
+    <string name="reality_mlkem_sum">在 REALITY 握手中发送 X25519MLKEM768 —— Xray v26+ 服务端要求；旧版服务端不支持</string>
+
+    <string name="diag_title">检测到连接问题</string>
+    <string name="diag_dismiss">知道了</string>
+    <string name="diag_reality_title">REALITY 认证被服务端拒绝</string>
+    <string name="diag_reality_msg">服务端拒绝了 REALITY 握手，这个节点无法承载任何流量。\n\n请核对公钥（Public Key）、ShortId、SNI 是否与服务端一致。如果服务端重新生成过密钥对，请重新复制分享链接导入。</string>
+    <string name="diag_dns_title">DNS 解析失败</string>
+    <string name="diag_dns_msg">远程 DNS 服务器连不上。远程 DNS 是走「默认出站（代理）」去拨号的，所以这通常意味着代理本身没连上。\n\n如果节点显示已连接但问题依旧，请到「设置 → 远程 DNS」换一个你的网络能到达的服务器。</string>
+    <string name="diag_timeout_title">连接超时</string>
+    <string name="diag_timeout_msg">出站始终没能建立连接。节点可达但不可用 —— 请检查服务端是否在线、端口是否放行、凭据是否还有效。</string>
+    <string name="diag_cert_title">TLS 证书问题</string>
+    <string name="diag_cert_msg">服务端证书被拒绝。请检查 SNI / 服务器名，以及这个节点是否需要打开「允许不安全」。</string>
+    <string name="diag_none_title">没有发现已知问题</string>
+    <string name="diag_none_msg">当前日志里没有匹配到本版本能解释的故障模式。完整日志见上方。</string>
     <string name="about_hl_dns">DNS 健康检查：连接前探测并自动故障转移</string>
     <string name="about_hl_core">共享核心：订阅与分享链接解析下沉到 Kotlin Multiplatform</string>
     <string name="about_protocols">支持的协议</string>

@@ -13,6 +13,7 @@ import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
 import androidx.core.view.ViewCompat
 import androidx.core.view.doOnLayout
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.justnpcx.mirage.R
 import com.justnpcx.mirage.databinding.LayoutLogcatBinding
 import com.justnpcx.mirage.ktx.*
@@ -24,6 +25,43 @@ class LogcatFragment : ToolbarFragment(R.layout.layout_logcat),
     Toolbar.OnMenuItemClickListener {
 
     lateinit var binding: LayoutLogcatBinding
+
+    /** The diagnosis dialog is shown once per log session, not on every re-bind. */
+    private var diagnosed = false
+
+    /**
+     * Matches the failures this build knows how to explain, in the order that reflects causation:
+     * a dead proxy also produces DNS and timeout errors, so those are checked after it.
+     */
+    private fun diagnose(log: String): Pair<Int, Int>? = when {
+        "reality verification failed" in log ||
+            "received real certificate" in log -> R.string.diag_reality_title to R.string.diag_reality_msg
+
+        "dns: exchange failed" in log -> R.string.diag_dns_title to R.string.diag_dns_msg
+
+        "x509" in log || "certificate verify" in log || "tls: failed to verify" in log ->
+            R.string.diag_cert_title to R.string.diag_cert_msg
+
+        "i/o timeout" in log || "connection timeout" in log ->
+            R.string.diag_timeout_title to R.string.diag_timeout_msg
+
+        else -> null
+    }
+
+    /**
+     * The kernel's real error is otherwise buried in a wall of trace lines, and it is easy to
+     * misread a downstream symptom (DNS, timeouts) as the cause. Surface it instead.
+     */
+    private fun maybeDiagnose(log: String) {
+        if (diagnosed) return
+        val (title, message) = diagnose(log) ?: return
+        diagnosed = true
+        MaterialAlertDialogBuilder(requireContext())
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(R.string.diag_dismiss, null)
+            .show()
+    }
 
     @SuppressLint("RestrictedApi", "WrongConstant")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,9 +101,8 @@ class LogcatFragment : ToolbarFragment(R.layout.layout_logcat),
     }
 
     private fun reloadSession() {
-        val span = SpannableString(
-            String(SendLog.getNekoLog(50 * 1024))
-        )
+        val raw = String(SendLog.getNekoLog(50 * 1024))
+        val span = SpannableString(raw)
         var offset = 0
         for (line in span.lines()) {
             val color = getColorForLine(line)
@@ -80,6 +117,7 @@ class LogcatFragment : ToolbarFragment(R.layout.layout_logcat),
         binding.textview.doOnLayout {
             binding.scroolview.scrollTo(0, binding.textview.height)
         }
+        maybeDiagnose(raw)
     }
 
     override fun onMenuItemClick(item: MenuItem): Boolean {
@@ -97,6 +135,8 @@ class LogcatFragment : ToolbarFragment(R.layout.layout_logcat),
                     }
                     onMainDispatcher {
                         binding.textview.text = ""
+                        // a cleared log starts a new session, so a fresh problem may be diagnosed
+                        diagnosed = false
                     }
                 }
 
