@@ -1,22 +1,29 @@
 package com.justnpcx.mirage.baselineprofile
 
+import android.os.SystemClock
 import androidx.benchmark.macro.junit4.BaselineProfileRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.uiautomator.By
-import androidx.test.uiautomator.Until
+import androidx.test.uiautomator.UiDevice
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
 /**
- * Generates a Baseline Profile for the app's startup critical path.
+ * Generates the Baseline Profile: app startup, then the drawer and the node list.
  *
- * Run on a connected device/emulator:
+ * Regeneration is documented in `.github/workflows/baselineprofile.yml`. Run it against a device or
+ * emulator with API 28+:
  * ```
- * ./gradlew :app:generateOssBenchmarkBaselineProfile
+ * ./gradlew :app:generateOssBaselineProfile
  * ```
- * The profile is written to `app/src/ossBenchmark/generated/baselineProfiles/` and picked up by the
- * `androidx.profileinstaller` dependency at install time.
+ * It writes `app/src/ossRelease/generated/baselineProfiles/baseline-prof.txt`, which is picked up
+ * by `androidx.profileinstaller` at install time.
+ *
+ * Every step here is best-effort on purpose: a missing label or an empty list must not fail the
+ * test, because a failed test means no profile is produced at all. On a freshly installed app the
+ * node list has no entries, so that part mostly profiles the LazyColumn machinery — on a device
+ * that already has profiles it covers the node cards as well.
  */
 @RunWith(AndroidJUnit4::class)
 class BaselineProfileGenerator {
@@ -25,10 +32,59 @@ class BaselineProfileGenerator {
     val rule = BaselineProfileRule()
 
     @Test
-    fun startup() = rule.collect(packageName = "com.justnpcx.mirage") {
+    fun startupAndNodeList() = rule.collect(packageName = "com.justnpcx.mirage") {
         pressHome()
         startActivityAndWait()
-        // Let the Compose Home screen settle, then open the drawer once so its layout is profiled.
-        device.wait(Until.hasObject(By.text("Mirage")), 5_000)
+
+        val width = device.displayWidth
+        val height = device.displayHeight
+
+        // Home screen settles.
+        device.waitForIdle(SETTLE_MS)
+
+        // The drawer has no hamburger button: MainActivity.onKeyDown opens it on DPAD_LEFT.
+        // Then jump to the node list.
+        device.pressDPadLeft()
+        clickAnyOf(device, timeoutMs = SETTLE_MS, "Nodes", "节点")
+        device.waitForIdle(SETTLE_MS)
+
+        // Scroll the node list both ways so the LazyColumn compose + scroll path is profiled.
+        repeat(3) {
+            device.swipe(width / 2, height * 3 / 4, width / 2, height / 4, SWIPE_STEPS)
+            device.waitForIdle(SETTLE_MS)
+        }
+        repeat(2) {
+            device.swipe(width / 2, height / 4, width / 2, height * 3 / 4, SWIPE_STEPS)
+            device.waitForIdle(SETTLE_MS)
+        }
+
+        // Back to Home, so the return path is covered too.
+        device.pressDPadLeft()
+        clickAnyOf(device, timeoutMs = SETTLE_MS, "Home", "主页")
+        device.waitForIdle(SETTLE_MS)
+    }
+
+    private companion object {
+        const val SETTLE_MS = 2_000L
+        const val SWIPE_STEPS = 20
+
+        /**
+         * Clicks the first of [labels] that appears, waiting up to [timeoutMs] for one to show up.
+         * Returns false instead of throwing when none do — see the class comment.
+         */
+        fun clickAnyOf(device: UiDevice, timeoutMs: Long, vararg labels: String): Boolean {
+            val deadline = SystemClock.uptimeMillis() + timeoutMs
+            while (SystemClock.uptimeMillis() < deadline) {
+                for (label in labels) {
+                    val node = device.findObject(By.text(label))
+                    if (node != null) {
+                        node.click()
+                        return true
+                    }
+                }
+                SystemClock.sleep(200)
+            }
+            return false
+        }
     }
 }
