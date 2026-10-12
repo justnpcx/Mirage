@@ -66,15 +66,21 @@ class SettingsPreferenceFragment : PreferenceFragmentCompat() {
         val appLanguage = findPreference<SimpleMenuPreference>(Key.APP_LANGUAGE)!!
         appLanguage.setOnPreferenceChangeListener { preference, newValue ->
             val tag = newValue as String
+            // DropDownPreference fires onItemSelected (and therefore this listener) while it is
+            // being bound, not just on a user change, so bail out unless the value really changed —
+            // otherwise the recreate() below loops forever.
+            if (tag == (preference as ListPreference).value) {
+                return@setOnPreferenceChangeListener true
+            }
             val locales = if (tag.isEmpty()) {
                 LocaleListCompat.getEmptyLocaleList()
             } else {
                 LocaleListCompat.forLanguageTags(tag)
             }
             AppCompatDelegate.setApplicationLocales(locales)
-            // apply the summary now; the activity recreate below would otherwise make the
-            // first tap look like it did nothing
-            preference.summary = appLanguage.entries[appLanguage.findIndexOfValue(tag)]
+            // No setSummary() here: the preference declares useSimpleSummaryProvider, and
+            // Preference.setSummary throws IllegalStateException when a provider is already set.
+            // The provider renders the new entry once recreate() re-binds the list.
             activity?.recreate()
             true
         }
