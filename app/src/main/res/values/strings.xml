@@ -606,7 +606,7 @@
     <string name="about_info">Info</string>
     <string name="about_highlights">Highlights</string>
     <string name="about_hl_kernel">Self-maintained sing-box 1.14.x kernel — upstream features can land here first</string>
-    <string name="about_hl_xhttp">xhttp transport: stream-one / stream-up / downloadSettings</string>
+    <string name="about_hl_xhttp">XHTTP transport: stream-one / stream-up / downloadSettings</string>
     <string name="about_hl_reality">Post-quantum REALITY: X25519MLKEM768</string>
 
     <string name="reality_mlkem">Post-quantum REALITY</string>
@@ -629,7 +629,7 @@
     <string name="about_protocols">Protocols</string>
     <string name="about_protocols_list">SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard</string>
     <string name="about_transports">Transports</string>
-    <string name="about_transports_list">TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · xhttp</string>
+    <string name="about_transports_list">TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · XHTTP</string>
     <string name="menu_nodes">Nodes</string>
     <string name="node_untested">—</string>
     <string name="node_selected">Selected</string>

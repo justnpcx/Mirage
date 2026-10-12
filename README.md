@@ -18,7 +18,7 @@ A universal proxy client for Android, powered by a self-maintained sing-box 1.14
 - **内核走在前面** —— 内核是自维护的 [justnpcx/sing-box](https://github.com/justnpcx/sing-box)
   fork（分支 `nb-next-1.14.x`），基于 sing-box `1.14.x`。上游还没发版、甚至还没实现的能力，
   可以先落到客户端。
-- **xhttp 传输** —— sing-box 官方**没有**这个传输。已在 fork 内核中实现，支持
+- **XHTTP 传输** —— sing-box 官方**没有**这个传输。已在 fork 内核中实现，支持
   `stream-one` / `stream-up` / `downloadSettings`（上下行可分流到不同服务器）。
 - **REALITY 后量子** —— 支持 Xray-core v26+ 要求的 `X25519MLKEM768`。缺了它的客户端与新版
   Xray 服务端（例如 3x-ui）握手会直接失败。
@@ -38,9 +38,9 @@ Trojan-Go / NaïveProxy / Mieru 需[插件](https://matsuridayo.github.io/nb4a-p
 
 ## 支持的传输 / Transports
 
-TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · **xhttp**
+TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · **XHTTP**
 
-其中 **xhttp** 是 sing-box 官方没有的传输，由本项目的 fork 内核实现（见上方「xhttp 传输」）。
+其中 **XHTTP** 是 sing-box 官方没有的传输，由本项目的 fork 内核实现（见上方「XHTTP 传输」）。
 
 ## 构建 / Building
 

@@ -117,7 +117,7 @@ jobs:
 
             内核是自维护的 [justnpcx/sing-box](https://github.com/justnpcx/sing-box) fork（分支 `nb-next-1.14.x`），基于 sing-box `1.14.x`。上游还没发版、甚至还没实现的能力，可以先落到客户端。
 
-            **xhttp 传输**
+            **XHTTP 传输**
 
             sing-box 官方**没有**这个传输。已在 fork 内核中实现，支持 `stream-one` / `stream-up` / `downloadSettings` —— 上下行可以分流到不同服务器。
 

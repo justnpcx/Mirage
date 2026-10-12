@@ -36,15 +36,16 @@ abstract class ThemedActivity : AppCompatActivity {
         uiMode = resources.configuration.uiMode
 
         if (Build.VERSION.SDK_INT >= 35) {
-            ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { _, insets ->
-                val top = insets.getInsets(WindowInsetsCompat.Type.systemBars()).top
+            ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { content, insets ->
+                val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 findViewById<AppBarLayout>(R.id.appbar)?.apply {
-                    updatePadding(top = top)
-//                Logs.w("appbar $top")
+                    updatePadding(top = bars.top)
                 }
-//            findViewById<NavigationView>(R.id.nav_view)?.apply {
-//                updatePadding(top = top)
-//            }
+                // Android 15 forces edge-to-edge, so without this the bottom of every screen is
+                // drawn under the navigation bar — on About it clips the last card in half.
+                // Padding the content root fixes every screen at once, including the ones that
+                // are plain scroll views rather than Compose.
+                content.updatePadding(bottom = bars.bottom)
                 insets
             }
         }

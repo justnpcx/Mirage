@@ -525,7 +525,7 @@
     <string name="about_info">信息</string>
     <string name="about_highlights">本版要点</string>
     <string name="about_hl_kernel">自维护内核 sing-box 1.14.x —— 上游新特性可以先落到这里</string>
-    <string name="about_hl_xhttp">xhttp 传输：stream-one / stream-up / downloadSettings</string>
+    <string name="about_hl_xhttp">XHTTP 传输：stream-one / stream-up / downloadSettings</string>
     <string name="about_hl_reality">REALITY 后量子：X25519MLKEM768</string>
 
     <string name="reality_mlkem">REALITY 后量子</string>
@@ -548,7 +548,7 @@
     <string name="about_protocols">支持的协议</string>
     <string name="about_protocols_list">SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard</string>
     <string name="about_transports">支持的传输</string>
-    <string name="about_transports_list">TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · xhttp</string>
+    <string name="about_transports_list">TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · XHTTP</string>
     <string name="menu_nodes">节点</string>
     <string name="node_untested">—</string>
     <string name="node_selected">当前</string>
