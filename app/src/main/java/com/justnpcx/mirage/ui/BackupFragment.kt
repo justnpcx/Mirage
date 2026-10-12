@@ -91,7 +91,6 @@ class BackupFragment : NamedFragment(R.layout.layout_backup) {
         }
 
         binding.actionShare.setOnClickListener {
-            Logs.w(Throwable("share sheet requested by BackupFragment (backup export)"))
             runOnDefaultDispatcher {
                 content = doBackup(
                     binding.backupConfigurations.isChecked,

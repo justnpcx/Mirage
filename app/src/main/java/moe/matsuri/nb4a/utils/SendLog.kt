@@ -18,9 +18,6 @@ import java.io.IOException
 object SendLog {
     // Create full log and send
     fun sendLog(context: Context, title: String) {
-        // DIAGNOSTIC: a share sheet appearing on its own is impossible to tell apart from a real
-        // share action, so record who asked for it (with the caller's stack).
-        Logs.w(Throwable("share sheet requested by SendLog.sendLog(title=$title)"))
         val logFile = File.createTempFile(
             "$title ",
             ".log",
