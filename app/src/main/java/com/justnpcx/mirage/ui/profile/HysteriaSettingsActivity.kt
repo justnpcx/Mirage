@@ -35,6 +35,12 @@ class HysteriaSettingsActivity : ProfileSettingsActivity<HysteriaBean>() {
         DataStore.serverConnectionReceiveWindow = connectionReceiveWindow
         DataStore.serverDisableMtuDiscovery = disableMtuDiscovery
         DataStore.serverHopInterval = hopInterval
+        DataStore.serverObfsType = obfsType
+        DataStore.serverHopIntervalMax = hopIntervalMax
+        DataStore.serverGeckoMinPacketSize = geckoMinPacketSize
+        DataStore.serverGeckoMaxPacketSize = geckoMaxPacketSize
+        DataStore.serverBbrProfile = bbrProfile
+        DataStore.serverDisableChromeParrot = disableChromeParrot
     }
 
     override fun HysteriaBean.serialize() {
@@ -56,6 +62,12 @@ class HysteriaSettingsActivity : ProfileSettingsActivity<HysteriaBean>() {
         connectionReceiveWindow = DataStore.serverConnectionReceiveWindow
         disableMtuDiscovery = DataStore.serverDisableMtuDiscovery
         hopInterval = DataStore.serverHopInterval
+        obfsType = DataStore.serverObfsType
+        hopIntervalMax = DataStore.serverHopIntervalMax
+        geckoMinPacketSize = DataStore.serverGeckoMinPacketSize
+        geckoMaxPacketSize = DataStore.serverGeckoMaxPacketSize
+        bbrProfile = DataStore.serverBbrProfile
+        disableChromeParrot = DataStore.serverDisableChromeParrot
     }
 
     override fun PreferenceFragmentCompat.createPreferences(
@@ -135,6 +147,37 @@ class HysteriaSettingsActivity : ProfileSettingsActivity<HysteriaBean>() {
 
         findPreference<EditTextPreference>(Key.SERVER_HOP_INTERVAL)!!.apply {
             setOnBindEditTextListener(EditTextPreferenceModifiers.Number)
+        }
+        findPreference<EditTextPreference>(Key.SERVER_HOP_INTERVAL_MAX)!!.apply {
+            setOnBindEditTextListener(EditTextPreferenceModifiers.Number)
+        }
+        findPreference<EditTextPreference>(Key.SERVER_GECKO_MIN_PACKET_SIZE)!!.apply {
+            setOnBindEditTextListener(EditTextPreferenceModifiers.Number)
+        }
+        findPreference<EditTextPreference>(Key.SERVER_GECKO_MAX_PACKET_SIZE)!!.apply {
+            setOnBindEditTextListener(EditTextPreferenceModifiers.Number)
+        }
+
+        setupObfsTypeVisibility()
+    }
+
+    /**
+     * Only the gecko packet-size fields are type-specific: both obfs types need the password
+     * (sing-box refuses to start with "missing obfs password").
+     */
+    private fun PreferenceFragmentCompat.setupObfsTypeVisibility() {
+        val obfsType = findPreference<SimpleMenuPreference>(Key.SERVER_OBFS_TYPE)!!
+        val geckoMin = findPreference<EditTextPreference>(Key.SERVER_GECKO_MIN_PACKET_SIZE)!!
+        val geckoMax = findPreference<EditTextPreference>(Key.SERVER_GECKO_MAX_PACKET_SIZE)!!
+        fun update(type: String?) {
+            val gecko = type == "gecko"
+            geckoMin.isVisible = gecko
+            geckoMax.isVisible = gecko
+        }
+        update(obfsType.value)
+        obfsType.setOnPreferenceChangeListener { _, newValue ->
+            update(newValue as String?)
+            true
         }
     }
 

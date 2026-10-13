@@ -101,6 +101,42 @@
             app:key="hopInterval"
             app:title="@string/hop_interval"
             app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="hopIntervalMax"
+            app:summary="@string/hop_interval_max_sum"
+            app:title="@string/hop_interval_max"
+            app:useSimpleSummaryProvider="true" />
+        <moe.matsuri.nb4a.ui.SimpleMenuPreference
+            app:defaultValue=""
+            app:entries="@array/hysteria_obfs_types"
+            app:entryValues="@array/hysteria_obfs_type_values"
+            app:icon="@drawable/ic_baseline_texture_24"
+            app:key="serverObfsType"
+            app:title="@string/hysteria_obfs_type"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="geckoMinPacketSize"
+            app:summary="@string/hysteria_gecko_packet_size_sum"
+            app:title="@string/hysteria_gecko_min"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:key="geckoMaxPacketSize"
+            app:summary="@string/hysteria_gecko_packet_size_sum"
+            app:title="@string/hysteria_gecko_max"
+            app:useSimpleSummaryProvider="true" />
+        <moe.matsuri.nb4a.ui.SimpleMenuPreference
+            app:defaultValue=""
+            app:entries="@array/hysteria_bbr_profiles"
+            app:entryValues="@array/hysteria_bbr_profile_values"
+            app:icon="@drawable/ic_baseline_speed_24"
+            app:key="bbrProfile"
+            app:title="@string/hysteria_bbr_profile"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            app:icon="@drawable/ic_baseline_nat_24"
+            app:key="disableChromeParrot"
+            app:summary="@string/hysteria_disable_chrome_parrot_sum"
+            app:title="@string/hysteria_disable_chrome_parrot" />
     </PreferenceCategory>
 
 </PreferenceScreen> 

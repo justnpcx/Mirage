@@ -111,7 +111,17 @@ jobs:
         with:
           files: apks/*.apk
           body: |
-            Mirage 1.0.0 —— 基于 **sing-box 1.14** 的 Android 通用代理客户端。
+            Mirage 1.0.1 —— 基于 **sing-box 1.14** 的 Android 通用代理客户端。
+
+            **1.0.1 更新**
+
+            - **新增：远程规则集订阅**。除了内置 `geosite:` / `geoip:`，现在可以订阅任意 `.srs` / `.json` 规则集（sing-box 自行下载并按间隔刷新）。抽屉 →「规则集」添加，然后在路由规则的域名/IP 栏填它的名称即可引用。
+            - **新增：自动选最快节点**。分组模式可选「自动选择（URL 测速）」—— 内核探测组内每个节点并始终使用最快的，无需手动切换。节点列表仍支持一键测速与按延迟排序。
+            - **新增：乐观 DNS 缓存**（默认开启）与 **DNS 查询超时**设置。
+            - **新增：Hysteria2 新能力** —— gecko 混淆、BBR 拥塞控制档位、端口跳跃间隔随机化、关闭 Chrome QUIC 指纹模仿。
+            - **修复：境外 DNS 之前走的是直连**。`dns-remote`（如 dns.google）没有 `detour`，被 sing-box 当作纯直连拨号 —— 在受限网络里必然失败，并连带所有境外域名解析不了，表现就是「有流量但打不开网页」。现已显式走隧道。
+            - **修复：底部卡片被系统导航栏遮挡**（Android 15 强制 edge-to-edge）。
+            - 其他：显式 `route.final`、FakeIP 映射持久化、抽屉里与「订阅与分组」重复的「节点」菜单已移除、状态栏图标换成新标识。
 
             **内核走在前面**
 
@@ -141,6 +151,10 @@ jobs:
 
             SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard
             （Trojan-Go / NaïveProxy / Mieru 需[插件](https://matsuridayo.github.io/nb4a-plugin/)）
+
+            **支持的传输**
+
+            TCP · WebSocket · HTTP/2 · QUIC · gRPC · HTTPUpgrade · XHTTP
 
             按 ABI 拆分的 APK：手机一般选 `arm64-v8a`。包名 `com.justnpcx.mirage`，可与官方 NekoBox 共存。
 

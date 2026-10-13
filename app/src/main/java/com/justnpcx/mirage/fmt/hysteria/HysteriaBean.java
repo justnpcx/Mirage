@@ -32,6 +32,23 @@ public class HysteriaBean extends AbstractBean {
     public Boolean disableMtuDiscovery;
     public Integer hopInterval;
 
+    // HY2 only: upper bound of the randomized port hop interval
+    public Integer hopIntervalMax;
+
+    // HY2 only: "" / "salamander" / "gecko". Blank falls back to obfuscation != "" -> salamander,
+    // which keeps links written before gecko existed working.
+    public String obfsType;
+
+    // HY2 gecko obfs
+    public Integer geckoMinPacketSize;
+    public Integer geckoMaxPacketSize;
+
+    // HY2 only: "" / "standard" / "conservative" / "aggressive"
+    public String bbrProfile;
+
+    // HY2 parrots Chrome's QUIC fingerprint by default; this turns that off
+    public Boolean disableChromeParrot;
+
     // HY1
 
     public String alpn;
@@ -77,12 +94,18 @@ public class HysteriaBean extends AbstractBean {
         if (connectionReceiveWindow == null) connectionReceiveWindow = 0;
         if (disableMtuDiscovery == null) disableMtuDiscovery = false;
         if (hopInterval == null) hopInterval = 10;
+        if (hopIntervalMax == null) hopIntervalMax = 0;
+        if (obfsType == null) obfsType = "";
+        if (geckoMinPacketSize == null) geckoMinPacketSize = 0;
+        if (geckoMaxPacketSize == null) geckoMaxPacketSize = 0;
+        if (bbrProfile == null) bbrProfile = "";
+        if (disableChromeParrot == null) disableChromeParrot = false;
         if (serverPorts == null) serverPorts = "443";
     }
 
     @Override
     public void serialize(ByteBufferOutput output) {
-        output.writeInt(7);
+        output.writeInt(8);
         super.serialize(output);
 
         output.writeInt(protocolVersion);
@@ -104,6 +127,12 @@ public class HysteriaBean extends AbstractBean {
         output.writeBoolean(disableMtuDiscovery);
         output.writeInt(hopInterval);
         output.writeString(serverPorts);
+        output.writeInt(hopIntervalMax);
+        output.writeString(obfsType);
+        output.writeInt(geckoMinPacketSize);
+        output.writeInt(geckoMaxPacketSize);
+        output.writeString(bbrProfile);
+        output.writeBoolean(disableChromeParrot);
     }
 
     @Override
@@ -147,6 +176,14 @@ public class HysteriaBean extends AbstractBean {
             } else {
                 serverPorts = serverPort.toString();
             }
+        }
+        if (version >= 8) {
+            hopIntervalMax = input.readInt();
+            obfsType = input.readString();
+            geckoMinPacketSize = input.readInt();
+            geckoMaxPacketSize = input.readInt();
+            bbrProfile = input.readString();
+            disableChromeParrot = input.readBoolean();
         }
     }
 

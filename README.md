@@ -22,8 +22,15 @@ A universal proxy client for Android, powered by a self-maintained sing-box 1.14
   `stream-one` / `stream-up` / `downloadSettings`（上下行可分流到不同服务器）。
 - **REALITY 后量子** —— 支持 Xray-core v26+ 要求的 `X25519MLKEM768`。缺了它的客户端与新版
   Xray 服务端（例如 3x-ui）握手会直接失败。
+- **自动选最快节点** —— 分组可选 `urltest` 模式：内核按测试 URL 探测组内每个节点，始终使用
+  最快的一个，无需手动切换。节点列表同时支持一键测速与按延迟排序。
+- **远程规则集订阅** —— 除了内置的 `geosite:` / `geoip:`，还可以订阅任意 `.srs` / `.json`
+  规则集（sing-box 自行下载并按间隔刷新）。在路由规则的域名栏填规则集名称即可引用。
 - **DNS 健康检查** —— sing-box 本身没有 DNS 故障转移。客户端在连接前探测所配 DNS，选用首个
   可达的（失败开放 + 结果缓存），避免某个 DNS 挂掉就整体连不上。
+- **分流是可用的，不是摆设** —— 境外 DNS 走隧道（`dns-remote` 显式 `detour`），未匹配流量
+  有显式 `route.final`，出站域名用直连解析器破循环。这些在别处常常是错的，表现就是"有流量但
+  打不开网页"。
 - **共享核心** —— 订阅与分享链接解析全部下沉到 Kotlin Multiplatform 的 `:core:model` /
   `:core:subscription`，Android 端不再自行解析，同一份逻辑可跨平台测试。
 - **界面** —— Jetpack Compose + Material 3，单向数据流（ViewModel + StateFlow），全 App 统一

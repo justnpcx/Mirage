@@ -413,6 +413,32 @@
         <item>BASE64</item>
     </string-array>
 
+    <string-array name="hysteria_obfs_types">
+        <item>@string/plugin_disabled</item>
+        <item>salamander</item>
+        <item>gecko</item>
+    </string-array>
+
+    <string-array name="hysteria_obfs_type_values">
+        <item></item>
+        <item>salamander</item>
+        <item>gecko</item>
+    </string-array>
+
+    <string-array name="hysteria_bbr_profiles">
+        <item>@string/plugin_disabled</item>
+        <item>standard</item>
+        <item>conservative</item>
+        <item>aggressive</item>
+    </string-array>
+
+    <string-array name="hysteria_bbr_profile_values">
+        <item></item>
+        <item>standard</item>
+        <item>conservative</item>
+        <item>aggressive</item>
+    </string-array>
+
     <string-array name="hysteria_version">
         <item>1</item>
         <item>2</item>

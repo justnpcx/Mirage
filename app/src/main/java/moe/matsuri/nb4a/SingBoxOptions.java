@@ -325,7 +325,21 @@ public class SingBoxOptions {
 
         public Boolean independent_cache;
 
+        // a duration string such as "10s"; empty keeps the sing-box default
+        public String timeout;
+
+        public OptimisticDNSOptions optimistic;
+
         // End of public DNSClientOptions ;
+
+    }
+
+    public static class OptimisticDNSOptions extends SingBoxOption {
+
+        public Boolean enabled;
+
+        // how long a stale answer may still be served while it refreshes
+        public String timeout;
 
     }
 
@@ -608,6 +622,11 @@ public class SingBoxOptions {
         public String type;
 
         public String password;
+
+        // gecko only: the two are emitted inline, not nested
+        public Integer min_packet_size;
+
+        public Integer max_packet_size;
 
     }
 
@@ -4460,6 +4479,13 @@ public class SingBoxOptions {
         public List<String> server_ports;
 
         public String hop_interval;
+
+        public String hop_interval_max;
+
+        // enum: standard, conservative, aggressive
+        public String bbr_profile;
+
+        public Boolean disable_chrome_parrot;
 
     }
 

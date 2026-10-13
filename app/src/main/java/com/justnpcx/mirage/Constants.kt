@@ -22,6 +22,9 @@ object Key {
     const val REMOTE_DNS = "remoteDns"
     const val DIRECT_DNS = "directDns"
     const val ENABLE_DNS_ROUTING = "enableDnsRouting"
+    const val DNS_TIMEOUT = "dnsTimeout"
+    const val DNS_OPTIMISTIC = "dnsOptimistic"
+    const val DNS_OPTIMISTIC_TIMEOUT = "dnsOptimisticTimeout"
     const val ENABLE_FAKEDNS = "enableFakeDns"
 
     const val IPV6_MODE = "ipv6Mode"
@@ -82,6 +85,12 @@ object Key {
 
     const val SERVER_PROTOCOL = "serverProtocol"
     const val SERVER_OBFS = "serverObfs"
+    const val SERVER_OBFS_TYPE = "serverObfsType"
+    const val SERVER_HOP_INTERVAL_MAX = "hopIntervalMax"
+    const val SERVER_GECKO_MIN_PACKET_SIZE = "geckoMinPacketSize"
+    const val SERVER_GECKO_MAX_PACKET_SIZE = "geckoMaxPacketSize"
+    const val SERVER_BBR_PROFILE = "bbrProfile"
+    const val SERVER_DISABLE_CHROME_PARROT = "disableChromeParrot"
 
     const val SERVER_NETWORK = "serverNetwork"
     const val SERVER_HOST = "serverHost"

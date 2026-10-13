@@ -1,5 +1,6 @@
 package com.justnpcx.mirage.fmt
 
+import moe.matsuri.nb4a.SingBoxOptions
 import moe.matsuri.nb4a.SingBoxOptions.DNSRule_DefaultOptions
 import moe.matsuri.nb4a.SingBoxOptions.DNSServerOptions
 import moe.matsuri.nb4a.SingBoxOptions.Inbound_TunOptions
@@ -99,5 +100,22 @@ class DnsConfigContractTest {
         // sing-box 1.12 removed the legacy tun address fields
         assertFalse(map.containsKey("inet4_address"))
         assertFalse(map.containsKey("inet6_address"))
+    }
+
+    @Test
+    fun optimisticCacheAndQueryTimeoutAreEmitted() {
+        val map = SingBoxOptions.DNSOptions().apply {
+            timeout = "10s"
+            optimistic = SingBoxOptions.OptimisticDNSOptions().apply {
+                enabled = true
+                timeout = "3d"
+            }
+        }.asMap()
+
+        assertEquals("10s", map["timeout"])
+        @Suppress("UNCHECKED_CAST")
+        val optimistic = map["optimistic"] as Map<*, *>
+        assertEquals(true, optimistic["enabled"])
+        assertEquals("3d", optimistic["timeout"])
     }
 }

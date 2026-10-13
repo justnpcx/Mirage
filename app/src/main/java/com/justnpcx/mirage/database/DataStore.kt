@@ -116,6 +116,9 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var remoteDns by configurationStore.string(Key.REMOTE_DNS) { "https://dns.google/dns-query" }
     var directDns by configurationStore.string(Key.DIRECT_DNS) { "https://223.5.5.5/dns-query" }
     var enableDnsRouting by configurationStore.boolean(Key.ENABLE_DNS_ROUTING) { true }
+    var dnsTimeout by configurationStore.string(Key.DNS_TIMEOUT) { "" }
+    var dnsOptimistic by configurationStore.boolean(Key.DNS_OPTIMISTIC) { true }
+    var dnsOptimisticTimeout by configurationStore.string(Key.DNS_OPTIMISTIC_TIMEOUT) { "3d" }
     var enableFakeDns by configurationStore.boolean(Key.ENABLE_FAKEDNS) { true }
 
     var rulesProvider by configurationStore.stringToInt(Key.RULES_PROVIDER)
@@ -211,6 +214,12 @@ object DataStore : OnPreferenceDataStoreChangeListener {
     var serverConnectionReceiveWindow by profileCacheStore.stringToIntIfExists(Key.SERVER_CONNECTION_RECEIVE_WINDOW)
     var serverDisableMtuDiscovery by profileCacheStore.boolean(Key.SERVER_DISABLE_MTU_DISCOVERY)
     var serverHopInterval by profileCacheStore.stringToInt(Key.SERVER_HOP_INTERVAL) { 10 }
+    var serverObfsType by profileCacheStore.string(Key.SERVER_OBFS_TYPE)
+    var serverHopIntervalMax by profileCacheStore.stringToInt(Key.SERVER_HOP_INTERVAL_MAX)
+    var serverGeckoMinPacketSize by profileCacheStore.stringToInt(Key.SERVER_GECKO_MIN_PACKET_SIZE)
+    var serverGeckoMaxPacketSize by profileCacheStore.stringToInt(Key.SERVER_GECKO_MAX_PACKET_SIZE)
+    var serverBbrProfile by profileCacheStore.string(Key.SERVER_BBR_PROFILE)
+    var serverDisableChromeParrot by profileCacheStore.boolean(Key.SERVER_DISABLE_CHROME_PARROT)
 
     var protocolVersion by profileCacheStore.stringToInt(Key.PROTOCOL_VERSION) { 2 } // default is SOCKS5
 

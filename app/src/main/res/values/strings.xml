@@ -541,6 +541,21 @@
 
     <string name="rule_sets">Rule sets</string>
     <string name="menu_rule_set">Rule sets</string>
+    <string name="dns_optimistic">Optimistic DNS cache</string>
+    <string name="dns_optimistic_sum">Answer from the cache immediately and refresh in the background</string>
+    <string name="dns_optimistic_timeout">Optimistic cache TTL</string>
+    <string name="dns_optimistic_timeout_sum">How long a stale answer may still be served</string>
+    <string name="dns_timeout">DNS query timeout</string>
+    <string name="dns_timeout_sum">A duration such as 10s. Empty keeps the default</string>
+    <string name="hysteria_obfs_type">Obfuscation type</string>
+    <string name="hysteria_gecko_min">Gecko min packet size</string>
+    <string name="hysteria_gecko_max">Gecko max packet size</string>
+    <string name="hysteria_gecko_packet_size_sum">0 keeps the sing-box default</string>
+    <string name="hop_interval_max">Max hop interval</string>
+    <string name="hop_interval_max_sum">Randomise the port hop interval up to this many seconds</string>
+    <string name="hysteria_bbr_profile">BBR profile</string>
+    <string name="hysteria_disable_chrome_parrot">Disable Chrome QUIC fingerprint</string>
+    <string name="hysteria_disable_chrome_parrot_sum">sing-box mimics Chrome\'s QUIC fingerprint by default</string>
     <string name="rule_set_settings">Rule set</string>
     <string name="rule_set_add">New rule set</string>
     <string name="rule_set_reset">Delete all rule sets</string>

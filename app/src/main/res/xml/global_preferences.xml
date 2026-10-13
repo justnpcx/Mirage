@@ -189,6 +189,24 @@
             app:title="@string/enable_dns_routing" />
         <SwitchPreference
             app:defaultValue="true"
+            app:icon="@drawable/ic_baseline_speed_24"
+            app:key="dnsOptimistic"
+            app:summary="@string/dns_optimistic_sum"
+            app:title="@string/dns_optimistic" />
+        <EditTextPreference
+            app:defaultValue="3d"
+            app:icon="@drawable/ic_baseline_timelapse_24"
+            app:key="dnsOptimisticTimeout"
+            app:summary="@string/dns_optimistic_timeout_sum"
+            app:title="@string/dns_optimistic_timeout"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:icon="@drawable/ic_baseline_timelapse_24"
+            app:key="dnsTimeout"
+            app:summary="@string/dns_timeout_sum"
+            app:title="@string/dns_timeout" />
+        <SwitchPreference
+            app:defaultValue="true"
             app:icon="@drawable/ic_action_lock"
             app:key="enableFakeDns"
             app:summary="@string/fakedns_message"

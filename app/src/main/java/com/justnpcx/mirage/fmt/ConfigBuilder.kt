@@ -197,6 +197,16 @@ fun buildConfig(
             servers = mutableListOf()
             rules = mutableListOf()
             independent_cache = true
+            // How long to wait for an upstream answer before giving up. Empty keeps the default.
+            DataStore.dnsTimeout.trim().takeIf { it.isNotEmpty() }?.let { timeout = it }
+            // Serve a stale answer immediately and refresh it in the background, instead of making
+            // the caller wait for the round trip. Worth it on a lossy mobile link.
+            if (DataStore.dnsOptimistic) {
+                optimistic = OptimisticDNSOptions().apply {
+                    enabled = true
+                    DataStore.dnsOptimisticTimeout.trim().takeIf { it.isNotEmpty() }?.let { timeout = it }
+                }
+            }
         }
 
         fun autoDnsDomainStrategy(s: String): String? {
