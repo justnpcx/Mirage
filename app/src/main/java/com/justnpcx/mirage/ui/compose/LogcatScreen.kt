@@ -77,17 +77,30 @@ private fun LogLevel.color(): Color = when (this) {
 private val LogInfoGreen = Color(0xFF86C166)
 
 /**
+ * The kernel colours its level tag before we ever see the line:
+ *
+ *     ESC[36mINFO ESC[0m[0000] sing-box started (0.59s)
+ *
+ * Left in, those escapes are rendered literally as `^[[36m` noise, and worse, they break the
+ * level match below -- `INFO` is followed by the escape, not by `[`. Drop them.
+ */
+private val AnsiEscape = Regex("\u001B\\[[0-9;]*[A-Za-z]")
+
+/**
  * Classify one line. Mirrors the kernel's own prefixes; anything else is body text.
  */
-fun logLineOf(text: String): LogLine = LogLine(
-    text = text,
-    level = when {
-        text.contains("INFO[") || text.contains(" [Info]") -> LogLevel.INFO
-        text.contains("ERROR[") || text.contains(" [Error]") -> LogLevel.ERROR
-        text.contains("WARN[") || text.contains(" [Warning]") -> LogLevel.WARN
-        else -> LogLevel.NORMAL
-    },
-)
+fun logLineOf(text: String): LogLine {
+    val clean = text.replace(AnsiEscape, "")
+    return LogLine(
+        text = clean,
+        level = when {
+            clean.contains("INFO[") || clean.contains(" [Info]") -> LogLevel.INFO
+            clean.contains("ERROR[") || clean.contains(" [Error]") -> LogLevel.ERROR
+            clean.contains("WARN[") || clean.contains(" [Warning]") -> LogLevel.WARN
+            else -> LogLevel.NORMAL
+        },
+    )
+}
 
 /** Split a raw kernel log into rows. Empty lines are dropped -- a blank row carries nothing. */
 fun parseLog(raw: String): List<LogLine> =
