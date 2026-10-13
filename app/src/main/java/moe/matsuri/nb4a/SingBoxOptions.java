@@ -1120,6 +1120,18 @@ public class SingBoxOptions {
 
         public String url;
 
+        // remote only: a duration string such as "1d"
+        public String update_interval;
+
+        // remote only: how the download is dialled (detour = an outbound tag)
+        public HTTPClientOptions http_client;
+
+    }
+
+    public static class HTTPClientOptions extends SingBoxOption {
+
+        public String detour;
+
     }
 
     public static class DefaultRule extends SingBoxOption {

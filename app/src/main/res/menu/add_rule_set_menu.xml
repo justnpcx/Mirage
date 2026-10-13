@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_new_rule_set"
+        android:icon="@drawable/ic_action_note_add"
+        android:title="@string/rule_set_add"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/action_reset_rule_set"
+        android:title="@string/rule_set_reset"
+        app:showAsAction="never" />
+</menu>

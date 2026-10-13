@@ -472,6 +472,7 @@ internal fun fragmentForNavId(@IdRes id: Int): ToolbarFragment? = when (id) {
     R.id.nav_configuration -> ConfigurationFragment()
     R.id.nav_group -> GroupFragment()
     R.id.nav_route -> RouteFragment()
+    R.id.nav_rule_set -> RuleSetFragment()
     R.id.nav_settings -> SettingsFragment()
     R.id.nav_traffic -> WebviewFragment()
     R.id.nav_tools -> ToolsFragment()

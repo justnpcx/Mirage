@@ -203,6 +203,9 @@
             android:name="com.justnpcx.mirage.ui.RouteSettingsActivity"
             android:configChanges="uiMode" />
         <activity
+            android:name="com.justnpcx.mirage.ui.RuleSetSettingsActivity"
+            android:configChanges="uiMode" />
+        <activity
             android:name="com.justnpcx.mirage.ui.AssetsActivity"
             android:configChanges="uiMode" />
         <activity

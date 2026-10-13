@@ -393,6 +393,20 @@
         <item>@string/group_mode_urltest</item>
     </string-array>
 
+    <string-array name="rule_set_formats">
+        <item>@string/rule_set_format_auto</item>
+        <item>@string/rule_set_format_binary</item>
+        <item>@string/rule_set_format_source</item>
+    </string-array>
+
+    <string-array name="rule_set_format_values">
+        <item></item>
+        <item>binary</item>
+        <item>source</item>
+    </string-array>
+
+
+
     <string-array name="hysteria_auth_type">
         <item>@string/plugin_disabled</item>
         <item>STRING</item>

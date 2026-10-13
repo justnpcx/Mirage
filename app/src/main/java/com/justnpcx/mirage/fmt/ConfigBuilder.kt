@@ -128,6 +128,11 @@ fun buildConfig(
         if (forTest) mapOf() else SagerDatabase.proxyDao.getEntities(extraRules.mapNotNull { rule ->
             rule.outbound.takeIf { it > 0 && it != proxy.id }
         }.toHashSet().toList()).associateBy { it.id }
+    // Subscribed rule sets. sing-box fetches these itself; the app only emits the url and the tag.
+    // Their tags become referenceable from route rules (see SingBoxOptionsUtil.resolveRuleSetTag).
+    val enabledRuleSets = if (forTest || forExport) listOf() else SagerDatabase.ruleSetDao.enabledRuleSets()
+    val remoteRuleSetMap = enabledRuleSets.associateBy { it.tag }
+    val remoteRuleSetTags = remoteRuleSetMap.keys
     // urltest wins when both are somehow set: it is the stricter, more useful mode.
     val buildUrlTest = !forTest && group?.isUrlTest == true && !forExport
     val buildSelector = !forTest && !buildUrlTest && group?.isSelector == true && !forExport
@@ -557,10 +562,10 @@ fun buildConfig(
                 var domainList: List<String>? = null
                 if (rule.domains.isNotBlank()) {
                     domainList = rule.domains.listByLineOrComma()
-                    makeSingBoxRule(domainList, false)
+                    makeSingBoxRule(domainList, false, remoteRuleSetTags)
                 }
                 if (rule.ip.isNotBlank()) {
-                    makeSingBoxRule(rule.ip.listByLineOrComma(), true)
+                    makeSingBoxRule(rule.ip.listByLineOrComma(), true, remoteRuleSetTags)
                 }
 
                 if (rule_set != null) generateRuleSet(rule_set, ruleSets)
@@ -600,7 +605,7 @@ fun buildConfig(
                 fun makeDnsRuleObj(): DNSRule_DefaultOptions {
                     return DNSRule_DefaultOptions().apply {
                         if (uidList.isNotEmpty()) user_id = uidList
-                        domainList?.let { makeSingBoxRule(it) }
+                        domainList?.let { makeSingBoxRule(it, remoteRuleSetTags) }
                     }
                 }
 
@@ -659,6 +664,14 @@ fun buildConfig(
                     route.rule_set.addAll(ruleSets)
                 }
             }
+        }
+
+        // Definitions for every enabled subscription, so one that no rule references yet is still
+        // fetched and ready to use. Deduped below along with the per-rule local ones.
+        if (enabledRuleSets.isNotEmpty()) {
+            val remoteDefs = mutableListOf<RuleSet>()
+            generateRuleSet(remoteRuleSetTags.toList(), remoteDefs, remoteRuleSetMap)
+            route.rule_set.addAll(remoteDefs)
         }
 
         // 对 rule_set tag 去重

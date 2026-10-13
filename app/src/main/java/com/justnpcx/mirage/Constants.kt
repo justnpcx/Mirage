@@ -131,6 +131,11 @@ object Key {
     const val ROUTE_OUTBOUND = "routeOutbound"
     const val ROUTE_PACKAGES = "routePackages"
 
+    const val RULE_SET_TAG = "ruleSetTag"
+    const val RULE_SET_URL = "ruleSetUrl"
+    const val RULE_SET_FORMAT = "ruleSetFormat"
+    const val RULE_SET_UPDATE_INTERVAL = "ruleSetUpdateInterval"
+
     const val GROUP_NAME = "groupName"
     const val GROUP_TYPE = "groupType"
     const val GROUP_ORDER = "groupOrder"

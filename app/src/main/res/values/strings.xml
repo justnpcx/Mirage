@@ -538,6 +538,26 @@
     <string name="group_mode_none">Off</string>
     <string name="group_mode_selector">Manual (selector)</string>
     <string name="group_mode_urltest">Automatic (URL test)</string>
+
+    <string name="rule_sets">Rule sets</string>
+    <string name="menu_rule_set">Rule sets</string>
+    <string name="rule_set_settings">Rule set</string>
+    <string name="rule_set_add">New rule set</string>
+    <string name="rule_set_reset">Delete all rule sets</string>
+    <string name="rule_set_delete_prompt">Delete this rule set?</string>
+    <string name="rule_set_none">No rule sets yet</string>
+    <string name="rule_set_none_sum">Add a remote rule set to reference it from a route rule</string>
+    <string name="rule_set_empty_tag">A name is required</string>
+    <string name="rule_set_duplicate_tag">That name is already used</string>
+    <string name="rule_set_tag">Name</string>
+    <string name="rule_set_tag_sum">Referenced from a route rule by this name</string>
+    <string name="rule_set_url">URL</string>
+    <string name="rule_set_format">Format</string>
+    <string name="rule_set_format_auto">Auto (from the file name)</string>
+    <string name="rule_set_format_binary">Binary (.srs)</string>
+    <string name="rule_set_format_source">Source (.json)</string>
+    <string name="rule_set_interval">Update interval</string>
+    <string name="rule_set_interval_sum">A duration such as 1d or 12h. Empty keeps the default</string>
     <string name="front_proxy">Front proxy</string>
     <string name="landing_proxy">Landing Proxy</string>
     <string name="action_shadowtls" translatable="false">ShadowTLS</string>

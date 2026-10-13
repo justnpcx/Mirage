@@ -462,6 +462,26 @@
     <string name="group_mode_none">关闭</string>
     <string name="group_mode_selector">手动选择（selector）</string>
     <string name="group_mode_urltest">自动选择（URL 测速）</string>
+
+    <string name="rule_sets">规则集</string>
+    <string name="menu_rule_set">规则集</string>
+    <string name="rule_set_settings">规则集</string>
+    <string name="rule_set_add">新建规则集</string>
+    <string name="rule_set_reset">删除全部规则集</string>
+    <string name="rule_set_delete_prompt">删除这个规则集？</string>
+    <string name="rule_set_none">还没有规则集</string>
+    <string name="rule_set_none_sum">添加远程规则集后即可在路由规则里引用</string>
+    <string name="rule_set_empty_tag">必须填名称</string>
+    <string name="rule_set_duplicate_tag">该名称已被占用</string>
+    <string name="rule_set_tag">名称</string>
+    <string name="rule_set_tag_sum">在路由规则里用这个名称引用它</string>
+    <string name="rule_set_url">URL</string>
+    <string name="rule_set_format">格式</string>
+    <string name="rule_set_format_auto">自动（按文件名判断）</string>
+    <string name="rule_set_format_binary">二进制（.srs）</string>
+    <string name="rule_set_format_source">源文件（.json）</string>
+    <string name="rule_set_interval">更新间隔</string>
+    <string name="rule_set_interval_sum">时长，如 1d、12h。留空用默认值</string>
     <string name="front_proxy">前置代理</string>
     <string name="landing_proxy">落地代理</string>
     <string name="protocol_version">协议版本</string>

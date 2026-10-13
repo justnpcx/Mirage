@@ -1,0 +1,30 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        app:icon="@drawable/ic_baseline_rule_folder_24"
+        app:key="ruleSetTag"
+        app:summary="@string/rule_set_tag_sum"
+        app:title="@string/rule_set_tag" />
+
+    <EditTextPreference
+        app:icon="@drawable/ic_baseline_link_24"
+        app:key="ruleSetUrl"
+        app:title="@string/rule_set_url"
+        app:useSimpleSummaryProvider="true" />
+
+    <moe.matsuri.nb4a.ui.SimpleMenuPreference
+        app:defaultValue=""
+        app:entries="@array/rule_set_formats"
+        app:entryValues="@array/rule_set_format_values"
+        app:icon="@drawable/ic_action_description"
+        app:key="ruleSetFormat"
+        app:title="@string/rule_set_format"
+        app:useSimpleSummaryProvider="true" />
+
+    <EditTextPreference
+        app:icon="@drawable/ic_baseline_timelapse_24"
+        app:key="ruleSetUpdateInterval"
+        app:summary="@string/rule_set_interval_sum"
+        app:title="@string/rule_set_interval" />
+
+</PreferenceScreen>
