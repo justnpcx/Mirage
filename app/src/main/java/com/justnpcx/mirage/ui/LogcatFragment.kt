@@ -1,30 +1,33 @@
 package com.justnpcx.mirage.ui
 
-import android.annotation.SuppressLint
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.text.SpannableString
-import android.text.Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
-import android.text.style.ForegroundColorSpan
 import android.view.MenuItem
 import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.widget.Toolbar
-import androidx.core.view.ViewCompat
-import androidx.core.view.doOnLayout
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.ComposeView
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.justnpcx.mirage.R
-import com.justnpcx.mirage.databinding.LayoutLogcatBinding
 import com.justnpcx.mirage.ktx.*
-import com.justnpcx.mirage.widget.ListListener
+import com.justnpcx.mirage.ui.compose.LogcatScreen
+import com.justnpcx.mirage.ui.compose.LogcatState
+import com.justnpcx.mirage.ui.compose.parseLog
+import com.justnpcx.mirage.ui.compose.theme.MirageTheme
 import libcore.Libcore
 import moe.matsuri.nb4a.utils.SendLog
 
-class LogcatFragment : ToolbarFragment(R.layout.layout_logcat),
+/**
+ * Kernel log — Compose implementation.
+ *
+ * The old version built one giant SpannableString and re-laid it out on every refresh, which is
+ * why a long log was slow to show. A LazyColumn only lays out what is on screen.
+ */
+class LogcatFragment : ToolbarFragment(R.layout.layout_compose),
     Toolbar.OnMenuItemClickListener {
 
-    lateinit var binding: LayoutLogcatBinding
+    private var state by mutableStateOf(LogcatState())
 
     /** The diagnosis dialog is shown once per log session, not on every re-bind. */
     private var diagnosed = false
@@ -63,60 +66,23 @@ class LogcatFragment : ToolbarFragment(R.layout.layout_logcat),
             .show()
     }
 
-    @SuppressLint("RestrictedApi", "WrongConstant")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         toolbar.setTitle(R.string.menu_log)
-
         toolbar.inflateMenu(R.menu.logcat_menu)
         toolbar.setOnMenuItemClickListener(this)
 
-        binding = LayoutLogcatBinding.bind(view)
-
-        if (Build.VERSION.SDK_INT >= 23) {
-            binding.textview.breakStrategy = 0 // simple
+        view.findViewById<ComposeView>(R.id.compose_view).setContent {
+            MirageTheme {
+                LogcatScreen(state = state)
+            }
         }
-
-        ViewCompat.setOnApplyWindowInsetsListener(binding.root, ListListener)
-
         reloadSession()
-    }
-
-    private fun getColorForLine(line: String): ForegroundColorSpan {
-        var color = ForegroundColorSpan(Color.GRAY)
-        when {
-            line.contains("INFO[") || line.contains(" [Info]") -> {
-                color = ForegroundColorSpan((0xFF86C166).toInt())
-            }
-
-            line.contains("ERROR[") || line.contains(" [Error]") -> {
-                color = ForegroundColorSpan(Color.RED)
-            }
-
-            line.contains("WARN[") || line.contains(" [Warning]") -> {
-                color = ForegroundColorSpan(Color.RED)
-            }
-        }
-        return color
     }
 
     private fun reloadSession() {
         val raw = String(SendLog.getNekoLog(50 * 1024))
-        val span = SpannableString(raw)
-        var offset = 0
-        for (line in span.lines()) {
-            val color = getColorForLine(line)
-            span.setSpan(
-                color, offset, offset + line.length, SPAN_EXCLUSIVE_EXCLUSIVE
-            )
-            offset += line.length + 1
-        }
-        binding.textview.text = span
-        binding.textview.clearFocus()
-        // 等 textview 完成最终 layout 再滚动到底部
-        binding.textview.doOnLayout {
-            binding.scroolview.scrollTo(0, binding.textview.height)
-        }
+        state = LogcatState(parseLog(raw))
         maybeDiagnose(raw)
     }
 
@@ -134,12 +100,11 @@ class LogcatFragment : ToolbarFragment(R.layout.layout_logcat),
                         return@runOnDefaultDispatcher
                     }
                     onMainDispatcher {
-                        binding.textview.text = ""
+                        state = LogcatState()
                         // a cleared log starts a new session, so a fresh problem may be diagnosed
                         diagnosed = false
                     }
                 }
-
             }
 
             R.id.action_send_logcat -> {
