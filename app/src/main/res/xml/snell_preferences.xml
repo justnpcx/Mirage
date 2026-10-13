@@ -1,0 +1,72 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <EditTextPreference
+        app:icon="@drawable/ic_social_emoji_symbols"
+        app:key="name"
+        app:title="@string/profile_name"
+        app:useSimpleSummaryProvider="true" />
+
+    <PreferenceCategory app:title="@string/proxy_cat">
+        <EditTextPreference
+            app:icon="@drawable/ic_hardware_router"
+            app:key="serverAddress"
+            app:title="@string/server_address"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:icon="@drawable/ic_maps_directions_boat"
+            app:key="serverPort"
+            app:title="@string/server_port"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:defaultValue="4"
+            app:icon="@drawable/ic_baseline_layers_24"
+            app:key="version"
+            app:summary="@string/snell_version_sum"
+            app:title="@string/snell_version"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:icon="@drawable/ic_settings_password"
+            app:key="psk"
+            app:title="@string/snell_psk" />
+        <EditTextPreference
+            app:icon="@drawable/ic_action_lock"
+            app:key="userKey"
+            app:summary="@string/snell_user_key_sum"
+            app:title="@string/snell_user_key"
+            app:useSimpleSummaryProvider="true" />
+        <SwitchPreference
+            app:icon="@drawable/ic_baseline_multiple_stop_24"
+            app:key="reuse"
+            app:summary="@string/snell_reuse_sum"
+            app:title="@string/snell_reuse" />
+        <EditTextPreference
+            app:icon="@drawable/ic_baseline_nat_24"
+            app:key="network"
+            app:summary="@string/snell_network_sum"
+            app:title="@string/snell_network"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        app:key="snellVersionOptions"
+        app:title="@string/snell_version_options">
+        <EditTextPreference
+            app:icon="@drawable/ic_baseline_texture_24"
+            app:key="obfsMode"
+            app:summary="@string/snell_obfs_mode_sum"
+            app:title="@string/snell_obfs_mode"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:icon="@drawable/ic_baseline_language_24"
+            app:key="obfsHost"
+            app:title="@string/snell_obfs_host"
+            app:useSimpleSummaryProvider="true" />
+        <EditTextPreference
+            app:icon="@drawable/ic_baseline_speed_24"
+            app:key="mode"
+            app:summary="@string/snell_mode_sum"
+            app:title="@string/snell_mode"
+            app:useSimpleSummaryProvider="true" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

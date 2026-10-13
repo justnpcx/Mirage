@@ -4489,6 +4489,33 @@ public class SingBoxOptions {
 
     }
 
+    public static class Outbound_SnellOptions extends Outbound {
+
+        public String server;
+
+        public Integer server_port;
+
+        // 4 or 6
+        public Integer version;
+
+        public String psk;
+
+        public String userkey;
+
+        public Boolean reuse;
+
+        public List<String> network;
+
+        // version 4: none / http / tls
+        public String obfs_mode;
+
+        public String obfs_host;
+
+        // version 6: default / unshaped / unsafe-raw
+        public String mode;
+
+    }
+
     public static class Outbound_SelectorOptions extends Outbound {
 
         public List<String> outbounds;

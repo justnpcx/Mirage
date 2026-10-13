@@ -111,7 +111,11 @@ jobs:
         with:
           files: apks/*.apk
           body: |
-            Mirage 1.0.1 —— 基于 **sing-box 1.14** 的 Android 通用代理客户端。
+            Mirage 1.0.2 —— 基于 **sing-box 1.14** 的 Android 通用代理客户端。
+
+            **1.0.2 更新**
+
+            - **新增：Snell 协议**（v4 / v6）。v4 用 `obfs_mode` / `obfs_host`，v6 用 `mode`，编辑界面会按版本只显示对应那组。也支持 Clash 配置里的 `snell` 节点。
 
             **1.0.1 更新**
 
@@ -149,7 +153,7 @@ jobs:
 
             **支持的协议**
 
-            SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard
+            SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS · AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · Snell · WireGuard
             （Trojan-Go / NaïveProxy / Mieru 需[插件](https://matsuridayo.github.io/nb4a-plugin/)）
 
             **支持的传输**

@@ -465,7 +465,21 @@
 
     <string name="rule_sets">规则集</string>
     <string name="menu_rule_set">规则集</string>
-    <string name="dns_optimistic">乐观 DNS 缓存</string>
+    <string name="snell_version">版本</string>
+    <string name="snell_version_sum">4 或 6，两者可用的选项不同</string>
+    <string name="snell_psk">PSK</string>
+    <string name="snell_user_key">用户密钥</string>
+    <string name="snell_user_key_sum">可选，需与服务端一致</string>
+    <string name="snell_reuse">连接复用</string>
+    <string name="snell_reuse_sum">完整 TCP 语义的多路复用</string>
+    <string name="snell_network">网络</string>
+    <string name="snell_network_sum">tcp / udp。留空表示两者都走</string>
+    <string name="snell_version_options">版本选项</string>
+    <string name="snell_obfs_mode">混淆模式（v4）</string>
+    <string name="snell_obfs_mode_sum">none / http / tls</string>
+    <string name="snell_obfs_host">混淆域名（v4）</string>
+    <string name="snell_mode">模式（v6）</string>
+    <string name="snell_mode_sum">default / unshaped / unsafe-raw</string>
     <string name="dns_optimistic_sum">先用缓存里的结果立即应答，再在后台刷新</string>
     <string name="dns_optimistic_timeout">乐观缓存有效期</string>
     <string name="dns_optimistic_timeout_sum">过期结果仍可继续使用的最长时间</string>

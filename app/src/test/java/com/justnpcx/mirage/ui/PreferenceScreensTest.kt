@@ -57,6 +57,7 @@ class PreferenceScreensTest {
         "tuic_preferences" to R.xml.tuic_preferences,
         "shadowtls_preferences" to R.xml.shadowtls_preferences,
         "anytls_preferences" to R.xml.anytls_preferences,
+        "snell_preferences" to R.xml.snell_preferences,
         "wireguard_preferences" to R.xml.wireguard_preferences,
         // NOT balancer_preferences: nothing references it and the manifest has no Balancer editor,
         // so it is dead upstream XML. It also cannot inflate off-device — its GroupPreference

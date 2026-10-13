@@ -23,6 +23,7 @@ import com.justnpcx.mirage.ktx.*
 import libcore.Libcore
 import moe.matsuri.nb4a.Protocols
 import moe.matsuri.nb4a.proxy.anytls.AnyTLSBean
+import moe.matsuri.nb4a.proxy.snell.SnellBean
 import moe.matsuri.nb4a.proxy.config.ConfigBean
 import moe.matsuri.nb4a.utils.Util
 import org.ini4j.Ini
@@ -366,6 +367,29 @@ object RawUpdater : GroupUpdater() {
                                     "alpn" -> {
                                         val alpn = (opt.value as? (List<String>))
                                         bean.alpn = alpn?.joinToString("\n")
+                                    }
+                                }
+                            }
+                            proxies.add(bean)
+                        }
+
+                        "snell" -> {
+                            val bean = SnellBean()
+                            for (opt in proxy) {
+                                if (opt.value == null) continue
+                                when (opt.key.replace("_", "-")) {
+                                    "name" -> bean.name = opt.value.toString()
+                                    "server" -> bean.serverAddress = opt.value as String
+                                    "port" -> bean.serverPort = opt.value.toString().toInt()
+                                    "psk" -> bean.psk = opt.value.toString()
+                                    "version" -> bean.version =
+                                        opt.value.toString().toIntOrNull() ?: 4
+
+                                    "reuse" -> bean.reuse = opt.value.toString() == "true"
+                                    "obfs-opts" -> {
+                                        val opts = opt.value as? Map<*, *> ?: continue
+                                        opts["mode"]?.let { bean.obfsMode = it.toString() }
+                                        opts["host"]?.let { bean.obfsHost = it.toString() }
                                     }
                                 }
                             }

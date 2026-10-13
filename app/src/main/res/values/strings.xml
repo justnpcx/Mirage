@@ -220,6 +220,22 @@
     <string name="action_mieru" translatable="false">Mieru</string>
     <string name="action_naive" translatable="false">Naïve</string>
     <string name="action_anytls" translatable="false">AnyTLS</string>
+    <string name="action_snell" translatable="false">Snell</string>
+    <string name="snell_version">Version</string>
+    <string name="snell_version_sum">4 or 6. The two take different options</string>
+    <string name="snell_psk">PSK</string>
+    <string name="snell_user_key">User key</string>
+    <string name="snell_user_key_sum">Optional; must match the server</string>
+    <string name="snell_reuse">Reuse connections</string>
+    <string name="snell_reuse_sum">Multiplex with complete TCP semantics</string>
+    <string name="snell_network">Network</string>
+    <string name="snell_network_sum">tcp / udp. Empty means both</string>
+    <string name="snell_version_options">Version options</string>
+    <string name="snell_obfs_mode">Obfs mode (v4)</string>
+    <string name="snell_obfs_mode_sum">none / http / tls</string>
+    <string name="snell_obfs_host">Obfs host (v4)</string>
+    <string name="snell_mode">Mode (v6)</string>
+    <string name="snell_mode_sum">default / unshaped / unsafe-raw</string>
     <string name="action_hysteria" translatable="false">Hysteria</string>
     <string name="action_ssh" translatable="false">SSH</string>
     <string name="action_wireguard" translatable="false">WireGuard</string>

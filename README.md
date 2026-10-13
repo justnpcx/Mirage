@@ -39,7 +39,7 @@ A universal proxy client for Android, powered by a self-maintained sing-box 1.14
 ## 支持的协议 / Protocols
 
 SOCKS (4/4a/5) · HTTP(S) · SSH · Shadowsocks · VMess · Trojan · VLESS ·
-AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · WireGuard
+AnyTLS · ShadowTLS · TUIC · Hysteria 1/2 · **Snell** · WireGuard
 
 Trojan-Go / NaïveProxy / Mieru 需[插件](https://matsuridayo.github.io/nb4a-plugin/)。
 
